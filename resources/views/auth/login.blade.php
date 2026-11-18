@@ -33,7 +33,6 @@
             <!-- Card Box -->
             <div class="lq-booking-wrap" style="background: var(--lq-white); border-radius: var(--lq-radius-lg); box-shadow: var(--lq-shadow); padding: 2.75rem 2.25rem;">
               <div class="text-center mb-4">
-                <span class="lq-eyebrow">Portal Pelanggan</span>
                 <h1 style="font-size: 1.85rem; margin-top: 0.25rem; margin-bottom: 0.5rem;">Masuk ke Akun</h1>
                 <p style="color: var(--lq-mauve); font-size: 0.92rem; margin-bottom: 0;">
                   Masukkan email dan kata sandi Anda untuk mengakses akun Amanails Nail Bar.

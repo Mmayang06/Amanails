@@ -1,58 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Panduan Menggunakan Website Amanails Nail Bar 💅✨
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Selamat datang di aplikasi website **Amanails Nail Bar**! Dokumen ini memandu Anda mengenai cara menjalankan dan mengakses website di komputer lokal, serta panduan fitur-fitur yang dapat Anda gunakan di dalam website ini.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Cara Menjalankan & Mengakses Website
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Untuk membuka dan melihat website ini di browser Anda, ikuti langkah mudah berikut:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Jalankan Server Lokal
+Buka aplikasi **Terminal** (atau PowerShell / Command Prompt) di folder proyek ini (`D:\Amanails`), lalu ketik perintah berikut dan tekan **Enter**:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Jika server sudah berjalan, terminal akan menampilkan pesan:
+```text
+INFO Server running on [http://127.0.0.1:8000].
+```
 
-## Contributing
+> 💡 **Catatan:** Biarkan jendela terminal ini tetap terbuka selama Anda membuka website. Jika ingin menghentikan server nantinya, cukup tekan tombol `Ctrl + C` di terminal.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+### 2. Buka di Browser Anda
+Setelah server aktif, buka browser favorit Anda (Google Chrome, Microsoft Edge, Mozilla Firefox, dll.) dan kunjungi tautan berikut:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* 🏠 **Halaman Beranda (Utama)**:  
+  👉 **[http://localhost:8000](http://localhost:8000)** atau **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 
-## Security Vulnerabilities
+* 📋 **Halaman Menu Layanan & Booking Lengkap**:  
+  👉 **[http://localhost:8000/services](http://localhost:8000/services)**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* 🔑 **Halaman Masuk (Login Akun Pelanggan)**:  
+  👉 **[http://localhost:8000/login](http://localhost:8000/login)**
 
-## License
+* 📝 **Halaman Pendaftaran (Register Akun Baru)**:  
+  👉 **[http://localhost:8000/register](http://localhost:8000/register)**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## ✨ Fitur-Fitur yang Ada di Website
+
+Website ini dirancang khusus untuk kenyamanan pelanggan salon kuku dengan berbagai fitur interaktif:
+
+### 1. Reservasi Online Cepat (Booking Janji Temu)
+Anda dapat langsung memesan jadwal perawatan tanpa perlu antre atau membayar uang muka di awal:
+* **Pilih Jenis Perawatan**: Tersedia pilihan manikur, pedikur, kutek gel, akrilik, sambung kuku (*soft gel extensions*), hingga tambahan nail art.
+* **Pilih Terapis Favorit**: Anda bebas memilih terapis kuku langganan Anda (atau pilih opsi *"Siapa saja / Tanpa preferensi"*).
+* **Tentukan Tanggal & Jam Kunjungan**: Pilih tanggal di kalender dan klik salah satu jam kunjungan yang masih tersedia.
+* **Jumlah Tamu**: Bisa untuk sendiri (1 orang), teman (2 orang), maupun rombongan/acara privat.
+* **Konfirmasi Otomatis**: Setelah formulir dikirim, notifikasi konfirmasi langsung muncul di layar dan tim salon akan mengonfirmasi jadwal Anda via WhatsApp/SMS.
+
+### 2. Galeri Lookbook Interaktif (Inspirasi Nail Art)
+* Menampilkan foto-foto asli hasil karya kuku dari studio Amanails Nail Bar.
+* **Filter Kategori**: Anda bisa memfilter foto berdasarkan gaya kuku yang disukai (*Semua, Klasik, Gel, Art / Lukis, Musiman*).
+* **Fitur Pratinjau (Lightbox)**: Klik pada foto mana saja untuk memperbesar tampilan dan melihat detail nama desain serta keterangannya.
+
+### 3. Informasi Layanan & Harga Transparan
+* Semua tarif perawatan dan estimasi waktu pengerjaan dicantumkan dengan jelas tanpa biaya tersembunyi.
+* Meliputi perawatan kuku tangan (*Manikur*), kuku kaki (*Pedikur*), kutek gel tahan lama (*Gel Polish*), hingga sambung kuku akrilik dan *BIAB overlay*.
+
+### 4. Portal Akun Pelanggan (Login & Register)
+* **Daftar Akun Baru**: Buat akun pribadi Anda untuk memudahkan pencatatan riwayat janji temu dan mendapatkan promo khusus.
+* **Masuk ke Akun**: Halaman login yang bersih, simpel, dan aman, dilengkapi fitur *"Ingat saya"* agar tidak perlu login berulang kali.
+* **Navigasi Pintar**: Saat Anda sudah masuk (*logged in*), bagian atas website otomatis menyapa nama Anda dan menyediakan tombol untuk keluar (*Logout*) dengan satu klik.
+
+### 5. Kenali Profil Terapis Kuku
+* Anda dapat melihat foto dan spesialisasi masing-masing terapis (misalnya ahli nail art bunga, spesialis penguat kuku alami, atau ahli akrilik) sebelum menentukan pilihan saat reservasi.
+
+### 6. Pilihan Paket Langganan Hemat (Membership)
+* Tersedia informasi paket bulanan bagi Anda yang rutin merawat kuku (*Polish Pass*, *Gel Devotee*, dan *The Full Set*) dengan keuntungan diskon produk, gratis pembersihan gel, dan stempel loyalitas ganda.
+
+### 7. Toko Produk Perawatan Kuku Mandiri
+* Anda dapat melihat koleksi produk perawatan kuku yang dipakai di salon (seperti vitamin minyak kutikula, krim pelembap tangan, dan kutek signature) yang bisa dipesan langsung di salon.
+
+### 8. Lokasi, Jam Buka & FAQ
+* Informasi lengkap alamat studio, jam buka operasional hari kerja dan akhir pekan, tombol langsung menuju Google Maps, serta jawaban dari pertanyaan yang sering ditanyakan pelanggan.
+
+---
+
