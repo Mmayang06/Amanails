@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <script>document.documentElement.classList.add('js')</script>
@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   </head>
   <body>
     <a class="lq-skip" href="#main">Skip to content</a>
@@ -20,7 +20,7 @@
     <!-- ===================== NAVBAR ===================== -->
     <header class="lq-nav" data-nav>
       <div class="container">
-        <a class="lq-brand" href="index.html" aria-label="Lacquer — home">
+        <a class="lq-brand" href="{{ url('/') }}" aria-label="Lacquer — home">
           Lacquer<span class="lq-dot">.</span>
           <small>Nail Bar</small>
         </a>
@@ -32,7 +32,7 @@
             <li><a href="#booking">Booking</a></li>
             <li><a href="#team">Technicians</a></li>
             <li><a href="#shop">Shop</a></li>
-            <li><a href="services.html">Full Menu</a></li>
+            <li><a href="{{ url('/services') }}">Full Menu</a></li>
           </ul>
         </nav>
 
@@ -55,7 +55,7 @@
         <li><a href="#membership">Membership</a></li>
         <li><a href="#shop">Shop</a></li>
         <li><a href="#visit">Visit</a></li>
-        <li><a href="services.html">Full Menu</a></li>
+        <li><a href="{{ url('/services') }}">Full Menu</a></li>
       </ul>
       <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Book an Appointment</a>
     </div>
@@ -65,7 +65,7 @@
       <!-- ===================== HERO ===================== -->
       <section class="lq-hero" id="home">
         <div class="lq-hero-media">
-          <img src="img/hero.jpg" alt="Close-up of manicured hands resting on a marble table with glossy rose-pink gel nails" width="1920" height="1280" fetchpriority="high">
+          <img src="{{ asset('img/hero.jpg') }}" alt="Close-up of manicured hands resting on a marble table with glossy rose-pink gel nails" width="1920" height="1280" fetchpriority="high">
         </div>
         <div class="container">
           <div class="lq-hero-inner">
@@ -234,7 +234,7 @@
           </div>
 
           <div class="text-center reveal" style="margin-top:3rem">
-            <a class="lq-btn lq-btn-outline" href="services.html">See the full menu &amp; add-ons</a>
+            <a class="lq-btn lq-btn-outline" href="{{ url('/services') }}">See the full menu &amp; add-ons</a>
           </div>
         </div>
       </section>
@@ -258,40 +258,40 @@
             </div>
 
             <div class="lq-gallery reveal reveal-d1">
-              <button class="lq-gallery-item" type="button" data-style="classic" data-lightbox data-full="img/gallery-1.jpg" data-caption="Timeless French tips with a soft ivory base">
-                <img src="img/gallery-1.jpg" alt="French manicure with clean white tips on a natural pink base" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="classic" data-lightbox data-full="{{ asset('img/gallery-1.jpg') }}" data-caption="Timeless French tips with a soft ivory base">
+                <img src="{{ asset('img/gallery-1.jpg') }}" alt="French manicure with clean white tips on a natural pink base" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Classic</span><strong>Modern French</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="gel" data-lightbox data-full="img/gallery-2.jpg" data-caption="High-gloss cherry-red gel, almond shape">
-                <img src="img/gallery-2.jpg" alt="Glossy cherry-red gel nails in an almond shape" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="gel" data-lightbox data-full="{{ asset('img/gallery-2.jpg') }}" data-caption="High-gloss cherry-red gel, almond shape">
+                <img src="{{ asset('img/gallery-2.jpg') }}" alt="Glossy cherry-red gel nails in an almond shape" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Gel</span><strong>Red Carpet Gel</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="art" data-lightbox data-full="img/gallery-3.jpg" data-caption="Hand-painted wildflower detail on a sheer base">
-                <img src="img/gallery-3.jpg" alt="Hand-painted floral nail art with small wildflowers" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="art" data-lightbox data-full="{{ asset('img/gallery-3.jpg') }}" data-caption="Hand-painted wildflower detail on a sheer base">
+                <img src="{{ asset('img/gallery-3.jpg') }}" alt="Hand-painted floral nail art with small wildflowers" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Art</span><strong>Pressed Florals</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="seasonal" data-lightbox data-full="img/gallery-4.jpg" data-caption="Warm copper and burnt-amber autumn set">
-                <img src="img/gallery-4.jpg" alt="Autumn nail set in copper and burnt-amber tones" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="seasonal" data-lightbox data-full="{{ asset('img/gallery-4.jpg') }}" data-caption="Warm copper and burnt-amber autumn set">
+                <img src="{{ asset('img/gallery-4.jpg') }}" alt="Autumn nail set in copper and burnt-amber tones" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Seasonal</span><strong>Amber Autumn</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="gel" data-lightbox data-full="img/gallery-5.jpg" data-caption="Milky nude gel with a glazed-donut shimmer">
-                <img src="img/gallery-5.jpg" alt="Milky nude gel nails with a glazed shimmer finish" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="gel" data-lightbox data-full="{{ asset('img/gallery-5.jpg') }}" data-caption="Milky nude gel with a glazed-donut shimmer">
+                <img src="{{ asset('img/gallery-5.jpg') }}" alt="Milky nude gel nails with a glazed shimmer finish" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Gel</span><strong>Glazed Nude</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="art" data-lightbox data-full="img/gallery-6.jpg" data-caption="Mirror-chrome finish in rose-gold">
-                <img src="img/gallery-6.jpg" alt="Rose-gold mirror chrome nail art" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="art" data-lightbox data-full="{{ asset('img/gallery-6.jpg') }}" data-caption="Mirror-chrome finish in rose-gold">
+                <img src="{{ asset('img/gallery-6.jpg') }}" alt="Rose-gold mirror chrome nail art" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Art</span><strong>Rose Chrome</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="seasonal" data-lightbox data-full="img/gallery-7.jpg" data-caption="Icy silver glitter for the party season">
-                <img src="img/gallery-7.jpg" alt="Silver glitter festive nails with sparkle" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="seasonal" data-lightbox data-full="{{ asset('img/gallery-7.jpg') }}" data-caption="Icy silver glitter for the party season">
+                <img src="{{ asset('img/gallery-7.jpg') }}" alt="Silver glitter festive nails with sparkle" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Seasonal</span><strong>Frost &amp; Sparkle</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="classic" data-lightbox data-full="img/gallery-8.jpg" data-caption="Soft blush pink, the everyday go-to">
-                <img src="img/gallery-8.jpg" alt="Soft blush-pink glossy manicure" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="classic" data-lightbox data-full="{{ asset('img/gallery-8.jpg') }}" data-caption="Soft blush pink, the everyday go-to">
+                <img src="{{ asset('img/gallery-8.jpg') }}" alt="Soft blush-pink glossy manicure" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Classic</span><strong>Blush Everyday</strong></span>
               </button>
-              <button class="lq-gallery-item" type="button" data-style="art" data-lightbox data-full="img/gallery-9.jpg" data-caption="Grey-and-white marble swirl with gold flecks">
-                <img src="img/gallery-9.jpg" alt="Marble-effect nail art in grey and white with gold flecks" width="600" height="600" loading="lazy">
+              <button class="lq-gallery-item" type="button" data-style="art" data-lightbox data-full="{{ asset('img/gallery-9.jpg') }}" data-caption="Grey-and-white marble swirl with gold flecks">
+                <img src="{{ asset('img/gallery-9.jpg') }}" alt="Marble-effect nail art in grey and white with gold flecks" width="600" height="600" loading="lazy">
                 <span class="lq-gallery-cap"><span>Art</span><strong>Marble Swirl</strong></span>
               </button>
             </div>
@@ -303,7 +303,7 @@
       <div class="lq-lightbox" data-lightbox-modal role="dialog" aria-modal="true" aria-label="Nail art preview" aria-hidden="true">
         <button class="lq-lb-btn lq-lb-close" type="button" data-lb-close aria-label="Close preview">&times;</button>
         <button class="lq-lb-btn lq-lb-prev" type="button" data-lb-prev aria-label="Previous design">&#8249;</button>
-        <img data-lb-img src="img/gallery-1.jpg" alt="">
+        <img data-lb-img src="{{ asset('img/gallery-1.jpg') }}" alt="">
         <button class="lq-lb-btn lq-lb-next" type="button" data-lb-next aria-label="Next design">&#8250;</button>
         <p class="lq-lightbox-cap" data-lb-cap></p>
       </div>
@@ -320,7 +320,7 @@
           <div class="lq-booking-wrap reveal reveal-d1">
             <div class="lq-booking-grid">
               <div class="lq-booking-side">
-                <img src="img/booking-side.jpg" alt="Nail technician carefully applying gel polish to a client's hand" width="720" height="900" loading="lazy">
+                <img src="{{ asset('img/booking-side.jpg') }}" alt="Nail technician carefully applying gel polish to a client's hand" width="720" height="900" loading="lazy">
                 <div class="lq-booking-side-inner">
                   <h3>Relax &mdash; we've got the details.</h3>
                   <p>Every booking includes a cuticle consultation, complimentary drink, and a heated hand treatment.</p>
@@ -448,7 +448,7 @@
             <div class="col-6 col-lg-3 reveal">
               <div class="lq-tech-card">
                 <div class="lq-tech-photo">
-                  <img src="img/tech-1.jpg" alt="Portrait of Mia Alvarez, nail art lead technician" width="400" height="400" loading="lazy">
+                  <img src="{{ asset('img/tech-1.jpg') }}" alt="Portrait of Mia Alvarez, nail art lead technician" width="400" height="400" loading="lazy">
                   <div class="lq-tech-social"><a href="#gallery">Portfolio</a><a href="#booking">Book</a></div>
                 </div>
                 <h4>Mia Alvarez</h4>
@@ -459,7 +459,7 @@
             <div class="col-6 col-lg-3 reveal reveal-d1">
               <div class="lq-tech-card">
                 <div class="lq-tech-photo">
-                  <img src="img/tech-2.jpg" alt="Portrait of Priya Nair, gel and BIAB specialist" width="400" height="400" loading="lazy">
+                  <img src="{{ asset('img/tech-2.jpg') }}" alt="Portrait of Priya Nair, gel and BIAB specialist" width="400" height="400" loading="lazy">
                   <div class="lq-tech-social"><a href="#gallery">Portfolio</a><a href="#booking">Book</a></div>
                 </div>
                 <h4>Priya Nair</h4>
@@ -470,7 +470,7 @@
             <div class="col-6 col-lg-3 reveal reveal-d2">
               <div class="lq-tech-card">
                 <div class="lq-tech-photo">
-                  <img src="img/tech-3.jpg" alt="Portrait of Daniel Okafor, acrylics and sculpting technician" width="400" height="400" loading="lazy">
+                  <img src="{{ asset('img/tech-3.jpg') }}" alt="Portrait of Daniel Okafor, acrylics and sculpting technician" width="400" height="400" loading="lazy">
                   <div class="lq-tech-social"><a href="#gallery">Portfolio</a><a href="#booking">Book</a></div>
                 </div>
                 <h4>Daniel Okafor</h4>
@@ -481,7 +481,7 @@
             <div class="col-6 col-lg-3 reveal reveal-d3">
               <div class="lq-tech-card">
                 <div class="lq-tech-photo">
-                  <img src="img/tech-4.jpg" alt="Portrait of Sofia Bianchi, pedicure and spa specialist" width="400" height="400" loading="lazy">
+                  <img src="{{ asset('img/tech-4.jpg') }}" alt="Portrait of Sofia Bianchi, pedicure and spa specialist" width="400" height="400" loading="lazy">
                   <div class="lq-tech-social"><a href="#gallery">Portfolio</a><a href="#booking">Book</a></div>
                 </div>
                 <h4>Sofia Bianchi</h4>
@@ -617,7 +617,7 @@
               <div class="lq-shop-card">
                 <div class="lq-shop-media">
                   <span class="lq-shop-badge">Bestseller</span>
-                  <img src="img/shop-1.jpg" alt="Bottle of blush-pink nail polish from the Lacquer own-label range" width="480" height="360" loading="lazy">
+                  <img src="{{ asset('img/shop-1.jpg') }}" alt="Bottle of blush-pink nail polish from the Lacquer own-label range" width="480" height="360" loading="lazy">
                 </div>
                 <div class="lq-shop-body">
                   <p class="lq-shop-cat">Own-label polish</p>
@@ -633,7 +633,7 @@
             <div class="col-6 col-lg-3 reveal reveal-d1">
               <div class="lq-shop-card">
                 <div class="lq-shop-media">
-                  <img src="img/shop-2.jpg" alt="Dropper bottle of nourishing cuticle oil" width="480" height="360" loading="lazy">
+                  <img src="{{ asset('img/shop-2.jpg') }}" alt="Dropper bottle of nourishing cuticle oil" width="480" height="360" loading="lazy">
                 </div>
                 <div class="lq-shop-body">
                   <p class="lq-shop-cat">Nail care</p>
@@ -649,7 +649,7 @@
             <div class="col-6 col-lg-3 reveal reveal-d2">
               <div class="lq-shop-card">
                 <div class="lq-shop-media">
-                  <img src="img/shop-3.jpg" alt="Tube of shea hand cream on a soft pink background" width="480" height="360" loading="lazy">
+                  <img src="{{ asset('img/shop-3.jpg') }}" alt="Tube of shea hand cream on a soft pink background" width="480" height="360" loading="lazy">
                 </div>
                 <div class="lq-shop-body">
                   <p class="lq-shop-cat">Hand care</p>
@@ -666,7 +666,7 @@
               <div class="lq-shop-card">
                 <div class="lq-shop-media">
                   <span class="lq-shop-badge">New</span>
-                  <img src="img/shop-4.jpg" alt="Boxed at-home nail care kit with file, buffer and oil" width="480" height="360" loading="lazy">
+                  <img src="{{ asset('img/shop-4.jpg') }}" alt="Boxed at-home nail care kit with file, buffer and oil" width="480" height="360" loading="lazy">
                 </div>
                 <div class="lq-shop-body">
                   <p class="lq-shop-cat">Kit</p>
@@ -697,7 +697,7 @@
                 <div class="lq-testi-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                 <p class="lq-testi-quote">&ldquo;Three weeks and my gel still looks freshly done. Mia's floral art is unreal &mdash; strangers stop me on the street to ask where I got my nails.&rdquo;</p>
                 <div class="lq-testi-person">
-                  <img src="img/client-1.jpg" alt="Portrait of Elena, a regular client" width="52" height="52" loading="lazy">
+                  <img src="{{ asset('img/client-1.jpg') }}" alt="Portrait of Elena, a regular client" width="52" height="52" loading="lazy">
                   <div><strong>Elena R.</strong><span>Gel Devotee member</span></div>
                 </div>
               </div>
@@ -705,7 +705,7 @@
                 <div class="lq-testi-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                 <p class="lq-testi-quote">&ldquo;Spotless studio, sterilised everything, and they actually care about nail health. My natural nails are stronger than they've been in years.&rdquo;</p>
                 <div class="lq-testi-person">
-                  <img src="img/client-2.jpg" alt="Portrait of Hannah, a regular client" width="52" height="52" loading="lazy">
+                  <img src="{{ asset('img/client-2.jpg') }}" alt="Portrait of Hannah, a regular client" width="52" height="52" loading="lazy">
                   <div><strong>Hannah T.</strong><span>Weekly regular</span></div>
                 </div>
               </div>
@@ -713,7 +713,7 @@
                 <div class="lq-testi-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                 <p class="lq-testi-quote">&ldquo;Booked a bridal party of six and they handled all of us beautifully with prosecco in hand. Every set lasted right through the honeymoon.&rdquo;</p>
                 <div class="lq-testi-person">
-                  <img src="img/client-3.jpg" alt="Portrait of Marcus, a client" width="52" height="52" loading="lazy">
+                  <img src="{{ asset('img/client-3.jpg') }}" alt="Portrait of Marcus, a client" width="52" height="52" loading="lazy">
                   <div><strong>Marcus &amp; the bridal party</strong><span>Private hire</span></div>
                 </div>
               </div>
@@ -760,7 +760,7 @@
 
             <div class="col-lg-7 reveal reveal-d1">
               <div class="lq-map">
-                <img src="img/map.jpg" alt="Map showing Lacquer Nail Bar on Cedar Hill Lane" width="900" height="600" loading="lazy">
+                <img src="{{ asset('img/map.jpg') }}" alt="Map showing Lacquer Nail Bar on Cedar Hill Lane" width="900" height="600" loading="lazy">
                 <div class="lq-map-pin">
                   <a class="lq-btn lq-btn-gold" href="https://maps.google.com/?q=42+Cedar+Hill+Lane" target="_blank" rel="noopener">Open in Google Maps</a>
                 </div>
@@ -857,7 +857,7 @@
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-4">
-            <a class="lq-brand" href="index.html">Lacquer<span class="lq-dot">.</span><small>Nail Bar</small></a>
+            <a class="lq-brand" href="{{ url('/') }}">Lacquer<span class="lq-dot">.</span><small>Nail Bar</small></a>
             <p style="margin-top:1.25rem;max-width:32ch">A boutique nail bar on Cedar Hill Lane. Master manicures, long-wear gel, and hand-painted art in a calm, spotless studio.</p>
             <div class="lq-footer-social">
               <a href="#" aria-label="Lacquer on Instagram">Ig</a>
@@ -873,7 +873,7 @@
               <li><a href="#gallery">Gallery</a></li>
               <li><a href="#team">Technicians</a></li>
               <li><a href="#membership">Membership</a></li>
-              <li><a href="services.html">Full Menu</a></li>
+              <li><a href="{{ url('/services') }}">Full Menu</a></li>
             </ul>
           </div>
           <div class="col-6 col-lg-2">
@@ -904,7 +904,7 @@
       </div>
     </footer>
 
-    <script src="js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
   </body>
 </html>

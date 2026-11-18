@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <script>document.documentElement.classList.add('js')</script>
@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   </head>
   <body>
     <a class="lq-skip" href="#main">Skip to content</a>
@@ -20,19 +20,19 @@
     <!-- ===================== NAVBAR ===================== -->
     <header class="lq-nav is-scrolled" data-nav>
       <div class="container">
-        <a class="lq-brand" href="index.html" aria-label="Lacquer — home">
+        <a class="lq-brand" href="{{ url('/') }}" aria-label="Lacquer — home">
           Lacquer<span class="lq-dot">.</span>
           <small>Nail Bar</small>
         </a>
 
         <nav class="lq-nav-desktop" aria-label="Primary">
           <ul class="lq-nav-links">
-            <li><a href="index.html#services">Services</a></li>
-            <li><a href="index.html#gallery">Gallery</a></li>
+            <li><a href="{{ url('/') }}#services">Services</a></li>
+            <li><a href="{{ url('/') }}#gallery">Gallery</a></li>
             <li><a href="#booking">Booking</a></li>
-            <li><a href="index.html#team">Technicians</a></li>
-            <li><a href="index.html#shop">Shop</a></li>
-            <li><a href="services.html" class="is-active">Full Menu</a></li>
+            <li><a href="{{ url('/') }}#team">Technicians</a></li>
+            <li><a href="{{ url('/') }}#shop">Shop</a></li>
+            <li><a href="{{ url('/services') }}" class="is-active">Full Menu</a></li>
           </ul>
         </nav>
 
@@ -48,14 +48,14 @@
     <!-- Mobile drawer -->
     <div class="lq-nav-mobile" id="mobile-nav" data-nav-mobile>
       <ul>
-        <li><a href="index.html#services">Services</a></li>
-        <li><a href="index.html#gallery">Gallery</a></li>
+        <li><a href="{{ url('/') }}#services">Services</a></li>
+        <li><a href="{{ url('/') }}#gallery">Gallery</a></li>
         <li><a href="#booking">Booking</a></li>
-        <li><a href="index.html#team">Technicians</a></li>
-        <li><a href="index.html#membership">Membership</a></li>
-        <li><a href="index.html#shop">Shop</a></li>
-        <li><a href="index.html#visit">Visit</a></li>
-        <li><a href="services.html">Full Menu</a></li>
+        <li><a href="{{ url('/') }}#team">Technicians</a></li>
+        <li><a href="{{ url('/') }}#membership">Membership</a></li>
+        <li><a href="{{ url('/') }}#shop">Shop</a></li>
+        <li><a href="{{ url('/') }}#visit">Visit</a></li>
+        <li><a href="{{ url('/services') }}">Full Menu</a></li>
       </ul>
       <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Book an Appointment</a>
     </div>
@@ -69,7 +69,7 @@
             <div class="col-lg-8 reveal">
               <nav aria-label="Breadcrumb" style="margin-bottom:1.25rem">
                 <span style="font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lq-mauve-soft)">
-                  <a href="index.html" style="color:var(--lq-gold-soft)">Home</a> &nbsp;/&nbsp; Services &amp; Booking
+                  <a href="{{ url('/') }}" style="color:var(--lq-gold-soft)">Home</a> &nbsp;/&nbsp; Services &amp; Booking
                 </span>
               </nav>
               <span class="lq-eyebrow">The Full Menu</span>
@@ -195,7 +195,7 @@
           <div class="lq-booking-wrap reveal reveal-d1">
             <div class="lq-booking-grid">
               <div class="lq-booking-side">
-                <img src="img/booking-side.jpg" alt="Nail technician carefully applying gel polish to a client's hand" width="720" height="900" loading="lazy">
+                <img src="{{ asset('img/booking-side.jpg') }}" alt="Nail technician carefully applying gel polish to a client's hand" width="720" height="900" loading="lazy">
                 <div class="lq-booking-side-inner">
                   <h3>Relax &mdash; we've got the details.</h3>
                   <p>Every booking includes a cuticle consultation, complimentary drink, and a heated hand treatment.</p>
@@ -321,7 +321,7 @@
             <p>Not sure which service is right for your nails? Call the studio and one of the team will talk it through with you.</p>
             <div class="lq-cta-actions">
               <a class="lq-btn lq-btn-gold" href="tel:+15550142200">Call (555) 014-2200</a>
-              <a class="lq-btn lq-btn-outline" href="index.html#gallery">Browse the Gallery</a>
+              <a class="lq-btn lq-btn-outline" href="{{ url('/') }}#gallery">Browse the Gallery</a>
             </div>
           </div>
         </div>
@@ -334,7 +334,7 @@
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-4">
-            <a class="lq-brand" href="index.html">Lacquer<span class="lq-dot">.</span><small>Nail Bar</small></a>
+            <a class="lq-brand" href="{{ url('/') }}">Lacquer<span class="lq-dot">.</span><small>Nail Bar</small></a>
             <p style="margin-top:1.25rem;max-width:32ch">A boutique nail bar on Cedar Hill Lane. Master manicures, long-wear gel, and hand-painted art in a calm, spotless studio.</p>
             <div class="lq-footer-social">
               <a href="#" aria-label="Lacquer on Instagram">Ig</a>
@@ -346,17 +346,17 @@
           <div class="col-6 col-lg-2">
             <h5>Explore</h5>
             <ul>
-              <li><a href="index.html#services">Services</a></li>
-              <li><a href="index.html#gallery">Gallery</a></li>
-              <li><a href="index.html#team">Technicians</a></li>
-              <li><a href="index.html#membership">Membership</a></li>
-              <li><a href="services.html">Full Menu</a></li>
+              <li><a href="{{ url('/') }}#services">Services</a></li>
+              <li><a href="{{ url('/') }}#gallery">Gallery</a></li>
+              <li><a href="{{ url('/') }}#team">Technicians</a></li>
+              <li><a href="{{ url('/') }}#membership">Membership</a></li>
+              <li><a href="{{ url('/services') }}">Full Menu</a></li>
             </ul>
           </div>
           <div class="col-6 col-lg-2">
             <h5>Visit</h5>
             <ul>
-              <li><a href="index.html#visit">Hours</a></li>
+              <li><a href="{{ url('/') }}#visit">Hours</a></li>
               <li><a href="https://maps.google.com/?q=42+Cedar+Hill+Lane" target="_blank" rel="noopener">Directions</a></li>
               <li><a href="tel:+15550142200">(555) 014-2200</a></li>
               <li><a href="mailto:hello@lacquernailbar.com">Email us</a></li>
@@ -376,12 +376,12 @@
 
         <div class="lq-footer-bottom">
           <p style="margin:0">&copy; 2026 Lacquer Nail Bar. All rights reserved.</p>
-          <p style="margin:0">Built on Bootstrap 5 &middot; <a href="index.html">Back to home</a></p>
+          <p style="margin:0">Built on Bootstrap 5 &middot; <a href="{{ url('/') }}">Back to home</a></p>
         </div>
       </div>
     </footer>
 
-    <script src="js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
   </body>
 </html>
