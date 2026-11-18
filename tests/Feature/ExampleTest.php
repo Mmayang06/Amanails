@@ -23,4 +23,13 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_terapis_dashboard_page_returns_a_successful_response(): void
+    {
+        $response = $this->get('/terapis/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertSee('Amanails');
+        $response->assertSee('Mia Alvarez');
+    }
 }

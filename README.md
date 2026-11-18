@@ -39,6 +39,9 @@ Setelah server aktif, buka browser favorit Anda (Google Chrome, Microsoft Edge, 
 * 📝 **Halaman Pendaftaran (Register Akun Baru)**:  
   👉 **[http://localhost:8000/register](http://localhost:8000/register)**
 
+* 👩‍🎨 **Dashboard Khusus Terapis (Role Terapis)**:  
+  👉 **[http://localhost:8000/terapis/dashboard](http://localhost:8000/terapis/dashboard)**
+
 ---
 
 ## ✨ Fitur-Fitur yang Ada di Website
