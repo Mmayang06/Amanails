@@ -4,8 +4,8 @@
     <script>document.documentElement.classList.add('js')</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Services &amp; Booking &mdash; Lacquer Nail Bar Template</title>
-    <meta name="description" content="The full Lacquer service menu — manicures, pedicures, gel, acrylics, extensions, nail art and add-ons with prices and durations — plus the online booking form.">
+    <title>Services &amp; Booking &mdash; Amanails Nail Bar Template</title>
+    <meta name="description" content="The full Amanails service menu — manicures, pedicures, gel, acrylics, extensions, nail art and add-ons with prices and durations — plus the online booking form.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,8 +20,8 @@
     <!-- ===================== NAVBAR ===================== -->
     <header class="lq-nav is-scrolled" data-nav>
       <div class="container">
-        <a class="lq-brand" href="{{ url('/') }}" aria-label="Lacquer — home">
-          Lacquer<span class="lq-dot">.</span>
+        <a class="lq-brand" href="{{ url('/') }}" aria-label="Amanails — home">
+          Amanails<span class="lq-dot">.</span>
           <small>Nail Bar</small>
         </a>
 
@@ -36,7 +36,16 @@
           </ul>
         </nav>
 
-        <div class="lq-nav-cta">
+        <div class="lq-nav-cta d-flex align-items-center gap-2">
+          @auth
+            <span class="lq-nav-desktop me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Hi, <strong>{{ Auth::user()->name }}</strong></span>
+            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+              @csrf
+              <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop">Logout</button>
+            </form>
+          @else
+            <a class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop" href="{{ route('login') }}">Sign In</a>
+          @endauth
           <a class="lq-btn lq-btn-primary lq-btn-sm lq-nav-desktop" href="#booking">Book Now</a>
           <button class="lq-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
             <span></span><span></span><span></span>
@@ -55,10 +64,30 @@
         <li><a href="{{ url('/') }}#membership">Membership</a></li>
         <li><a href="{{ url('/') }}#shop">Shop</a></li>
         <li><a href="{{ url('/') }}#visit">Visit</a></li>
-        <li><a href="{{ url('/services') }}">Full Menu</a></li>
+        <li><a href="{{ url('/services') }}" class="is-active">Full Menu</a></li>
+        @auth
+          <li><span style="display:block; padding: 0.5rem 0; color: var(--lq-rose); font-size: 0.9rem;">Signed in as <strong>{{ Auth::user()->name }}</strong></span></li>
+        @else
+          <li><a href="{{ route('login') }}">Sign In</a></li>
+          <li><a href="{{ route('register') }}">Create Account</a></li>
+        @endauth
       </ul>
-      <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Book an Appointment</a>
+      @auth
+        <form action="{{ route('logout') }}" method="POST" class="mt-3">
+          @csrf
+          <button type="submit" class="lq-btn lq-btn-outline lq-btn-block">Logout</button>
+        </form>
+      @else
+        <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Book an Appointment</a>
+      @endauth
     </div>
+
+    @if(session('success'))
+      <div class="alert alert-success alert-dismissible fade show text-center mb-0" role="alert" style="position: fixed; top: 85px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 520px; width: 92%; background: #ffffff; color: var(--lq-ink); border: 1px solid var(--lq-rose); box-shadow: var(--lq-shadow); border-radius: var(--lq-radius); padding: 1rem 1.5rem;">
+        <span>{{ session('success') }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="font-size: 0.75rem;"></button>
+      </div>
+    @endif
 
     <main id="main">
 
@@ -76,7 +105,7 @@
               <h1 class="lq-display">Every service,<br>every price, no surprises.</h1>
             </div>
             <div class="col-lg-4 reveal reveal-d1">
-              <p class="lq-lead ms-lg-auto">Browse the complete Lacquer menu below &mdash; then scroll to the booking form and reserve your chair in under a minute. Prices include our sterilisation, consultation, and hand-treatment finish.</p>
+              <p class="lq-lead ms-lg-auto">Browse the complete Amanails menu below &mdash; then scroll to the booking form and reserve your chair in under a minute. Prices include our sterilisation, consultation, and hand-treatment finish.</p>
               <a class="lq-btn lq-btn-gold" href="#booking" style="margin-top:1.5rem">Jump to Booking</a>
             </div>
           </div>
@@ -159,7 +188,7 @@
                 <ul class="lq-menu-list">
                   <li class="lq-menu-item"><span class="lq-menu-name">Paraffin Wax Dip<span class="lq-menu-desc">Deeply hydrating warm-wax hand or foot treatment</span></span><span class="lq-menu-dots" aria-hidden="true"></span><span class="lq-menu-dur">15 min</span><span class="lq-menu-price">$14</span></li>
                   <li class="lq-menu-item"><span class="lq-menu-name">Extended Hand Massage<span class="lq-menu-desc">Ten minutes of pressure-point hand and wrist work</span></span><span class="lq-menu-dots" aria-hidden="true"></span><span class="lq-menu-dur">10 min</span><span class="lq-menu-price">$10</span></li>
-                  <li class="lq-menu-item"><span class="lq-menu-name">Little Lacquer (age 10 &amp; under)<span class="lq-menu-desc">Mini file &amp; polish for our youngest guests</span></span><span class="lq-menu-dots" aria-hidden="true"></span><span class="lq-menu-dur">20 min</span><span class="lq-menu-price">$16</span></li>
+                  <li class="lq-menu-item"><span class="lq-menu-name">Little Amanails (age 10 &amp; under)<span class="lq-menu-desc">Mini file &amp; polish for our youngest guests</span></span><span class="lq-menu-dots" aria-hidden="true"></span><span class="lq-menu-dur">20 min</span><span class="lq-menu-price">$16</span></li>
                 </ul>
               </div>
             </div>
@@ -334,13 +363,13 @@
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-4">
-            <a class="lq-brand" href="{{ url('/') }}">Lacquer<span class="lq-dot">.</span><small>Nail Bar</small></a>
+            <a class="lq-brand" href="{{ url('/') }}">Amanails<span class="lq-dot">.</span><small>Nail Bar</small></a>
             <p style="margin-top:1.25rem;max-width:32ch">A boutique nail bar on Cedar Hill Lane. Master manicures, long-wear gel, and hand-painted art in a calm, spotless studio.</p>
             <div class="lq-footer-social">
-              <a href="#" aria-label="Lacquer on Instagram">Ig</a>
-              <a href="#" aria-label="Lacquer on Facebook">Fb</a>
-              <a href="#" aria-label="Lacquer on TikTok">Tk</a>
-              <a href="#" aria-label="Lacquer on Pinterest">Pin</a>
+              <a href="#" aria-label="Amanails on Instagram">Ig</a>
+              <a href="#" aria-label="Amanails on Facebook">Fb</a>
+              <a href="#" aria-label="Amanails on TikTok">Tk</a>
+              <a href="#" aria-label="Amanails on Pinterest">Pin</a>
             </div>
           </div>
           <div class="col-6 col-lg-2">
@@ -359,7 +388,7 @@
               <li><a href="{{ url('/') }}#visit">Hours</a></li>
               <li><a href="https://maps.google.com/?q=42+Cedar+Hill+Lane" target="_blank" rel="noopener">Directions</a></li>
               <li><a href="tel:+15550142200">(555) 014-2200</a></li>
-              <li><a href="mailto:hello@lacquernailbar.com">Email us</a></li>
+              <li><a href="mailto:hello@Amanailsnailbar.com">Email us</a></li>
               <li><a href="#booking">Book now</a></li>
             </ul>
           </div>
@@ -375,7 +404,7 @@
         </div>
 
         <div class="lq-footer-bottom">
-          <p style="margin:0">&copy; 2026 Lacquer Nail Bar. All rights reserved.</p>
+          <p style="margin:0">&copy; 2026 Amanails Nail Bar. All rights reserved.</p>
           <p style="margin:0">Built on Bootstrap 5 &middot; <a href="{{ url('/') }}">Back to home</a></p>
         </div>
       </div>

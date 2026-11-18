@@ -4,8 +4,8 @@
     <script>document.documentElement.classList.add('js')</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lacquer &mdash; Boutique Nail Salon &amp; Nail Bar Template</title>
-    <meta name="description" content="Lacquer is a chic, free Bootstrap 5 website template for nail salons and nail bars — services menu, nail-art gallery, online booking, technicians, and shop, all jQuery-free.">
+    <title>Amanails &mdash; Boutique Nail Salon &amp; Nail Bar Template</title>
+    <meta name="description" content="Amanails is a chic, free Bootstrap 5 website template for nail salons and nail bars — services menu, nail-art gallery, online booking, technicians, and shop, all jQuery-free.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,8 +20,8 @@
     <!-- ===================== NAVBAR ===================== -->
     <header class="lq-nav" data-nav>
       <div class="container">
-        <a class="lq-brand" href="{{ url('/') }}" aria-label="Lacquer — home">
-          Lacquer<span class="lq-dot">.</span>
+        <a class="lq-brand" href="{{ url('/') }}" aria-label="Amanails — home">
+          Amanails<span class="lq-dot">.</span>
           <small>Nail Bar</small>
         </a>
 
@@ -36,7 +36,16 @@
           </ul>
         </nav>
 
-        <div class="lq-nav-cta">
+        <div class="lq-nav-cta d-flex align-items-center gap-2">
+          @auth
+            <span class="lq-nav-desktop me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Hi, <strong>{{ Auth::user()->name }}</strong></span>
+            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+              @csrf
+              <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop">Logout</button>
+            </form>
+          @else
+            <a class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop" href="{{ route('login') }}">Sign In</a>
+          @endauth
           <a class="lq-btn lq-btn-primary lq-btn-sm lq-nav-desktop" href="#booking">Book Now</a>
           <button class="lq-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
             <span></span><span></span><span></span>
@@ -56,9 +65,29 @@
         <li><a href="#shop">Shop</a></li>
         <li><a href="#visit">Visit</a></li>
         <li><a href="{{ url('/services') }}">Full Menu</a></li>
+        @auth
+          <li><span style="display:block; padding: 0.5rem 0; color: var(--lq-rose); font-size: 0.9rem;">Signed in as <strong>{{ Auth::user()->name }}</strong></span></li>
+        @else
+          <li><a href="{{ route('login') }}">Sign In</a></li>
+          <li><a href="{{ route('register') }}">Create Account</a></li>
+        @endauth
       </ul>
-      <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Book an Appointment</a>
+      @auth
+        <form action="{{ route('logout') }}" method="POST" class="mt-3">
+          @csrf
+          <button type="submit" class="lq-btn lq-btn-outline lq-btn-block">Logout</button>
+        </form>
+      @else
+        <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Book an Appointment</a>
+      @endauth
     </div>
+
+    @if(session('success'))
+      <div class="alert alert-success alert-dismissible fade show text-center mb-0" role="alert" style="position: fixed; top: 85px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 520px; width: 92%; background: #ffffff; color: var(--lq-ink); border: 1px solid var(--lq-rose); box-shadow: var(--lq-shadow); border-radius: var(--lq-radius); padding: 1rem 1.5rem;">
+        <span>{{ session('success') }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="font-size: 0.75rem;"></button>
+      </div>
+    @endif
 
     <main id="main">
 
@@ -497,7 +526,7 @@
       <section class="lq-section lq-bg-cream" id="why">
         <div class="container">
           <div class="lq-head lq-head-center reveal">
-            <span class="lq-eyebrow lq-eyebrow-center">Why Lacquer</span>
+            <span class="lq-eyebrow lq-eyebrow-center">Why Amanails</span>
             <h2 class="lq-h2">Boutique care, without the compromise</h2>
           </div>
 
@@ -546,7 +575,7 @@
         <div class="container">
           <div class="lq-head lq-head-center reveal">
             <span class="lq-eyebrow lq-eyebrow-center">Membership &amp; Packages</span>
-            <h2 class="lq-h2">Save every visit with a Lacquer plan</h2>
+            <h2 class="lq-h2">Save every visit with a Amanails plan</h2>
             <p class="lq-lead">Prepaid packages and monthly memberships for regulars. Cancel or pause anytime &mdash; unused visits roll over for 60 days.</p>
           </div>
 
@@ -602,7 +631,7 @@
         <div class="container">
           <div class="row align-items-end lq-head">
             <div class="col-lg-7 reveal">
-              <span class="lq-eyebrow">The Lacquer Shop</span>
+              <span class="lq-eyebrow">The Amanails Shop</span>
               <h2 class="lq-h2">Take the salon home</h2>
             </div>
             <div class="col-lg-5 reveal reveal-d1">
@@ -617,7 +646,7 @@
               <div class="lq-shop-card">
                 <div class="lq-shop-media">
                   <span class="lq-shop-badge">Bestseller</span>
-                  <img src="{{ asset('img/shop-1.jpg') }}" alt="Bottle of blush-pink nail polish from the Lacquer own-label range" width="480" height="360" loading="lazy">
+                  <img src="{{ asset('img/shop-1.jpg') }}" alt="Bottle of blush-pink nail polish from the Amanails own-label range" width="480" height="360" loading="lazy">
                 </div>
                 <div class="lq-shop-body">
                   <p class="lq-shop-cat">Own-label polish</p>
@@ -753,14 +782,14 @@
                 </div>
                 <div class="lq-contact-line">
                   <span class="lq-ci" aria-hidden="true">&#9993;</span>
-                  <div><strong>Email</strong><a href="mailto:hello@lacquernailbar.com">hello@lacquernailbar.com</a></div>
+                  <div><strong>Email</strong><a href="mailto:hello@Amanailsnailbar.com">hello@Amanailsnailbar.com</a></div>
                 </div>
               </div>
             </div>
 
             <div class="col-lg-7 reveal reveal-d1">
               <div class="lq-map">
-                <img src="{{ asset('img/map.jpg') }}" alt="Map showing Lacquer Nail Bar on Cedar Hill Lane" width="900" height="600" loading="lazy">
+                <img src="{{ asset('img/map.jpg') }}" alt="Map showing Amanails Nail Bar on Cedar Hill Lane" width="900" height="600" loading="lazy">
                 <div class="lq-map-pin">
                   <a class="lq-btn lq-btn-gold" href="https://maps.google.com/?q=42+Cedar+Hill+Lane" target="_blank" rel="noopener">Open in Google Maps</a>
                 </div>
@@ -857,13 +886,13 @@
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-4">
-            <a class="lq-brand" href="{{ url('/') }}">Lacquer<span class="lq-dot">.</span><small>Nail Bar</small></a>
+            <a class="lq-brand" href="{{ url('/') }}">Amanails<span class="lq-dot">.</span><small>Nail Bar</small></a>
             <p style="margin-top:1.25rem;max-width:32ch">A boutique nail bar on Cedar Hill Lane. Master manicures, long-wear gel, and hand-painted art in a calm, spotless studio.</p>
             <div class="lq-footer-social">
-              <a href="#" aria-label="Lacquer on Instagram">Ig</a>
-              <a href="#" aria-label="Lacquer on Facebook">Fb</a>
-              <a href="#" aria-label="Lacquer on TikTok">Tk</a>
-              <a href="#" aria-label="Lacquer on Pinterest">Pin</a>
+              <a href="#" aria-label="Amanails on Instagram">Ig</a>
+              <a href="#" aria-label="Amanails on Facebook">Fb</a>
+              <a href="#" aria-label="Amanails on TikTok">Tk</a>
+              <a href="#" aria-label="Amanails on Pinterest">Pin</a>
             </div>
           </div>
           <div class="col-6 col-lg-2">
@@ -882,7 +911,7 @@
               <li><a href="#visit">Hours</a></li>
               <li><a href="https://maps.google.com/?q=42+Cedar+Hill+Lane" target="_blank" rel="noopener">Directions</a></li>
               <li><a href="tel:+15550142200">(555) 014-2200</a></li>
-              <li><a href="mailto:hello@lacquernailbar.com">Email us</a></li>
+              <li><a href="mailto:hello@Amanailsnailbar.com">Email us</a></li>
               <li><a href="#booking">Book now</a></li>
             </ul>
           </div>
@@ -898,7 +927,7 @@
         </div>
 
         <div class="lq-footer-bottom">
-          <p style="margin:0">&copy; 2026 Lacquer Nail Bar. All rights reserved.</p>
+          <p style="margin:0">&copy; 2026 Amanails Nail Bar. All rights reserved.</p>
           <p style="margin:0">Built on Bootstrap 5 &middot; <a href="#home">Back to top &uarr;</a></p>
         </div>
       </div>

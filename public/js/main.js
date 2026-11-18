@@ -230,13 +230,13 @@
       var date = form.querySelector("[name='date']");
       var time = form.querySelector("[data-slot-value]");
       if (success) {
-        var svcText = service && service.options ? service.options[service.selectedIndex].text : "your service";
-        var techText = tech && tech.options ? tech.options[tech.selectedIndex].text : "our team";
-        success.innerHTML = "<strong>Request received.</strong> We've noted " + escapeHtml(svcText) +
-          " with " + escapeHtml(techText) +
-          (date && date.value ? " on " + escapeHtml(date.value) : "") +
-          (time && time.value ? " at " + escapeHtml(time.value) : "") +
-          ". Our front desk will text you within the hour to confirm your spot.";
+        var svcText = service && service.options ? service.options[service.selectedIndex].text : "layanan Anda";
+        var techText = tech && tech.options ? tech.options[tech.selectedIndex].text : "tim kami";
+        success.innerHTML = "<strong>Permintaan diterima.</strong> Kami telah mencatat " + escapeHtml(svcText) +
+          " bersama " + escapeHtml(techText) +
+          (date && date.value ? " pada " + escapeHtml(date.value) : "") +
+          (time && time.value ? " pukul " + escapeHtml(time.value) : "") +
+          ". Tim resepsionis kami akan menghubungi via WhatsApp/SMS dalam 1 jam untuk konfirmasi.";
         success.classList.add("is-visible");
         success.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
       }
@@ -342,7 +342,7 @@
         btn.classList.add("is-added");
         var original = btn.getAttribute("data-label") || btn.textContent;
         btn.setAttribute("data-label", original);
-        btn.textContent = "Added";
+        btn.textContent = "Ditambahkan";
         setTimeout(function () {
           btn.classList.remove("is-added");
           btn.textContent = original;
