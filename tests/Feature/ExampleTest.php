@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -15,6 +14,28 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+        $response->assertSee('Amanails');
+        $response->assertSee('Pilih Jasa &amp; Layanan', false);
+    }
+
+    public function test_buyer_catalog_page_returns_successful_response(): void
+    {
+        $response = $this->get('/katalog');
+
+        $response->assertStatus(200);
+        $response->assertSee('Amanails');
+        $response->assertSee('Pilih Jasa &amp; Layanan', false);
+        $response->assertSee('Lanjut Pilih Jadwal');
+    }
+
+    public function test_buyer_schedule_page_returns_successful_response(): void
+    {
+        $response = $this->get('/jadwal');
+
+        $response->assertStatus(200);
+        $response->assertSee('Amanails');
+        $response->assertSee('Jadwal Ketersediaan Jam');
+        $response->assertSee('Pilih Tanggal Kunjungan');
     }
 
     public function test_services_page_returns_a_successful_response(): void
