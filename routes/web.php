@@ -26,3 +26,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Terapis / Nail Artist Portal Routes (Aurel)
 Route::get('/terapis/dashboard', [TerapisController::class, 'dashboard'])->name('terapis.dashboard');
+
+// Admin Routes (Maria)
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+
+Route::get('/admin/katalog', function () {
+    return view('admin.dashboard'); // placeholder, ganti dengan view admin.katalog saat sudah dibuat
+})->name('admin.katalog');
+
+Route::get('/admin/laporan', function () {
+    return view('admin.dashboard'); // placeholder, ganti dengan view admin.laporan saat sudah dibuat
+})->name('admin.laporan');
