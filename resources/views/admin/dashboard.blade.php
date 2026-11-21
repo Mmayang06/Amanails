@@ -32,6 +32,93 @@
       }
     }
 
+    /* ================= KALENDER JADWAL BULANAN ================= */
+    .lq-calendar-card {
+      background: var(--lq-white);
+      border-radius: var(--lq-radius-lg);
+      padding: 1.6rem;
+      border: 1px solid var(--lq-line-soft);
+      margin-bottom: 1.5rem;
+    }
+    .lq-calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    .lq-cal-day-head {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--lq-mauve);
+      padding: 0.4rem 0;
+    }
+    .lq-cal-cell {
+      background: var(--lq-cream-2);
+      border-radius: var(--lq-radius);
+      border: 1px solid var(--lq-line-soft);
+      min-height: 68px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      text-align: left;
+    }
+    .lq-cal-cell:hover {
+      border-color: var(--lq-rose);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(42, 29, 37, 0.08);
+    }
+    .lq-cal-cell.is-other-month {
+      opacity: 0.35;
+      background: transparent;
+      cursor: default;
+    }
+    .lq-cal-cell.is-today {
+      border: 2px solid var(--lq-gold);
+      background: #fffdf8;
+    }
+    .lq-cal-cell.is-selected {
+      background: var(--lq-plum) !important;
+      color: #fff !important;
+      border-color: var(--lq-plum) !important;
+      box-shadow: 0 4px 12px rgba(42, 29, 37, 0.25);
+    }
+    .lq-cal-cell.is-selected .lq-cal-num {
+      color: #fff !important;
+    }
+    .lq-cal-cell.is-selected .lq-cal-badge {
+      background: rgba(255, 255, 255, 0.22) !important;
+      color: #fff !important;
+    }
+    .lq-cal-cell.has-appt {
+      background: #fffcfd;
+      border-color: rgba(162, 93, 107, 0.4);
+    }
+    .lq-cal-num {
+      font-family: var(--lq-serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--lq-ink);
+      line-height: 1;
+    }
+    .lq-cal-badge {
+      font-size: 0.64rem;
+      font-weight: 600;
+      color: var(--lq-rose-deep);
+      background: rgba(162, 93, 107, 0.12);
+      padding: 2px 5px;
+      border-radius: 4px;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     /* ─── reuse terapis header ─── */
     .lq-terapis-header {
       background: var(--lq-white);
@@ -371,42 +458,42 @@
         <div class="col-6 col-md-3">
           <div class="lq-appt-card text-center mb-0 p-4" onclick="filterAppointments('all')" style="cursor: pointer;" title="Klik untuk tampilkan semua">
             <span class="lq-eyebrow" style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Semua Jadwal</span>
-            <div
+            <div id="statTotalAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: var(--lq-rose-deep); line-height: 1; margin-bottom: 0.35rem;">
-              12</div>
+              9</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Total Appointment</div>
-            <small style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal hari ini</small>
+            <small id="statDateLabel1" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="lq-appt-card text-center mb-0 p-4" onclick="filterAppointments('pending')" style="cursor: pointer;" title="Klik untuk filter menunggu accept">
             <span class="lq-eyebrow"
               style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Perlu Dikonfirmasi</span>
-            <div
+            <div id="statPendingAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: var(--lq-gold); line-height: 1; margin-bottom: 0.35rem;">
-              3</div>
+              2</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Menunggu Accept</div>
-            <small style="font-size: 0.8rem; color: var(--lq-mauve);">Perlu persetujuan admin</small>
+            <small id="statDateLabel2" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="lq-appt-card text-center mb-0 p-4" onclick="filterAppointments('lunas')" style="cursor: pointer;" title="Klik untuk filter terkonfirmasi">
             <span class="lq-eyebrow" style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Terkonfirmasi</span>
-            <div
+            <div id="statLunasAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: #27ae60; line-height: 1; margin-bottom: 0.35rem;">
-              8</div>
+              6</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Lunas &amp; Terjadwal</div>
-            <small style="font-size: 0.8rem; color: var(--lq-mauve);">Siap melayani perawatan</small>
+            <small id="statDateLabel3" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="lq-appt-card text-center mb-0 p-4" onclick="filterAppointments('batal')" style="cursor: pointer;" title="Klik untuk filter dibatalkan">
             <span class="lq-eyebrow" style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Dibatalkan</span>
-            <div
+            <div id="statBatalAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: #c62828; line-height: 1; margin-bottom: 0.35rem;">
               1</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Jadwal Batal</div>
-            <small style="font-size: 0.8rem; color: var(--lq-mauve);">Dibatalkan oleh pelanggan</small>
+            <small id="statDateLabel4" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
           </div>
         </div>
       </div>
@@ -420,12 +507,60 @@
           <!-- ── TAB 1: JADWAL APPOINTMENT ── -->
           <div class="adm-tab-panel {{ $currentTab === 'appointment' ? 'is-active' : '' }}" id="tab-appointment">
 
+            <!-- ================= KALENDER 1 BULAN KEDEPAN (Sesuai Dashboard Terapis) ================= -->
+            <div id="viewKalender" class="mb-4">
+              <!-- Kalender Widget Card -->
+              <div class="lq-calendar-card">
+                <!-- Kalender Navigasi Atas -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3 pb-2" style="border-bottom: 1px solid var(--lq-line-soft);">
+                  <div>
+                    <span class="lq-eyebrow" style="font-size: 0.68rem; margin-bottom: 0.15rem;">Bulan &amp; Tahun</span>
+                    <h3 id="calMonthTitle" style="font-family: var(--lq-serif); font-size: 1.45rem; margin: 0; color: var(--lq-ink);">November 2026</h3>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" style="padding: 0.35rem 0.75rem;" onclick="changeCalMonth(-1)">‹ Sebelumnya</button>
+                    <button type="button" class="lq-btn lq-btn-sm" style="background: var(--lq-cream-2); border: 1px solid var(--lq-line-soft); font-size: 0.75rem; padding: 0.35rem 0.75rem;" onclick="goToTodayCal()">Hari Ini</button>
+                    <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" style="padding: 0.35rem 0.75rem;" onclick="changeCalMonth(1)">Berikutnya ›</button>
+                  </div>
+                </div>
+
+                <!-- Legend Indikator -->
+                <div class="d-flex align-items-center gap-3 mb-3 flex-wrap" style="font-size: 0.76rem; color: var(--lq-mauve);">
+                  <span class="d-flex align-items-center gap-1">
+                    <span style="width: 10px; height: 10px; background: var(--lq-gold); border-radius: 2px; display: inline-block;"></span> Hari Ini (21 Nov)
+                  </span>
+                  <span class="d-flex align-items-center gap-1">
+                    <span style="width: 10px; height: 10px; background: rgba(162,93,107,0.3); border-radius: 2px; display: inline-block;"></span> Ada Klien Booking
+                  </span>
+                  <span class="d-flex align-items-center gap-1">
+                    <span style="width: 10px; height: 10px; background: var(--lq-plum); border-radius: 2px; display: inline-block;"></span> Tanggal Dipilih
+                  </span>
+                </div>
+
+                <!-- Grid Hari Header -->
+                <div class="lq-calendar-grid mb-1">
+                  <div class="lq-cal-day-head">Sen</div>
+                  <div class="lq-cal-day-head">Sel</div>
+                  <div class="lq-cal-day-head">Rab</div>
+                  <div class="lq-cal-day-head">Kam</div>
+                  <div class="lq-cal-day-head">Jum</div>
+                  <div class="lq-cal-day-head">Sab</div>
+                  <div class="lq-cal-day-head" style="color: var(--lq-rose-deep);">Min</div>
+                </div>
+
+                <!-- Grid Sel Hari -->
+                <div id="calGridCells" class="lq-calendar-grid">
+                  <!-- Rendered dynamically by JS -->
+                </div>
+              </div>
+            </div>
+
             <!-- TOOLBAR: judul + tombol + search (di atas tabel, sesuai wireframe) -->
             <div class="adm-toolbar">
               <div class="adm-toolbar-left">
                 <div>
-                  <div class="adm-section-eyebrow">Admin</div>
-                  <h3 class="adm-section-title">Jadwal appointment hari ini</h3>
+                  <div class="adm-section-eyebrow">Daftar Reservasi</div>
+                  <h3 class="adm-section-title" id="selectedDateTableTitle">Jadwal appointment: Sabtu, 21 November 2026</h3>
                 </div>
               </div>
               <div class="adm-toolbar-right">
@@ -440,7 +575,7 @@
             </div>
 
             <div class="adm-table-wrap">
-              <table class="table table-borderless">
+              <table class="table table-borderless" id="tableAppointmentWrap">
                 <thead>
                   <tr>
                     <th>Jam</th>
@@ -452,101 +587,15 @@
                   </tr>
                 </thead>
                 <tbody id="appointmentBody">
-                  <tr>
-                    <td>09:00&ndash;10:00</td>
-                    <td>Aurellia</td>
-                    <td>Basic Gel Polish</td>
-                    <td>Ami</td>
-                    <td><span class="adm-badge lunas">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
-                  <tr>
-                    <td>09:00&ndash;10:00</td>
-                    <td>Mayang</td>
-                    <td>Nail Art Custom</td>
-                    <td>Rara</td>
-                    <td><span class="adm-badge pending">Pending</span></td>
-                    <td>
-                      <div class="d-flex align-items-center gap-1">
-                        <button type="button" class="lq-btn lq-btn-primary lq-btn-table"
-                          onclick="approveRow(this,'Lunas')">Accept</button>
-                        <button type="button" class="lq-btn lq-btn-table lq-btn-table-danger"
-                          onclick="rejectRow(this)">Tolak</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>10:00&ndash;11:00</td>
-                    <td>Sela</td>
-                    <td>Soft Gel Extensions</td>
-                    <td>Ami</td>
-                    <td><span class="adm-badge lunas">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
-                  <tr>
-                    <td>11:00&ndash;12:00</td>
-                    <td>Dina</td>
-                    <td>Manikur Classic</td>
-                    <td>Lena</td>
-                    <td><span class="adm-badge lunas">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
-                  <tr>
-                    <td>13:00&ndash;14:00</td>
-                    <td>Rina</td>
-                    <td>Pedikur + Gel Polish</td>
-                    <td>Rara</td>
-                    <td><span class="adm-badge pending">Pending</span></td>
-                    <td>
-                      <div class="d-flex align-items-center gap-1">
-                        <button type="button" class="lq-btn lq-btn-primary lq-btn-table"
-                          onclick="approveRow(this,'Lunas')">Accept</button>
-                        <button type="button" class="lq-btn lq-btn-table lq-btn-table-danger"
-                          onclick="rejectRow(this)">Tolak</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>14:00&ndash;15:00</td>
-                    <td>Cindy</td>
-                    <td>BIAB Overlay</td>
-                    <td>Ami</td>
-                    <td><span class="adm-badge lunas">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
-                  <tr>
-                    <td>15:00&ndash;16:00</td>
-                    <td>Tari</td>
-                    <td>Acrylic Set</td>
-                    <td>Lena</td>
-                    <td><span class="adm-badge lunas">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
-                  <tr>
-                    <td>16:00&ndash;17:00</td>
-                    <td>Bella</td>
-                    <td>Basic Gel Polish</td>
-                    <td>Rara</td>
-                    <td><span class="adm-badge batal">Batal</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
-                  <tr>
-                    <td>17:00&ndash;18:00</td>
-                    <td>Nadia</td>
-                    <td>Nail Art Custom</td>
-                    <td>Ami</td>
-                    <td><span class="adm-badge lunas">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Detail appointment')">Detail</button></td>
-                  </tr>
+                  <!-- Rendered dynamically by JS -->
                 </tbody>
               </table>
+              <div id="emptyApptState" style="display: none; padding: 3rem 1.5rem; text-align: center;">
+                <h4 style="font-family: var(--lq-serif); color: var(--lq-ink); margin-bottom: 0.35rem;">Belum Ada Jadwal di Tanggal Ini</h4>
+                <p style="font-size: 0.88rem; color: var(--lq-mauve); margin-bottom: 1.25rem; max-width: 420px; margin-inline: auto;">
+                  Belum ada reservasi klien yang terdaftar pada tanggal yang dipilih. Anda dapat menambahkan jadwal secara manual melalui tombol di bawah.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -640,7 +689,7 @@
                   style="position: absolute; top: 1.25rem; right: 1.25rem; z-index: 30; background-color: var(--lq-cream-2); border-radius: 50%; padding: 0.65rem; opacity: 0.85; transition: opacity 0.2s;"></button>
 
           <div class="lq-booking-form" style="max-height: 85vh; overflow-y: auto;">
-            <form data-booking-form novalidate id="formTambahJadwalManual">
+            <form id="formTambahJadwalManual" novalidate>
               <div class="lq-booking-success" data-booking-success role="status" aria-live="polite"></div>
 
               <div class="lq-field">
@@ -784,57 +833,291 @@
   <script src="{{ asset('js/main.js') }}"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      /* ══ SUBMIT FORM TAMBAH JADWAL MANUAL ══ */
-      const formManual = document.querySelector('#modalTambahJadwal [data-booking-form]');
-      if (formManual) {
-        formManual.addEventListener('submit', function () {
-          let valid = true;
-          formManual.querySelectorAll('[data-required]').forEach(el => {
-            if (!(el.value || '').trim()) valid = false;
-          });
-          if (valid) {
-            const name = formManual.querySelector('[name="name"]')?.value || 'Pelanggan Baru';
-            const svc = formManual.querySelector('[name="service"]')?.value || 'Manikur';
-            const tech = formManual.querySelector('[name="technician"]')?.value || 'Ami';
-            const time = formManual.querySelector('[name="time"]')?.value || '10:00 WIB';
+    /* ══ DATA JADWAL APPOINTMENT BULANAN (Simulasi Multi-Hari) ══ */
+    var jadwalAppointmentBulan = {
+      '2026-11-01': [
+        { jam: '10:00–11:00', pelanggan: 'Fani', layanan: 'Basic Gel Polish', artist: 'Lena', status: 'Lunas' }
+      ],
+      '2026-11-21': [
+        { jam: '09:00–10:00', pelanggan: 'Aurellia', layanan: 'Basic Gel Polish', artist: 'Ami', status: 'Lunas' },
+        { jam: '09:00–10:00', pelanggan: 'Mayang', layanan: 'Nail Art Custom', artist: 'Rara', status: 'Pending' },
+        { jam: '10:00–11:00', pelanggan: 'Sela', layanan: 'Soft Gel Extensions', artist: 'Ami', status: 'Lunas' },
+        { jam: '11:00–12:00', pelanggan: 'Dina', layanan: 'Manikur Classic', artist: 'Lena', status: 'Lunas' },
+        { jam: '13:00–14:00', pelanggan: 'Rina', layanan: 'Pedikur + Gel Polish', artist: 'Rara', status: 'Pending' },
+        { jam: '14:00–15:00', pelanggan: 'Cindy', layanan: 'BIAB Overlay', artist: 'Ami', status: 'Lunas' },
+        { jam: '15:00–16:00', pelanggan: 'Tari', layanan: 'Acrylic Set', artist: 'Lena', status: 'Lunas' },
+        { jam: '16:00–17:00', pelanggan: 'Bella', layanan: 'Basic Gel Polish', artist: 'Rara', status: 'Batal' },
+        { jam: '17:00–18:00', pelanggan: 'Nadia', layanan: 'Nail Art Custom', artist: 'Ami', status: 'Lunas' }
+      ],
+      '2026-11-22': [
+        { jam: '10:00–11:00', pelanggan: 'Jessica', layanan: 'Spa Manikur Deluxe', artist: 'Ami', status: 'Lunas' },
+        { jam: '13:00–14:30', pelanggan: 'Clara', layanan: 'Nail Art Custom', artist: 'Rara', status: 'Pending' },
+        { jam: '15:00–16:00', pelanggan: 'Valerie', layanan: 'Manikur Gel Lengkap', artist: 'Lena', status: 'Lunas' }
+      ],
+      '2026-11-23': [
+        { jam: '11:00–12:00', pelanggan: 'Stephanie', layanan: 'BIAB Overlay', artist: 'Ami', status: 'Lunas' },
+        { jam: '14:00–15:00', pelanggan: 'Natasha', layanan: 'Akrilik Full Set', artist: 'Lena', status: 'Pending' }
+      ],
+      '2026-11-25': [
+        { jam: '09:30–10:30', pelanggan: 'Priscilla', layanan: 'Basic Gel Polish', artist: 'Rara', status: 'Lunas' },
+        { jam: '11:00–12:30', pelanggan: 'Gisella', layanan: 'Soft Gel Extensions', artist: 'Ami', status: 'Lunas' },
+        { jam: '13:30–14:30', pelanggan: 'Kezia', layanan: 'Pedikur Signature', artist: 'Lena', status: 'Pending' },
+        { jam: '16:00–17:00', pelanggan: 'Michelle', layanan: 'Hot Stone Pedikur', artist: 'Rara', status: 'Lunas' }
+      ],
+      '2026-11-28': [
+        { jam: '10:00–11:00', pelanggan: 'Angelina', layanan: 'Nail Art Custom', artist: 'Ami', status: 'Lunas' },
+        { jam: '13:00–14:00', pelanggan: 'Bianca', layanan: 'Infill & Retouch', artist: 'Lena', status: 'Pending' },
+        { jam: '15:30–16:30', pelanggan: 'Patricia', layanan: 'Manikur Classic', artist: 'Rara', status: 'Lunas' }
+      ]
+    };
 
-            const tbody = document.getElementById('appointmentBody');
-            if (tbody) {
-              const newRow = document.createElement('tr');
-              newRow.innerHTML = `
-                <td>${time.replace(' WIB', '')}</td>
-                <td>${name}</td>
-                <td>${svc.split('—')[0].trim()}</td>
-                <td>${tech.split('—')[0].trim()}</td>
-                <td><span class="adm-badge lunas">Lunas</span></td>
-                <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table" onclick="alert('Detail appointment')">Detail</button></td>
-              `;
-              tbody.prepend(newRow);
-            }
-          }
-        });
+    var currentCalYear = 2026;
+    var currentCalMonth = 10; // November (0-based)
+    var selectedCalDate = '2026-11-21';
+    var todayDateStr = '2026-11-21';
+    var namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    var namaHari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+    function formatTanggalIndo(dateStr) {
+      var parts = dateStr.split('-');
+      var y = parseInt(parts[0], 10);
+      var m = parseInt(parts[1], 10) - 1;
+      var d = parseInt(parts[2], 10);
+      var dt = new Date(y, m, d);
+      var dayName = namaHari[dt.getDay()];
+      var monthName = namaBulan[m];
+      return dayName + ', ' + d + ' ' + monthName + ' ' + y;
+    }
+
+    function formatShortDate(dateStr) {
+      var parts = dateStr.split('-');
+      var y = parseInt(parts[0], 10);
+      var m = parseInt(parts[1], 10) - 1;
+      var d = parseInt(parts[2], 10);
+      return d + ' ' + namaBulan[m].substring(0, 3) + ' ' + y;
+    }
+
+    function changeCalMonth(offset) {
+      currentCalMonth += offset;
+      if (currentCalMonth < 0) {
+        currentCalMonth = 11;
+        currentCalYear--;
+      } else if (currentCalMonth > 11) {
+        currentCalMonth = 0;
+        currentCalYear++;
+      }
+      renderCalendarGrid();
+    }
+
+    function goToTodayCal() {
+      currentCalYear = 2026;
+      currentCalMonth = 10;
+      selectedCalDate = todayDateStr;
+      renderCalendarGrid();
+      renderSelectedDateDetails(selectedCalDate);
+    }
+
+    function renderCalendarGrid() {
+      var titleEl = document.getElementById('calMonthTitle');
+      if (titleEl) {
+        titleEl.textContent = namaBulan[currentCalMonth] + ' ' + currentCalYear;
       }
 
-      /* ══ TABS ══ */
-      document.querySelectorAll('.adm-tab').forEach(tab => {
-        tab.addEventListener('click', function () {
-          document.querySelectorAll('.adm-tab').forEach(t => t.classList.remove('is-active'));
-          document.querySelectorAll('.adm-tab-panel').forEach(p => p.classList.remove('is-active'));
-          this.classList.add('is-active');
-          document.getElementById('tab-' + this.dataset.tab).classList.add('is-active');
-        });
-      });
-    });
+      var grid = document.getElementById('calGridCells');
+      if (!grid) return;
+      grid.innerHTML = '';
 
-    /* ══ FILTER APPOINTMENTS ══ */
+      var firstDayDate = new Date(currentCalYear, currentCalMonth, 1);
+      var firstDayIndex = (firstDayDate.getDay() + 6) % 7; // Senin (0) s/d Minggu (6)
+      var daysInMonth = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+      var daysInPrevMonth = new Date(currentCalYear, currentCalMonth, 0).getDate();
+
+      // Trailing hari bulan lalu
+      for (var p = firstDayIndex - 1; p >= 0; p--) {
+        var prevDayNum = daysInPrevMonth - p;
+        var cellPrev = document.createElement('div');
+        cellPrev.className = 'lq-cal-cell is-other-month';
+        cellPrev.innerHTML = '<span class="lq-cal-num" style="opacity: 0.4;">' + prevDayNum + '</span>';
+        grid.appendChild(cellPrev);
+      }
+
+      // Hari bulan aktif
+      for (var d = 1; d <= daysInMonth; d++) {
+        var mStr = String(currentCalMonth + 1).padStart(2, '0');
+        var dStr = String(d).padStart(2, '0');
+        var dateKey = currentCalYear + '-' + mStr + '-' + dStr;
+
+        var appts = jadwalAppointmentBulan[dateKey] || [];
+        var apptCount = appts.length;
+
+        var cell = document.createElement('div');
+        var cellClass = 'lq-cal-cell';
+        if (dateKey === todayDateStr) {
+          cellClass += ' is-today';
+        }
+        if (dateKey === selectedCalDate) {
+          cellClass += ' is-selected';
+        }
+        if (apptCount > 0) {
+          cellClass += ' has-appt';
+        }
+        cell.className = cellClass;
+        cell.setAttribute('data-date', dateKey);
+
+        var topHtml = '<div class="d-flex justify-content-between align-items-center">' +
+                      '<span class="lq-cal-num">' + d + '</span>' +
+                      (dateKey === todayDateStr ? '<span style="font-size: 0.55rem; color: var(--lq-gold); font-weight: 700; letter-spacing: 0.05em;">HARI INI</span>' : '') +
+                      '</div>';
+
+        var botHtml = apptCount > 0 ?
+          '<div class="mt-1"><span class="lq-cal-badge">' + apptCount + ' Klien</span></div>' :
+          '<div class="mt-1" style="height: 12px;"></div>';
+
+        cell.innerHTML = topHtml + botHtml;
+
+        (function(targetCell, k) {
+          targetCell.onclick = function() {
+            selectedCalDate = k;
+            document.querySelectorAll('.lq-cal-cell').forEach(function(el) {
+              el.classList.remove('is-selected');
+            });
+            targetCell.classList.add('is-selected');
+            renderSelectedDateDetails(k);
+          };
+        })(cell, dateKey);
+
+        grid.appendChild(cell);
+      }
+
+      // Leading hari bulan depan
+      var totalCells = firstDayIndex + daysInMonth;
+      var remainingCells = (7 - (totalCells % 7)) % 7;
+      for (var n = 1; n <= remainingCells; n++) {
+        var cellNext = document.createElement('div');
+        cellNext.className = 'lq-cal-cell is-other-month';
+        cellNext.innerHTML = '<span class="lq-cal-num" style="opacity: 0.4;">' + n + '</span>';
+        grid.appendChild(cellNext);
+      }
+    }
+
+    function renderSelectedDateDetails(dateKey) {
+      var heading = document.getElementById('selectedDateTableTitle');
+      if (heading) {
+        heading.textContent = 'Jadwal appointment: ' + formatTanggalIndo(dateKey);
+      }
+
+      // Sync default date di modal tambah jadwal
+      var modalDateInput = document.getElementById('bk-date');
+      if (modalDateInput) {
+        modalDateInput.value = dateKey;
+      }
+
+      var appts = jadwalAppointmentBulan[dateKey] || [];
+      var total = appts.length;
+      var pending = 0;
+      var lunas = 0;
+      var batal = 0;
+
+      appts.forEach(function(item) {
+        var s = (item.status || '').toLowerCase();
+        if (s === 'pending' || s === 'menunggu') pending++;
+        else if (s === 'lunas' || s === 'disetujui') lunas++;
+        else if (s === 'batal' || s === 'ditolak') batal++;
+      });
+
+      // Update stat cards
+      var elTotal = document.getElementById('statTotalAppt');
+      var elPending = document.getElementById('statPendingAppt');
+      var elLunas = document.getElementById('statLunasAppt');
+      var elBatal = document.getElementById('statBatalAppt');
+
+      if (elTotal) elTotal.textContent = total;
+      if (elPending) elPending.textContent = pending;
+      if (elLunas) elLunas.textContent = lunas;
+      if (elBatal) elBatal.textContent = batal;
+
+      var shortDate = formatShortDate(dateKey);
+      ['statDateLabel1', 'statDateLabel2', 'statDateLabel3', 'statDateLabel4'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = 'Jadwal ' + shortDate;
+      });
+
+      var tbody = document.getElementById('appointmentBody');
+      var tableWrap = document.getElementById('tableAppointmentWrap');
+      var emptyState = document.getElementById('emptyApptState');
+
+      if (!tbody) return;
+
+      if (total === 0) {
+        if (tableWrap) tableWrap.style.display = 'none';
+        if (emptyState) emptyState.style.display = 'block';
+        tbody.innerHTML = '';
+        return;
+      }
+
+      if (tableWrap) tableWrap.style.display = '';
+      if (emptyState) emptyState.style.display = 'none';
+
+      var rowsHtml = '';
+      appts.forEach(function(item, idx) {
+        var badgeClass = 'adm-badge ';
+        var s = (item.status || '').toLowerCase();
+        if (s === 'lunas' || s === 'disetujui') badgeClass += 'lunas';
+        else if (s === 'pending' || s === 'menunggu') badgeClass += 'pending';
+        else if (s === 'batal' || s === 'ditolak') badgeClass += 'batal';
+        else badgeClass += 'pending';
+
+        var actionHtml = '';
+        if (s === 'pending' || s === 'menunggu') {
+          actionHtml = '<div class="d-flex align-items-center gap-1">' +
+            '<button type="button" class="lq-btn lq-btn-primary lq-btn-table" onclick="approveApptRow(this, \'' + dateKey + '\', ' + idx + ')">Accept</button>' +
+            '<button type="button" class="lq-btn lq-btn-table lq-btn-table-danger" onclick="rejectApptRow(this, \'' + dateKey + '\', ' + idx + ')">Tolak</button>' +
+            '</div>';
+        } else {
+          actionHtml = '<button type="button" class="lq-btn lq-btn-outline lq-btn-table" onclick="showApptDetail(\'' + item.pelanggan + '\', \'' + item.layanan + '\', \'' + item.jam + '\', \'' + item.artist + '\')">Detail</button>';
+        }
+
+        rowsHtml += '<tr>' +
+          '<td>' + item.jam + '</td>' +
+          '<td>' + item.pelanggan + '</td>' +
+          '<td>' + item.layanan + '</td>' +
+          '<td>' + item.artist + '</td>' +
+          '<td><span class="' + badgeClass + '">' + item.status + '</span></td>' +
+          '<td>' + actionHtml + '</td>' +
+          '</tr>';
+      });
+
+      tbody.innerHTML = rowsHtml;
+    }
+
+    function approveApptRow(btn, dateKey, index) {
+      if (jadwalAppointmentBulan[dateKey] && jadwalAppointmentBulan[dateKey][index]) {
+        jadwalAppointmentBulan[dateKey][index].status = 'Lunas';
+      }
+      renderSelectedDateDetails(dateKey);
+      alert('Reservasi berhasil di-accept (Lunas)!');
+    }
+
+    function rejectApptRow(btn, dateKey, index) {
+      if (jadwalAppointmentBulan[dateKey] && jadwalAppointmentBulan[dateKey][index]) {
+        jadwalAppointmentBulan[dateKey][index].status = 'Batal';
+      }
+      renderSelectedDateDetails(dateKey);
+      alert('Reservasi telah ditolak.');
+    }
+
+    function showApptDetail(pelanggan, layanan, jam, artist) {
+      alert('Detail Appointment\n-------------------------\nPelanggan: ' + pelanggan + '\nLayanan: ' + layanan + '\nJam: ' + jam + '\nNail Artist: ' + artist + '\nStatus: Terverifikasi di sistem Amanails');
+    }
+
+    /* ══ FILTER APPOINTMENTS (BY STATUS KLIK KARTU STATS) ══ */
     function filterAppointments(status) {
-      const rows = document.querySelectorAll('#appointmentBody tr');
-      rows.forEach(row => {
+      var rows = document.querySelectorAll('#appointmentBody tr');
+      rows.forEach(function(row) {
         if (!status || status === 'all') {
           row.style.display = '';
         } else {
-          const badge = row.querySelector('.adm-badge');
+          var badge = row.querySelector('.adm-badge');
           if (badge && badge.textContent.toLowerCase().includes(status.toLowerCase())) {
             row.style.display = '';
           } else {
@@ -844,21 +1127,95 @@
       });
     }
 
-    /* ══ ACTION HELPERS ══ */
+    /* ══ HELPER UNTUK APPROVE PEMBAYARAN TAB ══ */
     function approveRow(btn, labelText) {
-      const row = btn.closest('tr');
-      const badge = row.querySelector('.adm-badge');
+      var row = btn.closest('tr');
+      var badge = row.querySelector('.adm-badge');
       badge.className = 'adm-badge disetujui';
       badge.textContent = labelText;
       btn.closest('td').innerHTML = '<button type="button" class="lq-btn lq-btn-outline lq-btn-table" onclick="alert(\'Sudah disetujui\')">Detail</button>';
     }
+
     function rejectRow(btn) {
-      const row = btn.closest('tr');
-      const badge = row.querySelector('.adm-badge');
+      var row = btn.closest('tr');
+      var badge = row.querySelector('.adm-badge');
       badge.className = 'adm-badge ditolak';
       badge.textContent = 'Ditolak';
       btn.closest('td').innerHTML = '<button type="button" class="lq-btn lq-btn-outline lq-btn-table" onclick="alert(\'Sudah ditolak\')">Detail</button>';
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Inisialisasi kalender dan detail hari ini
+      renderCalendarGrid();
+      renderSelectedDateDetails(todayDateStr);
+
+      /* ══ SLOT TIME PICKER DI MODAL ══ */
+      var modalSlots = document.querySelectorAll('#modalTambahJadwal .lq-slot');
+      var modalTimeInput = document.querySelector('#modalTambahJadwal [name="time"]');
+      modalSlots.forEach(function(slot) {
+        slot.addEventListener('click', function() {
+          modalSlots.forEach(function(s) { s.classList.remove('is-selected'); });
+          slot.classList.add('is-selected');
+          if (modalTimeInput) {
+            modalTimeInput.value = slot.getAttribute('data-slot');
+          }
+        });
+      });
+
+      /* ══ SUBMIT FORM TAMBAH JADWAL MANUAL ══ */
+      var formManual = document.getElementById('formTambahJadwalManual');
+      if (formManual) {
+        formManual.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name = (formManual.querySelector('[name="name"]')?.value || '').trim();
+          var svc = (formManual.querySelector('[name="service"]')?.value || '').trim();
+          var tech = (formManual.querySelector('[name="technician"]')?.value || 'Ami').trim();
+          var time = (formManual.querySelector('[name="time"]')?.value || '10:00 WIB').trim();
+          var tgl = (formManual.querySelector('[name="date"]')?.value || selectedCalDate).trim();
+
+          if (!name || !svc) {
+            alert('Mohon lengkapi nama pelanggan dan pilihan layanan.');
+            return;
+          }
+
+          if (!jadwalAppointmentBulan[tgl]) {
+            jadwalAppointmentBulan[tgl] = [];
+          }
+
+          jadwalAppointmentBulan[tgl].push({
+            jam: time.replace(' WIB', ''),
+            pelanggan: name,
+            layanan: svc.split('—')[0].trim(),
+            artist: tech.split('—')[0].trim(),
+            status: 'Lunas'
+          });
+
+          selectedCalDate = tgl;
+          renderCalendarGrid();
+          renderSelectedDateDetails(selectedCalDate);
+
+          // Tutup modal
+          var modalEl = document.getElementById('modalTambahJadwal');
+          var modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+
+          formManual.reset();
+          modalSlots.forEach(function(s) { s.classList.remove('is-selected'); });
+          alert('Jadwal baru untuk ' + name + ' pada tanggal ' + formatTanggalIndo(tgl) + ' berhasil ditambahkan!');
+        });
+      }
+
+      /* ══ TABS SWITCHER ══ */
+      document.querySelectorAll('.adm-tab').forEach(function(tab) {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.adm-tab').forEach(function(t) { t.classList.remove('is-active'); });
+          document.querySelectorAll('.adm-tab-panel').forEach(function(p) { p.classList.remove('is-active'); });
+          this.classList.add('is-active');
+          var targetPanel = document.getElementById('tab-' + this.dataset.tab);
+          if (targetPanel) targetPanel.classList.add('is-active');
+        });
+      });
+    });
   </script>
 </body>
 

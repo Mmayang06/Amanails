@@ -944,16 +944,16 @@
 
           cell.innerHTML = topHtml + botHtml;
 
-          (function(k) {
-            cell.onclick = function() {
+          (function(targetCell, k) {
+            targetCell.onclick = function() {
               selectedCalDate = k;
               document.querySelectorAll('.lq-cal-cell').forEach(function(el) {
                 el.classList.remove('is-selected');
               });
-              cell.classList.add('is-selected');
+              targetCell.classList.add('is-selected');
               renderSelectedDateDetails(k);
             };
-          })(dateKey);
+          })(cell, dateKey);
 
           grid.appendChild(cell);
         }
