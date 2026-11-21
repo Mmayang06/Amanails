@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\TerapisController;
@@ -28,14 +29,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/terapis/dashboard', [TerapisController::class, 'dashboard'])->name('terapis.dashboard');
 
 // Admin Routes (Maria)
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
-
-Route::get('/admin/katalog', function () {
-    return view('admin.dashboard'); // placeholder, ganti dengan view admin.katalog saat sudah dibuat
-})->name('admin.katalog');
-
-Route::get('/admin/laporan', function () {
-    return view('admin.dashboard'); // placeholder, ganti dengan view admin.laporan saat sudah dibuat
-})->name('admin.laporan');
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/katalog', [AdminController::class, 'katalog'])->name('admin.katalog');
+Route::get('/admin/laporan', [AdminController::class, 'dashboard'])->name('admin.laporan');
