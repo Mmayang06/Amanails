@@ -31,5 +31,6 @@ Route::get('/terapis/karya', [TerapisController::class, 'karya'])->name('terapis
 
 // Admin Routes (Maria)
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/cuti', [AdminController::class, 'cuti'])->name('admin.cuti');
 Route::get('/admin/katalog', [AdminController::class, 'katalog'])->name('admin.katalog');
 Route::get('/admin/laporan', [AdminController::class, 'dashboard'])->name('admin.laporan');
