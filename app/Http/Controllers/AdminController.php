@@ -129,9 +129,15 @@ class AdminController extends Controller
         ];
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('admin.dashboard');
+        $activeTab = $request->query('tab', 'appointment');
+        return view('admin.dashboard', compact('activeTab'));
+    }
+
+    public function cuti()
+    {
+        return view('admin.cuti');
     }
 
     public function katalog()

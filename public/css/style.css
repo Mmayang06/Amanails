@@ -247,7 +247,16 @@ textarea:focus-visible,
   padding: 0.85rem 0;
   box-shadow: 0 1px 0 var(--lq-line-soft), 0 12px 30px -24px rgba(58,40,48,0.5);
 }
-.lq-nav .container { display: flex; align-items: center; justify-content: space-between; }
+.lq-nav .container { display: flex; align-items: center; justify-content: space-between; position: relative; }
+
+@media (min-width: 992px) {
+  .lq-nav [aria-label="Navigasi Admin"] {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
 
 .lq-brand {
   font-family: var(--lq-serif);

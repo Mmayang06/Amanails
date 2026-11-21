@@ -14,6 +14,20 @@
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    <style>
+      @media (min-width: 992px) {
+        .lq-nav .container {
+          position: relative;
+        }
+        .lq-nav-desktop {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    </style>
+
   </head>
   <body>
     <a class="lq-skip" href="#main">Lewati ke konten utama</a>
@@ -29,6 +43,7 @@
         <nav class="lq-nav-desktop" aria-label="Navigasi Admin">
           <ul class="lq-nav-links">
             <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
+            <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
             <li><a href="{{ url('/admin/katalog') }}" class="is-active">Katalog</a></li>
             <li><a href="#" style="pointer-events:none; opacity:0.45; cursor:default;">Laporan</a></li>
           </ul>
@@ -53,6 +68,7 @@
     <div class="lq-nav-mobile" id="mobile-nav" data-nav-mobile>
       <ul>
         <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
+        <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
         <li><a href="{{ url('/admin/katalog') }}" class="is-active">Katalog</a></li>
         <li><span style="display:block; padding:0.5rem 0; color:var(--lq-mauve); opacity:0.5;">Laporan</span></li>
       </ul>
