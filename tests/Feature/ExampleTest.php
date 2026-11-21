@@ -53,4 +53,17 @@ class ExampleTest extends TestCase
         $response->assertSee('Amanails');
         $response->assertSee('Mia Alvarez');
     }
+
+    public function test_terapis_karya_page_returns_a_successful_response(): void
+    {
+        $response = $this->get('/terapis/karya');
+
+        $response->assertStatus(200);
+        $response->assertSee('Amanails');
+        $response->assertSee('Portofolio Terapis');
+        $response->assertSee('Kembali ke Dashboard');
+        $response->assertSee('Almond');
+        $response->assertSee('Coffin');
+        $response->assertSee('Stiletto');
+    }
 }

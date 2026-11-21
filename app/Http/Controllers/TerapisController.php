@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class TerapisController extends Controller
 {
     /**
@@ -97,12 +95,248 @@ class TerapisController extends Controller
             ],
         ];
 
+        // Data Jadwal Janji Temu 1 Bulan Kedepan (Nov - Des 2026)
+        $jadwalSatuBulan = [
+            '2026-11-21' => $jadwalHariIni,
+            '2026-11-22' => [
+                [
+                    'id' => 'APT-006',
+                    'jam' => '10:00 - 11:30 WIB',
+                    'klien' => 'Fiona Salim',
+                    'kontak' => '0812-3344-5566',
+                    'layanan' => 'Manikur Gel Signature + Chrome Finish',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Minta warna chrome mutiara halus (pearl glazed).',
+                    'tipe_klien' => 'Member',
+                ],
+                [
+                    'id' => 'APT-007',
+                    'jam' => '13:00 - 14:00 WIB',
+                    'klien' => 'Ratu Maharani',
+                    'kontak' => '0878-1122-8899',
+                    'layanan' => 'BIAB Overlay + Nude Polish',
+                    'durasi' => '60 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Kuku tipis setelah pemakaian gel berturut-turut.',
+                    'tipe_klien' => 'Pelanggan Baru',
+                ],
+                [
+                    'id' => 'APT-008',
+                    'jam' => '15:00 - 16:30 WIB',
+                    'klien' => 'Giselle Wardhana',
+                    'kontak' => '0819-0011-2233',
+                    'layanan' => 'Soft Gel Extensions + French Micro Tips',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Bentuk almond panjang sedang.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-11-24' => [
+                [
+                    'id' => 'APT-009',
+                    'jam' => '11:00 - 12:00 WIB',
+                    'klien' => 'Karin Novita',
+                    'kontak' => '0813-8899-7700',
+                    'layanan' => 'Spa Manikur Deluxe',
+                    'durasi' => '60 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Perawatan kutikula kering dan scrub parafin.',
+                    'tipe_klien' => 'Pelanggan Baru',
+                ],
+                [
+                    'id' => 'APT-010',
+                    'jam' => '14:00 - 15:30 WIB',
+                    'klien' => 'Bella Graceva',
+                    'kontak' => '0822-5544-3322',
+                    'layanan' => 'Velvet Cat Eye Gel Polish',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Warna magnetic green emerald.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-11-26' => [
+                [
+                    'id' => 'APT-011',
+                    'jam' => '09:30 - 11:00 WIB',
+                    'klien' => 'Sheryl Sheinafia',
+                    'kontak' => '0812-7788-9900',
+                    'layanan' => 'Hand-painted Florals Art',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Desain bunga daisy minimalis warna pastel.',
+                    'tipe_klien' => 'Member',
+                ],
+                [
+                    'id' => 'APT-012',
+                    'jam' => '13:00 - 14:00 WIB',
+                    'klien' => 'Chelsea Islan',
+                    'kontak' => '0811-2233-4455',
+                    'layanan' => 'Manikur Klasik + Vitamin Kuku',
+                    'durasi' => '60 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Persiapan photoshoot kuku alami.',
+                    'tipe_klien' => 'Member',
+                ],
+                [
+                    'id' => 'APT-013',
+                    'jam' => '15:30 - 17:00 WIB',
+                    'klien' => 'Raisa Andriana',
+                    'kontak' => '0856-7788-1122',
+                    'layanan' => 'BIAB Overlay Nude & Soft Shimmer',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Bentuk kuku oval klasik.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-11-28' => [
+                [
+                    'id' => 'APT-014',
+                    'jam' => '10:00 - 11:30 WIB',
+                    'klien' => 'Tatjana Saphira',
+                    'kontak' => '0812-9988-7766',
+                    'layanan' => 'Cat Eye Gel + Micro Ombre',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Aksen gliter champagne di ujung kuku.',
+                    'tipe_klien' => 'Pelanggan Baru',
+                ],
+                [
+                    'id' => 'APT-015',
+                    'jam' => '13:30 - 15:00 WIB',
+                    'klien' => 'Pevita Pearce',
+                    'kontak' => '0878-9900-1122',
+                    'layanan' => 'Gel Extensions Almond + Rose Gold',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Panjang medium, kikir rapi.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-12-01' => [
+                [
+                    'id' => 'APT-016',
+                    'jam' => '10:30 - 12:00 WIB',
+                    'klien' => 'Anya Geraldine',
+                    'kontak' => '0813-1133-5577',
+                    'layanan' => 'Glazed Donut Nails + Hand Scrub',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Chrome powder shade mutiara putih.',
+                    'tipe_klien' => 'Member',
+                ],
+                [
+                    'id' => 'APT-017',
+                    'jam' => '14:00 - 15:00 WIB',
+                    'klien' => 'Enzy Storia',
+                    'kontak' => '0818-4455-6677',
+                    'layanan' => 'Express Tidy & Cuticle Care',
+                    'durasi' => '60 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Poles kutek bening bernutrisi.',
+                    'tipe_klien' => 'Pelanggan Baru',
+                ],
+            ],
+            '2026-12-03' => [
+                [
+                    'id' => 'APT-018',
+                    'jam' => '11:00 - 12:30 WIB',
+                    'klien' => 'Laura Basuki',
+                    'kontak' => '0821-3344-9900',
+                    'layanan' => 'Manikur Gel Organik 10-Free',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Warna deep plum red elegan.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-12-05' => [
+                [
+                    'id' => 'APT-019',
+                    'jam' => '10:00 - 11:30 WIB',
+                    'klien' => 'Prilly Latuconsina',
+                    'kontak' => '0812-5566-7788',
+                    'layanan' => 'Soft Gel Extensions Coffin + French',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Bentuk coffin sedang, garis tipis putih.',
+                    'tipe_klien' => 'Member',
+                ],
+                [
+                    'id' => 'APT-020',
+                    'jam' => '13:00 - 14:30 WIB',
+                    'klien' => 'Sheila Dara',
+                    'kontak' => '0857-1122-3344',
+                    'layanan' => 'Tortoiseshell Amber Gel Art',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Motif tempurung kura-kura dengan serpihan emas.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-12-08' => [
+                [
+                    'id' => 'APT-021',
+                    'jam' => '11:00 - 12:00 WIB',
+                    'klien' => 'Luna Maya',
+                    'kontak' => '0811-9988-3344',
+                    'layanan' => 'Spa Manikur Deluxe & Pijat Tangan',
+                    'durasi' => '60 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Rendaman minyak esensial mawar.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-12-12' => [
+                [
+                    'id' => 'APT-022',
+                    'jam' => '10:00 - 11:30 WIB',
+                    'klien' => 'Cinta Laura',
+                    'kontak' => '0812-4455-8899',
+                    'layanan' => 'Stiletto Gel Extension + Chrome Gold',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Bentuk kuku stiletto tajam dan berani.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+            '2026-12-15' => [
+                [
+                    'id' => 'APT-023',
+                    'jam' => '14:00 - 15:30 WIB',
+                    'klien' => 'Tiara Andini',
+                    'kontak' => '0813-7788-2233',
+                    'layanan' => 'Milky White Minimalist Gel',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Kuku pendek bulat rapi.',
+                    'tipe_klien' => 'Pelanggan Baru',
+                ],
+            ],
+            '2026-12-19' => [
+                [
+                    'id' => 'APT-024',
+                    'jam' => '10:30 - 12:00 WIB',
+                    'klien' => 'Mahalini Raharja',
+                    'kontak' => '0819-3322-1100',
+                    'layanan' => 'Bridal Pre-Wedding Nail Art',
+                    'durasi' => '90 Menit',
+                    'status' => 'Menunggu',
+                    'catatan' => 'Pita mutiara 3D dan swarovski halus.',
+                    'tipe_klien' => 'Member',
+                ],
+            ],
+        ];
+
         // Data Kuota & Riwayat Pengajuan Cuti Terapis (Jatah Cuti 8 Hari Sebulan)
         $dataCuti = [
             'kuota_bulanan' => 8,
             'cuti_terpakai' => 2,
             'sisa_cuti' => 6,
-            'periode' => 'Bulan Ini (' . date('F Y') . ')',
+            'periode' => 'Bulan Ini ('.date('F Y').')',
             'riwayat' => [
                 [
                     'id' => 'CUTI-02',
@@ -125,14 +359,188 @@ class TerapisController extends Controller
             ],
         ];
 
-        // Karya Unggulan Terapis
+        // Karya Unggulan Terapis (dengan bentuk kuku / Nail Shape & Estimasi Pengerjaan)
         $karyaTerapis = [
-            ['judul' => 'Pressed Florals', 'gaya' => 'Floral Art', 'img' => asset('img/gallery-3.jpg'), 'suka' => 420],
-            ['judul' => 'Rose Gold Chrome', 'gaya' => 'Chrome Mirror', 'img' => asset('img/gallery-6.jpg'), 'suka' => 380],
-            ['judul' => 'Glazed Nude Shimmer', 'gaya' => 'Glazed Gel', 'img' => asset('img/gallery-5.jpg'), 'suka' => 512],
-            ['judul' => 'Modern French Tips', 'gaya' => 'Classic French', 'img' => asset('img/gallery-1.jpg'), 'suka' => 295],
+            [
+                'id' => 1,
+                'judul' => 'Pressed Florals',
+                'gaya' => 'Floral Art',
+                'nail_shape' => 'Almond',
+                'durasi' => '90 Menit',
+                'img' => asset('img/gallery-3.jpg'),
+                'suka' => 420,
+                'tanggal' => '18 Nov 2026',
+                'deskripsi' => 'Lukisan tangan bunga daisy dengan aksen foil emas di kuku bentuk Almond.',
+            ],
+            [
+                'id' => 2,
+                'judul' => 'Rose Gold Chrome',
+                'gaya' => 'Chrome Mirror',
+                'nail_shape' => 'Coffin',
+                'durasi' => '75 Menit',
+                'img' => asset('img/gallery-6.jpg'),
+                'suka' => 380,
+                'tanggal' => '15 Nov 2026',
+                'deskripsi' => 'Bubuk mirror chrome rose gold dengan base coat nude di kuku bentuk Coffin.',
+            ],
+            [
+                'id' => 3,
+                'judul' => 'Glazed Nude Shimmer',
+                'gaya' => 'Glazed Gel',
+                'nail_shape' => 'Oval',
+                'durasi' => '60 Menit',
+                'img' => asset('img/gallery-5.jpg'),
+                'suka' => 512,
+                'tanggal' => '12 Nov 2026',
+                'deskripsi' => 'Efek glazed donut shimmer lembut di atas kuku bentuk Oval alami.',
+            ],
+            [
+                'id' => 4,
+                'judul' => 'Modern French Tips',
+                'gaya' => 'Classic French',
+                'nail_shape' => 'Square',
+                'durasi' => '60 Menit',
+                'img' => asset('img/gallery-1.jpg'),
+                'suka' => 295,
+                'tanggal' => '08 Nov 2026',
+                'deskripsi' => 'Garis micro French putih bersih pada kuku bentuk Square yang rapi.',
+            ],
+            [
+                'id' => 5,
+                'judul' => 'Emerald Velvet Cat Eye',
+                'gaya' => 'Cat Eye',
+                'nail_shape' => 'Stiletto',
+                'durasi' => '90 Menit',
+                'img' => asset('img/gallery-7.jpg'),
+                'suka' => 340,
+                'tanggal' => '05 Nov 2026',
+                'deskripsi' => 'Efek magnetik velvet hijau zamrud dramatis pada bentuk kuku Stiletto tajam.',
+            ],
+            [
+                'id' => 6,
+                'judul' => 'Soft Blush Squoval',
+                'gaya' => 'Minimalist',
+                'nail_shape' => 'Squoval',
+                'durasi' => '45 Menit',
+                'img' => asset('img/gallery-2.jpg'),
+                'suka' => 260,
+                'tanggal' => '01 Nov 2026',
+                'deskripsi' => 'Warna blush natural 10-free pada bentuk kuku Squoval yang nyaman untuk harian.',
+            ],
         ];
 
-        return view('terapis.dashboard', compact('terapis', 'statistik', 'jadwalHariIni', 'dataCuti', 'karyaTerapis'));
+        return view('terapis.dashboard', compact('terapis', 'statistik', 'jadwalHariIni', 'dataCuti', 'karyaTerapis', 'jadwalSatuBulan'));
+    }
+
+    /**
+     * Halaman Khusus Lookbook Karya Terapis (Galeri Lengkap Hasil Nail Art).
+     */
+    public function karya()
+    {
+        $terapis = [
+            'nama' => 'Mia Alvarez',
+            'role' => 'Nail Art Lead & Senior Technician',
+            'spesialisasi' => 'Freehand Florals, Chrome & Micro-Detailing',
+            'rating' => '4.95',
+            'total_ulasan' => 148,
+            'status' => 'Tersedia',
+            'meja_kerja' => 'Station 01',
+        ];
+
+        $karyaTerapis = [
+            [
+                'id' => 1,
+                'judul' => 'Pressed Florals',
+                'gaya' => 'Floral Art',
+                'nail_shape' => 'Almond',
+                'durasi' => '90 Menit',
+                'img' => asset('img/gallery-3.jpg'),
+                'suka' => 420,
+                'tanggal' => '18 Nov 2026',
+                'deskripsi' => 'Lukisan tangan bunga daisy dengan aksen foil emas di kuku bentuk Almond.',
+            ],
+            [
+                'id' => 2,
+                'judul' => 'Rose Gold Chrome',
+                'gaya' => 'Chrome Mirror',
+                'nail_shape' => 'Coffin',
+                'durasi' => '75 Menit',
+                'img' => asset('img/gallery-6.jpg'),
+                'suka' => 380,
+                'tanggal' => '15 Nov 2026',
+                'deskripsi' => 'Bubuk mirror chrome rose gold dengan base coat nude di kuku bentuk Coffin.',
+            ],
+            [
+                'id' => 3,
+                'judul' => 'Glazed Nude Shimmer',
+                'gaya' => 'Glazed Gel',
+                'nail_shape' => 'Oval',
+                'durasi' => '60 Menit',
+                'img' => asset('img/gallery-5.jpg'),
+                'suka' => 512,
+                'tanggal' => '12 Nov 2026',
+                'deskripsi' => 'Efek glazed donut shimmer lembut di atas kuku bentuk Oval alami.',
+            ],
+            [
+                'id' => 4,
+                'judul' => 'Modern French Tips',
+                'gaya' => 'Classic French',
+                'nail_shape' => 'Square',
+                'durasi' => '60 Menit',
+                'img' => asset('img/gallery-1.jpg'),
+                'suka' => 295,
+                'tanggal' => '08 Nov 2026',
+                'deskripsi' => 'Garis micro French putih bersih pada kuku bentuk Square yang rapi.',
+            ],
+            [
+                'id' => 5,
+                'judul' => 'Emerald Velvet Cat Eye',
+                'gaya' => 'Cat Eye',
+                'nail_shape' => 'Stiletto',
+                'durasi' => '90 Menit',
+                'img' => asset('img/gallery-7.jpg'),
+                'suka' => 340,
+                'tanggal' => '05 Nov 2026',
+                'deskripsi' => 'Efek magnetik velvet hijau zamrud dramatis pada bentuk kuku Stiletto tajam.',
+            ],
+            [
+                'id' => 6,
+                'judul' => 'Soft Blush Squoval',
+                'gaya' => 'Minimalist',
+                'nail_shape' => 'Squoval',
+                'durasi' => '45 Menit',
+                'img' => asset('img/gallery-2.jpg'),
+                'suka' => 260,
+                'tanggal' => '01 Nov 2026',
+                'deskripsi' => 'Warna blush natural 10-free pada bentuk kuku Squoval yang nyaman untuk harian.',
+            ],
+            [
+                'id' => 7,
+                'judul' => 'Milky White Clean',
+                'gaya' => 'Minimalist',
+                'nail_shape' => 'Round',
+                'durasi' => '45 Menit',
+                'img' => asset('img/gallery-8.jpg'),
+                'suka' => 310,
+                'tanggal' => '28 Okt 2026',
+                'deskripsi' => 'Warna milky white semi-transparan yang bersih dan rapi untuk kuku pendek Round.',
+            ],
+            [
+                'id' => 8,
+                'judul' => 'Tortoiseshell & Gold Leaf',
+                'gaya' => 'Floral Art',
+                'nail_shape' => 'Almond',
+                'durasi' => '105 Menit',
+                'img' => asset('img/gallery-9.jpg'),
+                'suka' => 475,
+                'tanggal' => '24 Okt 2026',
+                'deskripsi' => 'Motif tempurung kura-kura amber dengan sentuhan serpihan emas 24k di kuku Almond.',
+            ],
+        ];
+
+        // Daftar 7 Bentuk Kuku Resmi Sesuai Nail Shape Guide
+        $nailShapes = ['Square', 'Squoval', 'Round', 'Oval', 'Almond', 'Coffin', 'Stiletto'];
+
+        return view('terapis.karya', compact('terapis', 'karyaTerapis', 'nailShapes'));
     }
 }

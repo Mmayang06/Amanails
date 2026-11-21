@@ -26,6 +26,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Terapis / Nail Artist Portal Routes (Aurel)
 Route::get('/terapis/dashboard', [TerapisController::class, 'dashboard'])->name('terapis.dashboard');
+Route::get('/terapis/karya', [TerapisController::class, 'karya'])->name('terapis.karya');
 
 // Admin Routes (Maria)
 Route::get('/admin/dashboard', function () {
