@@ -225,7 +225,7 @@
         <nav class="lq-nav-desktop" aria-label="Navigasi Admin">
           <ul class="lq-nav-links">
             <li><a href="{{ url('/admin/dashboard') }}" class="is-active">Appointment</a></li>
-            <li><a href="#" style="pointer-events:none; opacity:0.45; cursor:default;">Katalog</a></li>
+            <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
             <li><a href="#" style="pointer-events:none; opacity:0.45; cursor:default;">Laporan</a></li>
           </ul>
         </nav>
@@ -248,7 +248,7 @@
     <div class="lq-nav-mobile" id="mobile-nav" data-nav-mobile>
       <ul>
         <li><a href="{{ url('/admin/dashboard') }}" class="is-active">Appointment</a></li>
-        <li><span style="display:block; padding:0.5rem 0; color:var(--lq-mauve); opacity:0.5;">Katalog</span></li>
+        <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
         <li><span style="display:block; padding:0.5rem 0; color:var(--lq-mauve); opacity:0.5;">Laporan</span></li>
       </ul>
     </div>
