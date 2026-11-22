@@ -66,4 +66,15 @@ class ExampleTest extends TestCase
         $response->assertSee('Coffin');
         $response->assertSee('Stiletto');
     }
+
+    public function test_terapis_cuti_page_returns_a_successful_response(): void
+    {
+        $response = $this->get('/terapis/cuti');
+
+        $response->assertStatus(200);
+        $response->assertSee('Amanails');
+        $response->assertSee('Pengajuan &amp; Kuota Cuti', false);
+        $response->assertSee('Kembali ke Dashboard');
+        $response->assertSee('Riwayat Pengajuan Cuti');
+    }
 }

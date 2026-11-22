@@ -13,158 +13,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <style>
-      .lq-terapis-header {
-        background: var(--lq-white);
-        border-bottom: 1px solid var(--lq-line-soft);
-        padding: 1.15rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-      .lq-appt-card {
-        background: var(--lq-white);
-        border-radius: var(--lq-radius-lg);
-        padding: 1.8rem 2rem;
-        border: 1px solid var(--lq-line-soft);
-        margin-bottom: 1.25rem;
-        transition: transform 0.3s var(--lq-ease), box-shadow 0.3s var(--lq-ease);
-      }
-      .lq-appt-card:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--lq-shadow-soft);
-      }
-      .lq-eyebrow::before,
-      .lq-eyebrow::after {
-        display: none !important;
-      }
-      .lq-shape-radio {
-        display: none;
-      }
-      .lq-shape-label {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.35rem 0.75rem;
-        border-radius: var(--lq-radius);
-        border: 1px solid var(--lq-line-soft);
-        background: var(--lq-white);
-        font-size: 0.78rem;
-        font-weight: 500;
-        color: var(--lq-ink);
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .lq-shape-radio:checked + .lq-shape-label {
-        background: var(--lq-plum);
-        color: #fff;
-        border-color: var(--lq-plum);
-      }
-
-      /* ================= KALENDER JADWAL 1 BULAN ================= */
-      .lq-calendar-card {
-        background: var(--lq-white);
-        border-radius: var(--lq-radius-lg);
-        padding: 1.6rem;
-        border: 1px solid var(--lq-line-soft);
-        margin-bottom: 1.5rem;
-      }
-      .lq-calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 6px;
-      }
-      .lq-cal-day-head {
-        text-align: center;
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--lq-mauve);
-        padding: 0.4rem 0;
-      }
-      .lq-cal-cell {
-        background: var(--lq-cream-2);
-        border-radius: var(--lq-radius);
-        border: 1px solid var(--lq-line-soft);
-        min-height: 68px;
-        padding: 6px 8px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
-        text-align: left;
-      }
-      .lq-cal-cell:hover {
-        border-color: var(--lq-rose);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(42, 29, 37, 0.08);
-      }
-      .lq-cal-cell.is-other-month {
-        opacity: 0.35;
-        background: transparent;
-        cursor: default;
-      }
-      .lq-cal-cell.is-today {
-        border: 2px solid var(--lq-gold);
-        background: #fffdf8;
-      }
-      .lq-cal-cell.is-selected {
-        background: var(--lq-plum) !important;
-        color: #fff !important;
-        border-color: var(--lq-plum) !important;
-        box-shadow: 0 4px 12px rgba(42, 29, 37, 0.25);
-      }
-      .lq-cal-cell.is-selected .lq-cal-num {
-        color: #fff !important;
-      }
-      .lq-cal-cell.is-selected .lq-cal-badge {
-        background: rgba(255, 255, 255, 0.22) !important;
-        color: #fff !important;
-      }
-      .lq-cal-cell.has-appt {
-        background: #fffcfd;
-        border-color: rgba(162, 93, 107, 0.4);
-      }
-      .lq-cal-num {
-        font-family: var(--lq-serif);
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--lq-ink);
-        line-height: 1;
-      }
-      .lq-cal-badge {
-        font-size: 0.64rem;
-        font-weight: 600;
-        color: var(--lq-rose-deep);
-        background: rgba(162, 93, 107, 0.12);
-        padding: 2px 5px;
-        border-radius: 4px;
-        display: inline-block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .lq-view-toggle-btn {
-        padding: 0.45rem 1rem;
-        font-size: 0.78rem;
-        font-weight: 500;
-        border-radius: 999px;
-        border: 1px solid var(--lq-line-soft);
-        background: var(--lq-white);
-        color: var(--lq-ink);
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .lq-view-toggle-btn.is-active {
-        background: var(--lq-plum);
-        color: #fff;
-        border-color: var(--lq-plum);
-      }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/terapis.css') }}">
   </head>
   <body style="background: var(--lq-cream); min-height: 100vh;">
 
@@ -180,11 +29,25 @@
             </a>
           </div>
 
-          <!-- Navigasi -->
-          <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('terapis.karya') }}" class="lq-btn lq-btn-outline lq-btn-sm">
-              Lookbook Karya &rarr;
-            </a>
+          <!-- Navigasi Menu Burger (Icon Garis Tumpuk) -->
+          <div class="dropdown">
+            <button class="lq-menu-burger" type="button" id="menuTerapisToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Buka Menu Navigasi" title="Menu Navigasi">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end lq-portal-dropdown" aria-labelledby="menuTerapisToggle">
+              <li>
+                <a class="dropdown-item" href="{{ route('terapis.karya') }}">
+                  Portofolio Saya
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ route('terapis.cuti') }}">
+                  Pengajuan Cuti
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -196,34 +59,20 @@
 
         <!-- Banner Profil Terapis (Sesuai Kartu Unggulan Template .lq-pkg-card.is-featured) -->
         <div class="lq-pkg-card is-featured mb-4" style="transform: none; padding: 2.2rem 2.4rem;">
-          <div class="row align-items-center g-4">
-            <div class="col-lg-8">
-              <div class="mb-2">
-                <span class="lq-pkg-tag" style="position: static; display: inline-block; margin-bottom: 0.45rem; font-size: 0.62rem;">
-                  {{ $terapis['meja_kerja'] }}
-                </span>
-                <h2 style="color: #fff; font-size: 1.85rem; margin-bottom: 0.2rem; font-family: var(--lq-serif);">
-                  Selamat Bekerja, {{ $terapis['nama'] }}!
-                </h2>
-                <p style="color: var(--lq-mauve-soft); margin-bottom: 0; font-size: 0.88rem;">
-                  {{ $terapis['role'] }} &middot; Bergabung sejak {{ $terapis['bergabung_sejak'] }}
-                </p>
-              </div>
-              <p style="color: rgba(255,255,255,0.85); font-size: 0.92rem; margin-bottom: 0;">
-                Spesialisasi: <em>{{ $terapis['spesialisasi'] }}</em>
-              </p>
-            </div>
-
-            <div class="col-lg-4 text-lg-end">
-              <div class="d-inline-block text-lg-end">
-                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--lq-gold-soft); display: block;">Rating Kepuasan Klien</span>
-                <div style="font-size: 2rem; font-weight: 500; color: #fff; font-family: var(--lq-serif); line-height: 1.1; margin-top: 0.25rem;">
-                  ★ {{ $terapis['rating'] }} <small style="font-size: 0.85rem; color: var(--lq-mauve-soft); font-family: var(--lq-sans);">/ 5.0</small>
-                </div>
-                <small style="font-size: 0.78rem; color: var(--lq-mauve-soft);">Berdasarkan {{ $terapis['total_ulasan'] }} ulasan terverifikasi</small>
-              </div>
-            </div>
+          <div class="mb-2">
+            <span class="lq-pkg-tag" style="position: static; display: inline-block; margin-bottom: 0.45rem; font-size: 0.62rem;">
+              {{ $terapis['meja_kerja'] }}
+            </span>
+            <h2 style="color: #fff; font-size: 1.85rem; margin-bottom: 0.2rem; font-family: var(--lq-serif);">
+              Selamat Bekerja, {{ $terapis['nama'] }}!
+            </h2>
+            <p style="color: var(--lq-mauve-soft); margin-bottom: 0; font-size: 0.88rem;">
+              {{ $terapis['role'] }} &middot; Bergabung sejak {{ $terapis['bergabung_sejak'] }}
+            </p>
           </div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 0.92rem; margin-bottom: 0;">
+            Spesialisasi: <em>{{ $terapis['spesialisasi'] }}</em>
+          </p>
         </div>
 
         <!-- 3 Baris Kartu Metrik Terpisah Sesuai Desain Template -->
@@ -262,10 +111,9 @@
           </div>
         </div>
 
-        <div class="row g-4">
-          <!-- ================= KONTEN KIRI: DAFTAR JANJI TEMU & KALENDER ================= -->
-          <div class="col-lg-8">
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <!-- ================= JADWAL PERAWATAN & KALENDER BOOKING (FULL WIDTH) ================= -->
+        <div class="mb-5">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
               <div>
                 <span class="lq-eyebrow" style="margin-bottom: 0.15rem;">Jadwal Perawatan</span>
                 <h2 style="font-size: 1.5rem; margin-bottom: 0; font-family: var(--lq-serif);" id="scheduleMainHeading">Janji Temu Hari Ini ({{ count($jadwalHariIni) }})</h2>
@@ -436,141 +284,44 @@
           </div>
         </div>
 
-        <!-- ================= KONTEN KANAN: PENGAJUAN CUTI & PORTOFOLIO ================= -->
-          <div class="col-lg-4">
-            
-            <!-- Fitur Pengajuan Cuti (Format Kartu Template .lq-pkg-card) -->
-            <div class="lq-pkg-card mb-4">
-              <span class="lq-eyebrow" style="margin-bottom: 0.35rem;">Pengajuan Cuti</span>
-              <h3>Cuti &amp; Izin Terapis</h3>
-              <p class="lq-pkg-sub">Alokasi cuti aktif periode {{ date('F Y') }}</p>
-
-              <div class="lq-pkg-price mb-3">
-                {{ $dataCuti['sisa_cuti'] }}<small style="font-size: 0.95rem;"> / {{ $dataCuti['kuota_bulanan'] }} hari tersisa</small>
-              </div>
-
-              <ul class="lq-pkg-list mb-3">
-                <li>Jatah kuota bulanan: <strong>8 Hari Sebulan</strong></li>
-                <li>Cuti yang telah terpakai: <strong>{{ $dataCuti['cuti_terpakai'] }} Hari</strong></li>
-                <li>Sisa kuota bulan berjalan: <strong>{{ $dataCuti['sisa_cuti'] }} Hari</strong></li>
-              </ul>
-
-              <!-- Tombol Pengajuan Cuti Modal -->
-              <button type="button" class="lq-btn lq-btn-primary lq-btn-block mb-3" data-bs-toggle="modal" data-bs-target="#modalAjukanCuti">
-                Ajukan Cuti Baru
-              </button>
-
-              <!-- Riwayat Pengajuan Cuti -->
-              <span class="lq-eyebrow" style="font-size: 0.68rem; margin-bottom: 0.65rem; display: block;">Riwayat Pengajuan</span>
-
-              <div id="riwayatCutiList">
-                @foreach($dataCuti['riwayat'] as $cuti)
-                  <div class="p-3 rounded mb-2" style="background: var(--lq-cream-2); border: 1px solid var(--lq-line-soft); font-size: 0.84rem;">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <strong style="color: var(--lq-ink); font-family: var(--lq-serif); font-size: 0.95rem;">{{ $cuti['tipe'] }}</strong>
-                      <span class="lq-pkg-tag" style="position: static; font-size: 0.58rem; padding: 0.2rem 0.55rem; background: var(--lq-white); color: var(--lq-mauve);">
-                        {{ $cuti['status'] }}
-                      </span>
-                    </div>
-                    <div style="font-size: 0.8rem; color: var(--lq-mauve); margin-bottom: 0.25rem;">
-                      {{ $cuti['tanggal'] }} &middot; {{ $cuti['durasi'] }}
-                    </div>
-                    <div style="font-size: 0.8rem; color: var(--lq-mauve-soft); font-style: italic;">
-                      &ldquo;{{ $cuti['alasan'] }}&rdquo;
-                    </div>
-                  </div>
-                @endforeach
-              </div>
+        <!-- ================= GALERI & PORTOFOLIO KARYA TERAPIS (DI BAWAH JADWAL) ================= -->
+        <div class="lq-pkg-card mb-4" style="padding: 2.2rem 2.4rem;">
+          <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4 pb-3" style="border-bottom: 1px solid var(--lq-line-soft);">
+            <div>
+              <span class="lq-eyebrow" style="margin-bottom: 0.25rem;">Galeri &amp; Portofolio Studio</span>
+              <h3 style="font-size: 1.65rem; margin-bottom: 0.25rem; font-family: var(--lq-serif); color: var(--lq-ink);">
+                Koleksi Portofolio Terapis
+              </h3>
+              <p class="lq-pkg-sub" style="margin: 0;">Dokumentasi hasil karya nail art &amp; manikur terbaru oleh {{ $terapis['nama'] }}</p>
             </div>
-
-            <!-- Galeri Portofolio Terapis (Format Kartu Template .lq-pkg-card) -->
-            <div class="lq-pkg-card mb-4">
-              <div class="d-flex justify-content-between align-items-baseline mb-2">
-                <div>
-                  <span class="lq-eyebrow" style="margin-bottom: 0.2rem;">Galeri Studio</span>
-                  <h3 style="font-size: 1.35rem; margin-bottom: 0.2rem;">Karya Anda</h3>
-                </div>
-                <a href="{{ route('terapis.karya') }}" style="font-size: 0.78rem; color: var(--lq-rose-deep); text-decoration: none;">Lihat Semua &rarr;</a>
-              </div>
-              <p class="lq-pkg-sub" style="margin-bottom: 1.25rem;">Dokumentasi hasil karya manikur &amp; nail art terbaru</p>
-
-              <div class="row g-2" id="karyaContainer">
-                @foreach($karyaTerapis as $karya)
-                  <div class="col-6">
-                    <div style="position: relative; border-radius: var(--lq-radius); overflow: hidden; height: 110px;">
-                      <img src="{{ $karya['img'] }}" alt="{{ $karya['judul'] }}" style="width: 100%; height: 100%; object-fit: cover;">
-                      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,29,37,0.85), transparent 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.5rem; color: #fff;">
-                        <span style="font-size: 0.75rem; font-weight: 500;">{{ $karya['judul'] }}</span>
-                        <small style="font-size: 0.65rem; color: var(--lq-gold-soft);">&hearts; {{ $karya['suka'] }} suka</small>
-                      </div>
-                    </div>
-                  </div>
-                @endforeach
-              </div>
-              <button type="button" class="lq-btn lq-btn-outline lq-btn-block lq-btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#modalTambahKarya">
+            <div class="d-flex align-items-center gap-2">
+              <button type="button" class="lq-btn lq-btn-primary lq-btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahKarya">
                 + Tambah Foto Karya
               </button>
+              <a href="{{ route('terapis.karya') }}" class="lq-btn lq-btn-outline lq-btn-sm">
+                Lihat Semua Portofolio &rarr;
+              </a>
             </div>
+          </div>
 
+          <!-- Grid Preview Karya (Full Width Responsive) -->
+          <div class="row g-3" id="karyaContainer">
+            @foreach($karyaTerapis as $karya)
+              <div class="col-6 col-md-4 col-lg-2">
+                <div style="position: relative; border-radius: var(--lq-radius); overflow: hidden; height: 160px; border: 1px solid var(--lq-line-soft); background: var(--lq-cream-2);">
+                  <img src="{{ $karya['img'] }}" alt="{{ $karya['judul'] }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,29,37,0.88), transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.65rem; color: #fff;">
+                    <span style="font-size: 0.8rem; font-weight: 500; line-height: 1.2; margin-bottom: 0.2rem;">{{ $karya['judul'] }}</span>
+                    <small style="font-size: 0.68rem; color: var(--lq-gold-soft);">&hearts; {{ $karya['suka'] }} suka &middot; {{ $karya['nail_shape'] }}</small>
+                  </div>
+                </div>
+              </div>
+            @endforeach
           </div>
         </div>
 
       </div>
     </main>
-
-    <!-- ===================== MODAL AJUKAN CUTI (SESUAI GAYA FORM TEMPLATE) ===================== -->
-    <div class="modal fade" id="modalAjukanCuti" tabindex="-1" aria-labelledby="modalAjukanCutiLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: var(--lq-radius-lg); border: 1px solid var(--lq-line-soft); box-shadow: var(--lq-shadow); background: var(--lq-white);">
-          <div class="modal-header" style="background: var(--lq-cream); border-bottom: 1px solid var(--lq-line-soft); padding: 1.5rem 1.8rem;">
-            <div>
-              <span class="lq-eyebrow" style="font-size: 0.68rem; margin-bottom: 2px;">Formulir Internal Terapis</span>
-              <h4 class="modal-title" id="modalAjukanCutiLabel" style="font-family: var(--lq-serif); font-size: 1.45rem; color: var(--lq-ink); margin: 0;">Ajukan Cuti Bulanan</h4>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-          </div>
-          <div class="modal-body" style="padding: 1.8rem;">
-            <form id="formCuti" onsubmit="event.preventDefault(); submitCuti();">
-              <div class="lq-field mb-3">
-                <label for="jenisCuti">Jenis Cuti / Izin <span class="req">*</span></label>
-                <select class="lq-select" id="jenisCuti" required>
-                  <option value="">Pilih jenis cuti...</option>
-                  <option value="Cuti Bulanan">Cuti Bulanan Reguler</option>
-                  <option value="Izin Sakit">Izin Sakit</option>
-                  <option value="Keperluan Keluarga">Keperluan Keluarga / Mendesak</option>
-                  <option value="Cuti Khusus">Cuti Khusus (Menikah / Melahirkan)</option>
-                </select>
-              </div>
-
-              <div class="lq-field-row mb-3">
-                <div class="lq-field">
-                  <label for="tglMulai">Tanggal Mulai <span class="req">*</span></label>
-                  <input type="date" class="lq-input" id="tglMulai" required>
-                </div>
-                <div class="lq-field">
-                  <label for="tglSelesai">Tanggal Selesai <span class="req">*</span></label>
-                  <input type="date" class="lq-input" id="tglSelesai" required>
-                </div>
-              </div>
-
-              <div class="lq-field mb-3">
-                <label for="alasanCuti">Alasan / Keterangan <span class="req">*</span></label>
-                <textarea class="lq-textarea" id="alasanCuti" placeholder="Jelaskan keperluan pengajuan cuti Anda secara singkat..." required style="min-height: 85px;"></textarea>
-              </div>
-
-              <div class="p-3 rounded mb-3" style="background: var(--lq-cream-2); font-size: 0.82rem; color: var(--lq-mauve);">
-                <em>Catatan:</em> Kuota cuti terapis adalah <strong>8 hari sebulan</strong>. Mohon ajukan beberapa hari sebelumnya agar resepsionis dapat mengelola reservasi klien.
-              </div>
-
-              <div class="d-flex justify-content-end gap-2 pt-2">
-                <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="lq-btn lq-btn-primary lq-btn-sm">Kirim Pengajuan Cuti</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- ===================== MODAL TAMBAH FOTO KARYA ===================== -->
     <div class="modal fade" id="modalTambahKarya" tabindex="-1" aria-labelledby="modalTambahKaryaLabel" aria-hidden="true">
@@ -720,40 +471,6 @@
         });
       }
 
-      function submitCuti() {
-        var jenis = document.getElementById('jenisCuti').value;
-        var tglMulai = document.getElementById('tglMulai').value;
-        var tglSelesai = document.getElementById('tglSelesai').value;
-        var alasan = document.getElementById('alasanCuti').value;
-
-        if (!jenis || !tglMulai || !tglSelesai || !alasan) {
-          alert('Silakan lengkapi semua data formulir pengajuan cuti.');
-          return;
-        }
-
-        // Tutup modal
-        var modalEl = document.getElementById('modalAjukanCuti');
-        var modal = bootstrap.Modal.getInstance(modalEl);
-        if (modal) modal.hide();
-
-        // Tambah ke riwayat list secara dinamis
-        var riwayatContainer = document.getElementById('riwayatCutiList');
-        var itemBaru = document.createElement('div');
-        itemBaru.className = 'p-3 rounded mb-2';
-        itemBaru.style.cssText = 'background: var(--lq-cream-2); border: 1px solid var(--lq-line-soft); font-size: 0.84rem;';
-        itemBaru.innerHTML = '<div class="d-flex justify-content-between align-items-center mb-1">' +
-                             '<strong style="color: var(--lq-ink); font-family: var(--lq-serif); font-size: 0.95rem;">' + jenis + '</strong>' +
-                             '<span class="lq-pkg-tag" style="position: static; font-size: 0.58rem; padding: 0.2rem 0.55rem; background: var(--lq-gold); color: var(--lq-plum-deep);">Menunggu Persetujuan</span>' +
-                             '</div>' +
-                             '<div style="font-size: 0.8rem; color: var(--lq-mauve); margin-bottom: 0.25rem;">' + tglMulai + ' s/d ' + tglSelesai + '</div>' +
-                             '<div style="font-size: 0.8rem; color: var(--lq-mauve-soft); font-style: italic;">&ldquo;' + alasan + '&rdquo;</div>';
-        
-        riwayatContainer.insertBefore(itemBaru, riwayatContainer.firstChild);
-
-        alert('Pengajuan cuti (' + jenis + ') berhasil dikirim ke manajer salon!');
-        document.getElementById('formCuti').reset();
-      }
-
       // Preview dan Unggah Foto Karya
       var uploadedKaryaImgUrl = '';
 
@@ -797,12 +514,12 @@
         // Tambah ke galeri lookbook
         var container = document.getElementById('karyaContainer');
         var col = document.createElement('div');
-        col.className = 'col-6';
-        col.innerHTML = '<div style="position: relative; border-radius: var(--lq-radius); overflow: hidden; height: 110px;">' +
+        col.className = 'col-6 col-md-4 col-lg-2';
+        col.innerHTML = '<div style="position: relative; border-radius: var(--lq-radius); overflow: hidden; height: 160px; border: 1px solid var(--lq-line-soft); background: var(--lq-cream-2);">' +
                         '<img src="' + imgSrc + '" alt="' + judul + '" style="width: 100%; height: 100%; object-fit: cover;">' +
-                        '<div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,29,37,0.85), transparent 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.5rem; color: #fff;">' +
-                        '<span style="font-size: 0.75rem; font-weight: 500;">' + judul + '</span>' +
-                        '<small style="font-size: 0.65rem; color: var(--lq-gold-soft);">' + shape + ' &bull; ⏱ ' + durasi + ' &bull; &hearts; 0 baru</small>' +
+                        '<div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,29,37,0.88), transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.65rem; color: #fff;">' +
+                        '<span style="font-size: 0.8rem; font-weight: 500; line-height: 1.2; margin-bottom: 0.2rem;">' + judul + '</span>' +
+                        '<small style="font-size: 0.68rem; color: var(--lq-gold-soft);">' + shape + ' &bull; ⏱ ' + durasi + ' &bull; &hearts; 0 baru</small>' +
                         '</div>' +
                         '</div>';
 

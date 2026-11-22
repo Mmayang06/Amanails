@@ -543,4 +543,45 @@ class TerapisController extends Controller
 
         return view('terapis.karya', compact('terapis', 'karyaTerapis', 'nailShapes'));
     }
+
+    /**
+     * Halaman Khusus Pengajuan & Manajemen Cuti Terapis.
+     */
+    public function cuti()
+    {
+        $terapis = [
+            'nama' => 'Mia Alvarez',
+            'role' => 'Nail Art Lead & Senior Technician',
+            'meja_kerja' => 'Station 01',
+        ];
+
+        $dataCuti = [
+            'kuota_bulanan' => 8,
+            'cuti_terpakai' => 2,
+            'sisa_cuti' => 6,
+            'periode' => 'Bulan Ini ('.date('F Y').')',
+            'riwayat' => [
+                [
+                    'id' => 'CUTI-02',
+                    'tipe' => 'Cuti Bulanan',
+                    'tanggal' => '10 Nov 2026',
+                    'durasi' => '1 Hari',
+                    'alasan' => 'Keperluan keluarga mendesak.',
+                    'status' => 'Selesai',
+                    'tanggal_pengajuan' => '08 Nov 2026',
+                ],
+                [
+                    'id' => 'CUTI-01',
+                    'tipe' => 'Izin Sakit',
+                    'tanggal' => '02 Nov 2026',
+                    'durasi' => '1 Hari',
+                    'alasan' => 'Istirahat flu dan demam (surat dokter terlampir).',
+                    'status' => 'Selesai',
+                    'tanggal_pengajuan' => '02 Nov 2026',
+                ],
+            ],
+        ];
+
+        return view('terapis.cuti', compact('terapis', 'dataCuti'));
+    }
 }

@@ -1,0 +1,329 @@
+/**
+ * Amanails Nail Bar - Portal Terapis Stylesheet
+ * File: public/css/terapis.css
+ * Merapikan seluruh komponen CSS portal terapis (Dashboard, Lookbook Karya, dan Pengajuan Cuti)
+ * Menghilangkan duplikasi kode antar view.
+ */
+
+/* ==========================================================================
+   1. HEADER & TOPBAR NAVIGASI PORTAL
+   ========================================================================== */
+.lq-terapis-header {
+  background: var(--lq-white);
+  border-bottom: 1px solid var(--lq-line-soft);
+  padding: 1.15rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Reset ornamen strip untuk eyebrow di dalam portal terapis */
+.lq-eyebrow::before,
+.lq-eyebrow::after {
+  display: none !important;
+}
+
+/* ==========================================================================
+   2. HAMBURGER MENU (ICON GARIS TUMPUK) & DROPDOWN NAVIGASI
+   ========================================================================== */
+.lq-menu-burger {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--lq-line-soft);
+  border-radius: 50%;
+  background: var(--lq-white);
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+
+.lq-menu-burger:hover,
+.lq-menu-burger:focus,
+.lq-menu-burger[aria-expanded="true"] {
+  background: var(--lq-cream-2);
+  border-color: var(--lq-plum);
+  box-shadow: 0 4px 12px rgba(42, 29, 37, 0.12);
+  outline: none;
+}
+
+.lq-menu-burger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--lq-ink);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.lq-menu-burger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.lq-menu-burger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.lq-menu-burger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.lq-portal-dropdown {
+  min-width: 190px;
+  border-radius: var(--lq-radius);
+  border: 1px solid var(--lq-line-soft);
+  padding: 0.45rem;
+  background: var(--lq-white);
+  box-shadow: 0 10px 25px rgba(42, 29, 37, 0.1);
+  margin-top: 0.5rem !important;
+}
+
+.lq-portal-dropdown .dropdown-item {
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--lq-radius);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--lq-ink);
+  transition: all 0.15s ease;
+}
+
+.lq-portal-dropdown .dropdown-item:hover,
+.lq-portal-dropdown .dropdown-item:focus {
+  background: var(--lq-cream-2);
+  color: var(--lq-plum-deep);
+}
+
+.lq-portal-dropdown .dropdown-item.is-active {
+  background: var(--lq-plum);
+  color: #fff;
+}
+
+/* ==========================================================================
+   3. KARTU BASE TERAPIS (JANJI TEMU & CUTI)
+   ========================================================================== */
+.lq-appt-card,
+.lq-cuti-card {
+  background: var(--lq-white);
+  border-radius: var(--lq-radius-lg);
+  border: 1px solid var(--lq-line-soft);
+  transition: transform 0.3s var(--lq-ease), box-shadow 0.3s var(--lq-ease);
+}
+
+.lq-appt-card {
+  padding: 1.8rem 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.lq-cuti-card {
+  padding: 2rem 2.2rem;
+  height: 100%;
+}
+
+.lq-appt-card:hover,
+.lq-cuti-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lq-shadow-soft);
+}
+
+/* ==========================================================================
+   4. SELEKTOR BENTUK KUKU (NAIL SHAPE RADIO & PILL)
+   ========================================================================== */
+.lq-shape-radio {
+  display: none;
+}
+
+.lq-shape-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.38rem 0.8rem;
+  border-radius: var(--lq-radius);
+  border: 1px solid var(--lq-line-soft);
+  background: var(--lq-white);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--lq-ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lq-shape-radio:checked + .lq-shape-label {
+  background: var(--lq-plum);
+  color: #fff;
+  border-color: var(--lq-plum);
+  box-shadow: 0 2px 6px rgba(58, 40, 48, 0.25);
+}
+
+.lq-shape-pill {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--lq-cream-2);
+  color: var(--lq-plum-deep);
+  border: 1px solid var(--lq-line-soft);
+}
+
+/* ==========================================================================
+   5. VIEW TOGGLE & KALENDER BOOKING (DASHBOARD)
+   ========================================================================== */
+.lq-view-toggle-btn {
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid var(--lq-line-soft);
+  background: var(--lq-white);
+  color: var(--lq-ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lq-view-toggle-btn.is-active {
+  background: var(--lq-plum);
+  color: #fff;
+  border-color: var(--lq-plum);
+}
+
+.lq-calendar-card {
+  background: var(--lq-white);
+  border-radius: var(--lq-radius-lg);
+  padding: 1.6rem;
+  border: 1px solid var(--lq-line-soft);
+  margin-bottom: 1.5rem;
+}
+
+.lq-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.lq-cal-day-head {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lq-mauve);
+  padding: 0.4rem 0;
+}
+
+.lq-cal-cell {
+  background: var(--lq-cream-2);
+  border-radius: var(--lq-radius);
+  border: 1px solid var(--lq-line-soft);
+  min-height: 68px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+}
+
+.lq-cal-cell:hover {
+  border-color: var(--lq-rose);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(42, 29, 37, 0.08);
+}
+
+.lq-cal-cell.is-other-month {
+  opacity: 0.35;
+  background: transparent;
+  cursor: default;
+}
+
+.lq-cal-cell.is-today {
+  border: 2px solid var(--lq-gold);
+  background: #fffdf8;
+}
+
+.lq-cal-cell.is-selected {
+  background: var(--lq-plum) !important;
+  color: #fff !important;
+  border-color: var(--lq-plum) !important;
+  box-shadow: 0 4px 12px rgba(42, 29, 37, 0.25);
+}
+
+.lq-cal-cell.is-selected .lq-cal-num {
+  color: #fff !important;
+}
+
+.lq-cal-cell.is-selected .lq-cal-badge {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+.lq-cal-cell.has-appt {
+  background: #fffcfd;
+  border-color: rgba(162, 93, 107, 0.4);
+}
+
+.lq-cal-num {
+  font-family: var(--lq-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--lq-ink);
+  line-height: 1;
+}
+
+.lq-cal-badge {
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--lq-rose-deep);
+  background: rgba(162, 93, 107, 0.12);
+  padding: 2px 5px;
+  border-radius: 4px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   6. LOOKBOOK & GALERI KARYA (KARYA)
+   ========================================================================== */
+.lq-karya-card {
+  background: var(--lq-white);
+  border-radius: var(--lq-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--lq-line-soft);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s var(--lq-ease), box-shadow 0.3s var(--lq-ease);
+}
+
+.lq-karya-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--lq-shadow);
+}
+
+.lq-karya-media {
+  position: relative;
+  height: 220px;
+  background: var(--lq-cream-2);
+  overflow: hidden;
+}
+
+.lq-karya-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--lq-ease);
+}
+
+.lq-karya-card:hover .lq-karya-media img {
+  transform: scale(1.04);
+}

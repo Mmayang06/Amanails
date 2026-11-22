@@ -13,85 +13,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <style>
-      .lq-terapis-header {
-        background: var(--lq-white);
-        border-bottom: 1px solid var(--lq-line-soft);
-        padding: 1.15rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-      .lq-eyebrow::before,
-      .lq-eyebrow::after {
-        display: none !important;
-      }
-      .lq-karya-card {
-        background: var(--lq-white);
-        border-radius: var(--lq-radius-lg);
-        overflow: hidden;
-        border: 1px solid var(--lq-line-soft);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.3s var(--lq-ease), box-shadow 0.3s var(--lq-ease);
-      }
-      .lq-karya-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--lq-shadow);
-      }
-      .lq-karya-media {
-        position: relative;
-        height: 220px;
-        background: var(--lq-cream-2);
-        overflow: hidden;
-      }
-      .lq-karya-media img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s var(--lq-ease);
-      }
-      .lq-karya-card:hover .lq-karya-media img {
-        transform: scale(1.04);
-      }
-      .lq-shape-pill {
-        display: inline-block;
-        padding: 0.3rem 0.65rem;
-        border-radius: 9999px;
-        font-size: 0.68rem;
-        font-weight: 500;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        background: var(--lq-cream-2);
-        color: var(--lq-plum-deep);
-        border: 1px solid var(--lq-line-soft);
-      }
-      .lq-shape-radio {
-        display: none;
-      }
-      .lq-shape-label {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.4rem 0.85rem;
-        border-radius: var(--lq-radius);
-        border: 1px solid var(--lq-line-soft);
-        background: var(--lq-white);
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--lq-ink);
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .lq-shape-radio:checked + .lq-shape-label {
-        background: var(--lq-plum);
-        color: #fff;
-        border-color: var(--lq-plum);
-        box-shadow: 0 2px 6px rgba(58,40,48,0.25);
-      }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/terapis.css') }}">
   </head>
   <body style="background: var(--lq-cream); min-height: 100vh;">
 
@@ -109,14 +31,30 @@
             <span style="font-size: 0.84rem; font-weight: 500; color: var(--lq-mauve);">Lookbook Portofolio</span>
           </div>
 
-          <!-- Tombol Aksi Topbar (Kembali ke Dashboard) -->
+          <!-- Tombol Aksi Topbar -->
           <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('terapis.dashboard') }}" class="lq-btn lq-btn-outline lq-btn-sm">
-              &larr; Kembali ke Dashboard
-            </a>
             <button type="button" class="lq-btn lq-btn-primary lq-btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahKarya">
               + Tambah Foto Karya
             </button>
+            <div class="dropdown">
+              <button class="lq-menu-burger" type="button" id="menuTerapisToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Buka Menu Navigasi" title="Menu Navigasi">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end lq-portal-dropdown" aria-labelledby="menuTerapisToggle">
+                <li>
+                  <a class="dropdown-item" href="{{ route('terapis.dashboard') }}">
+                    Kembali ke Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ route('terapis.cuti') }}">
+                    Pengajuan Cuti
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
