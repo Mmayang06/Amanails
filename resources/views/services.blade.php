@@ -27,12 +27,10 @@
 
         <nav class="lq-nav-desktop" aria-label="Navigasi Utama">
           <ul class="lq-nav-links">
-            <li><a href="{{ url('/') }}#services">Layanan</a></li>
-            <li><a href="{{ url('/') }}#gallery">Galeri</a></li>
-            <li><a href="#booking">Reservasi</a></li>
-            <li><a href="{{ url('/') }}#team">Terapis</a></li>
-            <li><a href="{{ url('/') }}#shop">Produk</a></li>
+            <li><a href="{{ url('/katalog') }}">Katalog</a></li>
+            <li><a href="{{ url('/jadwal') }}">Booking</a></li>
             <li><a href="{{ url('/services') }}" class="is-active">Menu Lengkap</a></li>
+            <li><a href="{{ url('/bantuan') }}">Bantuan</a></li>
           </ul>
         </nav>
 
@@ -46,7 +44,7 @@
           @else
             <a class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop" href="{{ route('login') }}">Masuk</a>
           @endauth
-          <a class="lq-btn lq-btn-primary lq-btn-sm lq-nav-desktop" href="#booking">Pesan Sekarang</a>
+          <a class="lq-btn lq-btn-primary lq-btn-sm lq-nav-desktop" href="{{ url('/jadwal') }}">Pesan Sekarang</a>
           <button class="lq-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-nav" aria-label="Buka menu navigasi">
             <span></span><span></span><span></span>
           </button>
@@ -213,133 +211,6 @@
       </section>
 
       <!-- ===================== BOOKING ===================== -->
-      <section class="lq-section lq-bg-cream" id="booking">
-        <div class="container">
-          <div class="lq-head lq-head-center reveal">
-            <span class="lq-eyebrow lq-eyebrow-center">Reservasi Kursi Anda</span>
-            <h2 class="lq-h2">Pesan dalam tiga langkah mudah</h2>
-            <p class="lq-lead">Pilih layanan, tentukan terapis favorit, dan pilih jam kunjungan yang pas. Kami akan mengonfirmasi jadwal Anda segera tanpa perlu uang muka untuk layanan standar.</p>
-          </div>
-
-          <div class="lq-booking-wrap reveal reveal-d1">
-            <div class="lq-booking-grid">
-              <div class="lq-booking-side">
-                <img src="{{ asset('img/booking-side.jpg') }}" alt="Terapis kuku Amanails Nail Bar sedang mengaplikasikan kutek gel dengan teliti" width="720" height="900" loading="lazy">
-                <div class="lq-booking-side-inner">
-                  <h3>Santai &mdash; kami siapkan semuanya untuk Anda.</h3>
-                  <p>Setiap kunjungan mencakup konsultasi kutikula, welcome drink gratis, dan perawatan tangan hangat yang menenangkan.</p>
-                  <ul class="lq-booking-perks">
-                    <li>Peralatan higienis dengan autoklaf standar rumah sakit</li>
-                    <li>Garansi poles ulang gratis dalam 5 hari untuk set gel</li>
-                    <li>Stempel loyalitas di setiap kunjungan Anda</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="lq-booking-form">
-                <form data-booking-form novalidate>
-                  <div class="lq-steps" aria-hidden="true">
-                    <span class="lq-step-pill is-done"><span>01</span>Layanan</span>
-                    <span class="lq-step-pill is-done"><span>02</span>Terapis</span>
-                    <span class="lq-step-pill is-done"><span>03</span>Jadwal</span>
-                  </div>
-
-                  <div class="lq-booking-success" data-booking-success role="status" aria-live="polite"></div>
-
-                  <div class="lq-field">
-                    <label for="bk-service">Pilihan Layanan <span class="req" aria-hidden="true">*</span></label>
-                    <select class="lq-select" id="bk-service" name="service" data-required aria-required="true">
-                      <option value="">Pilih jenis layanan&hellip;</option>
-                      <option>Manikur Klasik &mdash; Rp 180.000</option>
-                      <option>Spa Manikur Deluxe &mdash; Rp 260.000</option>
-                      <option>Manikur Gel Lengkap &mdash; Rp 250.000</option>
-                      <option>BIAB Overlay &mdash; Rp 300.000</option>
-                      <option>Pedikur Signature &mdash; Rp 280.000</option>
-                      <option>Hot Stone Pedikur &mdash; Rp 360.000</option>
-                      <option>Akrilik Full Set &mdash; Rp 400.000</option>
-                      <option>Soft Gel Extensions &mdash; Rp 430.000</option>
-                      <option>Infill &amp; Retouch &mdash; Rp 260.000</option>
-                      <option>Nail Art Tambahan</option>
-                    </select>
-                    <span class="lq-field-error">Silakan pilih salah satu layanan.</span>
-                  </div>
-
-                  <div class="lq-field">
-                    <label for="bk-tech">Pilihan Terapis <span class="req" aria-hidden="true">*</span></label>
-                    <select class="lq-select" id="bk-tech" name="technician" data-required aria-required="true">
-                      <option value="">Siapa saja / Tanpa preferensi</option>
-                      <option>Mia Alvarez &mdash; Nail Art Lead</option>
-                      <option>Priya Nair &mdash; Spesialis Gel &amp; BIAB</option>
-                      <option>Daniel Okafor &mdash; Spesialis Akrilik &amp; Ekstensi</option>
-                      <option>Sofia Bianchi &mdash; Spesialis Pedikur &amp; Spa</option>
-                    </select>
-                    <span class="lq-field-error">Silakan pilih terapis atau "Tanpa preferensi".</span>
-                  </div>
-
-                  <div class="lq-field-row">
-                    <div class="lq-field">
-                      <label for="bk-date">Tanggal Kunjungan <span class="req" aria-hidden="true">*</span></label>
-                      <input class="lq-input" type="date" id="bk-date" name="date" data-required aria-required="true">
-                      <span class="lq-field-error">Silakan pilih tanggal kunjungan Anda.</span>
-                    </div>
-                    <div class="lq-field">
-                      <label for="bk-people">Jumlah Tamu</label>
-                      <select class="lq-select" id="bk-people" name="guests">
-                        <option>1 Orang (Sendiri)</option>
-                        <option>2 Orang (Kursi Berdampingan)</option>
-                        <option>3&ndash;4 Orang (Rombongan)</option>
-                        <option>5+ Orang (Sewa Privat)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="lq-field">
-                    <label id="slot-label">Pilihan Jam Kunjungan <span class="req" aria-hidden="true">*</span></label>
-                    <input type="hidden" name="time" data-slot-value data-required aria-required="true">
-                    <div class="lq-slots" data-slots role="group" aria-labelledby="slot-label">
-                      <button type="button" class="lq-slot" data-slot="10:00 WIB">10:00</button>
-                      <button type="button" class="lq-slot" data-slot="11:30 WIB">11:30</button>
-                      <button type="button" class="lq-slot" data-slot="13:00 WIB">13:00</button>
-                      <button type="button" class="lq-slot" data-slot="14:30 WIB">14:30</button>
-                      <button type="button" class="lq-slot" data-slot="16:00 WIB">16:00</button>
-                      <button type="button" class="lq-slot" data-slot="17:30 WIB">17:30</button>
-                      <button type="button" class="lq-slot" data-slot="19:00 WIB">19:00</button>
-                    </div>
-                    <span class="lq-field-error">Silakan tentukan pilihan jam kunjungan.</span>
-                  </div>
-
-                  <div class="lq-field-row">
-                    <div class="lq-field">
-                      <label for="bk-name">Nama Lengkap <span class="req" aria-hidden="true">*</span></label>
-                      <input class="lq-input" type="text" id="bk-name" name="name" autocomplete="name" data-required aria-required="true" placeholder="Nama Anda">
-                      <span class="lq-field-error">Silakan masukkan nama lengkap Anda.</span>
-                    </div>
-                    <div class="lq-field">
-                      <label for="bk-phone">Nomor HP / WhatsApp <span class="req" aria-hidden="true">*</span></label>
-                      <input class="lq-input" type="tel" id="bk-phone" name="phone" autocomplete="tel" data-required aria-required="true" placeholder="08xxxxxxxxxx">
-                      <span class="lq-field-error">Kami memerlukan nomor untuk mengirimkan konfirmasi.</span>
-                    </div>
-                  </div>
-
-                  <div class="lq-field">
-                    <label for="bk-email">Alamat Email <span class="req" aria-hidden="true">*</span></label>
-                    <input class="lq-input" type="email" id="bk-email" name="email" autocomplete="email" data-required aria-required="true" placeholder="nama@email.com">
-                    <span class="lq-field-error">Silakan masukkan alamat email yang valid.</span>
-                  </div>
-
-                  <div class="lq-field">
-                    <label for="bk-notes">Catatan Khusus (Opsional)</label>
-                    <textarea class="lq-textarea" id="bk-notes" name="notes" placeholder="Tautan inspirasi desain, alergi kulit tertentu, atau request khusus&hellip;"></textarea>
-                  </div>
-
-                  <button class="lq-btn lq-btn-primary lq-btn-block" type="submit">Kirim Permintaan Reservasi</button>
-                  <p style="font-size:.78rem;color:var(--lq-mauve-soft);margin:1rem 0 0;text-align:center">Tidak ada pembayaran di awal. Tim kami akan menghubungi Anda via WhatsApp untuk konfirmasi.</p>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- ===================== CTA BAND ===================== -->
       <section class="lq-section lq-cta">
@@ -350,7 +221,7 @@
             <p>Bingung menentukan jenis perawatan yang paling cocok untuk kondisi kuku Anda? Hubungi studio kami dan tim ahli kami akan dengan senang hati membantu.</p>
             <div class="lq-cta-actions">
               <a class="lq-btn lq-btn-gold" href="tel:+6281234567890">Hubungi (021) 555-0142</a>
-              <a class="lq-btn lq-btn-outline" href="{{ url('/') }}#gallery">Lihat Galeri Inspirasi</a>
+              <a class="lq-btn lq-btn-outline2" href="{{ url('/') }}#gallery">Lihat Galeri Inspirasi</a>
             </div>
           </div>
         </div>

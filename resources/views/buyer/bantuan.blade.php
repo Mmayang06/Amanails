@@ -116,7 +116,7 @@
           </div>
           <div class="col-lg-4">
             <h5>Amanails &middot; PROBIS</h5>
-            <p style="max-width:34ch">Modul Pembeli (Buyer - Sela): Pusat bantuan dan tanya jawab.</p>
+            <p style="max-width:34ch">Digitalisasi dan sentralisasi layanan reservasi salon kuku</p>
           </div>
         </div>
 

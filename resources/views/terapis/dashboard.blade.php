@@ -205,8 +205,8 @@
                       @else
                         <span style="font-size: 0.84rem; color: #27ae60; font-weight: 500; align-self: center;">Perawatan Selesai</span>
                       @endif
-                      <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" onclick="lihatDetail('{{ $item['klien'] }}', '{{ $item['layanan'] }}')">
-                        Detail
+                      <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" onclick="bukaKasirPelunasan('{{ $item['id'] }}')">
+                        Detail &amp; Kasir Pelunasan
                       </button>
                     </div>
                   </div>
@@ -413,6 +413,152 @@
       </div>
     </div>
 
+    <!-- ===================== MODAL DETAIL APPOINTMENT & KASIR PELUNASAN HARI-H ===================== -->
+    <div class="modal fade" id="modalKasirPelunasan" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: var(--lq-radius-lg); border: 1px solid var(--lq-line-soft); box-shadow: var(--lq-shadow); background: var(--lq-white); overflow: hidden;">
+          <div class="modal-header" style="background: var(--lq-plum); color: #fff; padding: 1.25rem 1.6rem;">
+            <div>
+              <span class="lq-eyebrow" style="font-size: 0.68rem; color: var(--lq-gold-soft); margin-bottom: 2px;">Kasir &amp; Pelunasan Studio</span>
+              <h4 class="modal-title" style="font-family: var(--lq-serif); font-size: 1.35rem; color: #fff; margin: 0;">Detail Appointment &amp; Tambahan Hari-H</h4>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+          </div>
+
+          <div class="modal-body p-4" style="background: var(--lq-cream);">
+            
+            <!-- Detail Klien & Status Booking -->
+            <div class="p-3 mb-3" style="background: #fff; border: 1px solid var(--lq-line-soft); border-radius: var(--lq-radius);">
+              <div class="row g-2">
+                <div class="col-sm-6">
+                  <small style="font-size: 0.72rem; color: var(--lq-mauve); text-transform: uppercase;">Pelanggan</small>
+                  <div style="font-size: 1.05rem; font-weight: 600; color: var(--lq-ink);" id="kasirClientName">Sela (Buyer)</div>
+                  <div style="font-size: 0.8rem; color: var(--lq-mauve);" id="kasirClientPhone">WhatsApp: 0812-9876-5432</div>
+                </div>
+                <div class="col-sm-6 text-sm-end">
+                  <small style="font-size: 0.72rem; color: var(--lq-mauve); text-transform: uppercase;">Jadwal &amp; Meja</small>
+                  <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-rose-deep);" id="kasirScheduleTime">09:00 - 10:30 WIB &bull; Station 01</div>
+                  <div style="font-size: 0.8rem; color: var(--lq-mauve);" id="kasirArtistName">Terapis: Aurel (Senior Nail Artist)</div>
+                </div>
+              </div>
+
+              <!-- Foto Referensi Desain Klien (Jika Request Desain Sendiri) -->
+              <div id="kasirDesignPhotoBox" class="mt-3 pt-3" style="border-top: 1px dashed var(--lq-line-soft); display: none;">
+                <div class="d-flex align-items-center gap-3">
+                  <img id="kasirDesignPhotoImg" src="" alt="Desain Referensi Klien" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--lq-line);">
+                  <div>
+                    <span class="badge" style="background: var(--lq-blush); color: var(--lq-rose-deep); font-size: 0.72rem;">✨ Request Desain Klien</span>
+                    <div style="font-size: 0.82rem; font-style: italic; color: var(--lq-ink); margin-top: 2px;" id="kasirDesignNote">"Lilac floral & aksen emas"</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rincian Layanan Booking Awal -->
+            <div class="mb-3">
+              <label style="font-weight: 600; font-size: 0.85rem; color: var(--lq-plum);" class="d-block mb-1">
+                Rincian Layanan Saat Booking Awal:
+              </label>
+              <div style="background: #fff; border: 1px solid var(--lq-line-soft); border-radius: var(--lq-radius); overflow: hidden;">
+                <table class="table mb-0" style="font-size: 0.85rem;">
+                  <tbody id="kasirInitialServicesTable">
+                    <!-- Di-render oleh JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TAMBAHAN LAYANAN HARI-H (Add-on Saat Treatment) -->
+            <div class="p-3 mb-3" style="background: #fbf5f2; border: 1px solid var(--lq-rose-soft, #eedbd8); border-radius: var(--lq-radius);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label style="font-weight: 600; font-size: 0.86rem; color: var(--lq-plum); margin: 0;">
+                  Tambahan Layanan Hari-H (Saat Treatment di Kursi)
+                </label>
+                <small style="font-size: 0.75rem; color: var(--lq-mauve);">Charm, 3D Art, Ekstra Layer, dll.</small>
+              </div>
+
+              <!-- Input Tambah Item Ekstra -->
+              <div class="row g-2 align-items-center mb-2">
+                <div class="col-7 col-sm-6">
+                  <select class="lq-select" id="kasirPresetAddon" style="font-size: 0.82rem; padding: 0.45rem 0.65rem;">
+                    <option value="" disabled selected>Pilih Layanan Tambahan Cepat...</option>
+                    <option value="Aksesoris Charm 3D / Kristal Swarovski" data-price="25000">Charm 3D / Kristal Swarovski (+Rp 25.000)</option>
+                    <option value="Ekstra Layer Builder Gel (BIAB)" data-price="40000">Ekstra Layer Builder Gel (+Rp 40.000)</option>
+                    <option value="Aksen Chrome / Aurora Powder" data-price="30000">Aksen Chrome / Aurora (+Rp 30.000)</option>
+                    <option value="Nail Tip Extension Tambahan (2 Jari)" data-price="35000">Nail Tip Extension (+Rp 35.000)</option>
+                    <option value="Spa Hand Massage & Pelembap" data-price="30000">Spa Hand Massage & Pelembap (+Rp 30.000)</option>
+                    <option value="custom" data-price="0">+ Input Custom Layanan Lainnya...</option>
+                  </select>
+                </div>
+                <div class="col-5 col-sm-4" id="kasirCustomPriceCol" style="display: none;">
+                  <input type="number" class="lq-input" id="kasirCustomPrice" placeholder="Harga (Rp)" style="font-size: 0.82rem; padding: 0.45rem 0.65rem;">
+                </div>
+                <div class="col-12 col-sm-2">
+                  <button type="button" class="lq-btn lq-btn-primary lq-btn-block" id="btnKasirAddService" style="padding: 0.45rem 0.65rem; font-size: 0.8rem;">
+                    + Tambah
+                  </button>
+                </div>
+              </div>
+
+              <!-- Daftar Item Tambahan Hari-H -->
+              <div id="kasirAddonsList" style="background: #fff; border: 1px solid var(--lq-line-soft); border-radius: 6px; padding: 0.5rem 0.75rem; min-height: 40px;">
+                <div id="kasirNoAddonsText" style="font-size: 0.78rem; color: var(--lq-mauve); font-style: italic; text-align: center; padding: 4px;">
+                  Belum ada tambahan layanan hari-h.
+                </div>
+                <ul id="kasirAddonsUl" style="list-style: none; padding: 0; margin: 0;"></ul>
+              </div>
+            </div>
+
+            <!-- Rekapitulasi Tagihan & Sisa Pelunasan -->
+            <div class="p-3" style="background: #fff; border: 1px solid var(--lq-line-soft); border-radius: var(--lq-radius);">
+              <div class="d-flex justify-content-between py-1" style="font-size: 0.85rem; color: var(--lq-mauve);">
+                <span>Subtotal Layanan Awal</span>
+                <span id="kasirValInitialTotal">Rp 275.000</span>
+              </div>
+              <div class="d-flex justify-content-between py-1" style="font-size: 0.85rem; color: var(--lq-mauve);">
+                <span>Tambahan Layanan Hari-H</span>
+                <span id="kasirValAddonsTotal" style="color: var(--lq-rose-deep); font-weight: 600;">+ Rp 0</span>
+              </div>
+              <div class="d-flex justify-content-between py-1" style="font-size: 0.85rem; color: var(--lq-mauve);">
+                <span>Uang Muka (DP) Sudah Terbayar</span>
+                <span id="kasirValDpPaid" style="color: #27ae60; font-weight: 600;">- Rp 50.000</span>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 2px solid var(--lq-cream-2);">
+                <div>
+                  <small style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--lq-rose-deep); font-weight: 700; font-size: 0.75rem; display: block;">
+                    💵 SISA TOTALAN DIBAYAR DI AKHIR:
+                  </small>
+                  <small style="font-size: 0.72rem; color: var(--lq-mauve);">Harus dilunasi klien sebelum meninggalkan studio</small>
+                </div>
+                <div style="font-family: var(--lq-serif); font-size: 1.55rem; color: var(--lq-plum); font-weight: 700;" id="kasirValFinalRemaining">
+                  Rp 225.000
+                </div>
+              </div>
+            </div>
+
+            <!-- Metode Pembayaran Pelunasan -->
+            <div class="mt-3">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--lq-mauve);" class="d-block mb-1">Metode Pelunasan:</label>
+              <div class="d-flex gap-3">
+                <label style="font-size: 0.82rem; cursor: pointer;"><input type="radio" name="payment_method_final" value="cash" checked> Tunai (Cash)</label>
+                <label style="font-size: 0.82rem; cursor: pointer;"><input type="radio" name="payment_method_final" value="qris"> QRIS Kasir</label>
+                <label style="font-size: 0.82rem; cursor: pointer;"><input type="radio" name="payment_method_final" value="edc"> Kartu Debit / EDC</label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="modal-footer" style="background: var(--lq-cream-2); padding: 0.85rem 1.5rem;">
+            <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" class="lq-btn lq-btn-primary lq-btn-sm" id="btnKasirSelesaikan">
+              Konfirmasi Pelunasan &amp; Selesaikan Appointment &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer Khusus Portal -->
     <footer style="padding: 1.8rem 0; border-top: 1px solid var(--lq-line-soft); text-align: center; font-size: 0.82rem; color: var(--lq-mauve); background: var(--lq-cream);">
       &copy; {{ date('Y') }} Amanails Nail Bar &middot; Khusus Akses Internal Terapis
@@ -531,12 +677,177 @@
         uploadedKaryaImgUrl = '';
       }
 
-      function lihatDetail(klien, layanan) {
-        if (!klien) {
-          alert('Informasi riwayat perawatan klien ini tersimpan aman di sistem.');
+      // ================= LOGIKA KASIR PELUNASAN & TAMBAHAN HARI-H =================
+      var jadwalList = @json($jadwalHariIni);
+      var currentActiveAppt = null;
+      var currentAddons = [];
+
+      function formatRupiahKasir(num) {
+        return 'Rp ' + parseInt(num, 10).toLocaleString('id-ID');
+      }
+
+      function bukaKasirPelunasan(id) {
+        var appt = jadwalList.find(function(item) { return item.id === id; });
+        if (!appt) {
+          appt = {
+            id: id,
+            klien: 'Klien Amanails',
+            kontak: '0812-9876-5432',
+            jam: '10:00 - 11:00 WIB',
+            kursi: 'Station 01',
+            layanan: 'Treatment Kuku',
+            layanan_awal: [
+              { nama: 'Layanan Manikur & Nail Art', harga: 200000 }
+            ],
+            dp_terbayar: 50000
+          };
+        }
+        currentActiveAppt = appt;
+        currentAddons = [];
+
+        document.getElementById('kasirClientName').textContent = appt.klien;
+        document.getElementById('kasirClientPhone').textContent = 'WhatsApp: ' + appt.kontak;
+        document.getElementById('kasirScheduleTime').textContent = appt.jam + ' • ' + (appt.kursi || 'Station 01');
+        document.getElementById('kasirArtistName').textContent = 'Terapis Bertugas: ' + (appt.kursi === 'Station 02' ? 'Nadia' : 'Aurel');
+
+        var photoBox = document.getElementById('kasirDesignPhotoBox');
+        if (appt.foto_desain) {
+          photoBox.style.display = 'block';
+          document.getElementById('kasirDesignPhotoImg').src = appt.foto_desain;
+          document.getElementById('kasirDesignNote').textContent = appt.catatan || 'Model referensi desain khusus klien.';
+        } else {
+          photoBox.style.display = 'none';
+        }
+
+        var initialServices = appt.layanan_awal || [
+          { nama: appt.layanan || 'Manikur Gel Lengkap', harga: 180000 }
+        ];
+
+        var tableHtml = '';
+        var initialTotal = 0;
+        initialServices.forEach(function(s) {
+          initialTotal += s.harga;
+          tableHtml += '<tr><td style="padding: 0.55rem 0.85rem;">' + s.nama + '</td>' +
+                       '<td class="text-end" style="padding: 0.55rem 0.85rem; font-weight: 600; color: var(--lq-ink);">' + formatRupiahKasir(s.harga) + '</td></tr>';
+        });
+        document.getElementById('kasirInitialServicesTable').innerHTML = tableHtml;
+        document.getElementById('kasirValInitialTotal').textContent = formatRupiahKasir(initialTotal);
+
+        var dp = appt.dp_terbayar || 50000;
+        document.getElementById('kasirValDpPaid').textContent = '- ' + formatRupiahKasir(dp);
+
+        renderKasirAddons();
+
+        var modalEl = new bootstrap.Modal(document.getElementById('modalKasirPelunasan'));
+        modalEl.show();
+      }
+
+      function renderKasirAddons() {
+        var ul = document.getElementById('kasirAddonsUl');
+        var noText = document.getElementById('kasirNoAddonsText');
+        ul.innerHTML = '';
+
+        var totalAddons = 0;
+        if (currentAddons.length === 0) {
+          noText.style.display = 'block';
+        } else {
+          noText.style.display = 'none';
+          currentAddons.forEach(function(item, idx) {
+            totalAddons += item.price;
+            var li = document.createElement('li');
+            li.className = 'd-flex justify-content-between align-items-center py-1';
+            li.style.borderBottom = '1px dashed var(--lq-line-soft)';
+            li.style.fontSize = '0.82rem';
+            li.innerHTML = '<span>+ ' + item.name + '</span>' +
+                           '<div><strong style="color:var(--lq-rose-deep); margin-right:8px;">' + formatRupiahKasir(item.price) + '</strong>' +
+                           '<button type="button" class="btn btn-sm btn-link text-danger p-0" style="text-decoration:none; font-size:0.85rem;" onclick="hapusKasirAddon(' + idx + ')">&times;</button></div>';
+            ul.appendChild(li);
+          });
+        }
+
+        var initialServices = currentActiveAppt.layanan_awal || [{ harga: 180000 }];
+        var initialTotal = initialServices.reduce(function(acc, cur) { return acc + cur.harga; }, 0);
+        var dp = currentActiveAppt.dp_terbayar || 50000;
+
+        var finalGrand = initialTotal + totalAddons;
+        var finalRemaining = Math.max(0, finalGrand - dp);
+
+        document.getElementById('kasirValAddonsTotal').textContent = '+ ' + formatRupiahKasir(totalAddons);
+        document.getElementById('kasirValFinalRemaining').textContent = formatRupiahKasir(finalRemaining);
+      }
+
+      function hapusKasirAddon(idx) {
+        currentAddons.splice(idx, 1);
+        renderKasirAddons();
+      }
+
+      document.getElementById('kasirPresetAddon').addEventListener('change', function() {
+        var priceCol = document.getElementById('kasirCustomPriceCol');
+        if (this.value === 'custom') {
+          priceCol.style.display = 'block';
+        } else {
+          priceCol.style.display = 'none';
+        }
+      });
+
+      document.getElementById('btnKasirAddService').addEventListener('click', function() {
+        var select = document.getElementById('kasirPresetAddon');
+        var val = select.value;
+        if (!val) {
+          alert('Pilih jenis layanan tambahan terlebih dahulu.');
           return;
         }
-        alert('Klien: ' + klien + '\nLayanan: ' + layanan + '\nStatus: Terjadwal di Meja Amanails Nail Bar');
+
+        var name = '';
+        var price = 0;
+
+        if (val === 'custom') {
+          var customInput = prompt('Masukkan nama layanan / aksesoris tambahan:', 'Charm 3D Ekstra');
+          if (!customInput) return;
+          name = customInput;
+          price = parseInt(document.getElementById('kasirCustomPrice').value, 10) || 25000;
+        } else {
+          var opt = select.options[select.selectedIndex];
+          name = opt.value;
+          price = parseInt(opt.getAttribute('data-price'), 10);
+        }
+
+        currentAddons.push({ name: name, price: price });
+        select.selectedIndex = 0;
+        document.getElementById('kasirCustomPriceCol').style.display = 'none';
+        renderKasirAddons();
+      });
+
+      document.getElementById('btnKasirSelesaikan').addEventListener('click', function() {
+        if (!currentActiveAppt) return;
+        var remaining = document.getElementById('kasirValFinalRemaining').textContent;
+        var methodEl = document.querySelector('input[name="payment_method_final"]:checked');
+        var method = methodEl ? methodEl.value.toUpperCase() : 'CASH';
+
+        alert('Appointment untuk ' + currentActiveAppt.klien + ' berhasil diselesaikan!\n\nPelunasan sebesar ' + remaining + ' (' + method + ') telah diterima di kasir studio. Terima kasih!');
+
+        var id = currentActiveAppt.id;
+        var card = document.getElementById('card-' + id);
+        var badge = document.getElementById('badge-' + id);
+        var action = document.getElementById('action-' + id);
+
+        if (card) card.setAttribute('data-status', 'selesai');
+        if (badge) {
+          badge.style.background = '#eef6ee';
+          badge.style.color = '#27ae60';
+          badge.innerText = 'Selesai & Lunas';
+        }
+        if (action) {
+          action.innerHTML = '<span style="font-size:0.84rem; color:#27ae60; font-weight:600; align-self:center;">✓ Lunas (' + remaining + ')</span>' +
+                             '<button type="button" class="lq-btn lq-btn-outline lq-btn-sm" onclick="bukaKasirPelunasan(\'' + id + '\')">Detail Kasir</button>';
+        }
+
+        var modalEl = bootstrap.Modal.getInstance(document.getElementById('modalKasirPelunasan'));
+        if (modalEl) modalEl.hide();
+      });
+
+      function lihatDetail(klien, layanan) {
+        bukaKasirPelunasan('APT-000');
       }
 
       // ================= LOGIKA KALENDER 1 BULAN KEDEPAN =================

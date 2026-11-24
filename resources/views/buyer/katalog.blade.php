@@ -106,7 +106,7 @@
         <div class="container">
           <div class="row align-items-end lq-head">
             <div class="col-lg-7 reveal">
-              <span class="lq-eyebrow">Pilihan Perawatan &middot; Sela (Buyer)</span>
+              <span class="lq-eyebrow">Pilihan Perawatan</span>
               <h1 class="lq-h2">Pilih Jasa &amp; Layanan</h1>
               <p class="lq-lead mb-0">Model kuku diunggah oleh Nail Artist &amp; Admin. Pilih model favorit Anda untuk memeriksa jadwal ketersediaan jam.</p>
             </div>
@@ -135,35 +135,35 @@
           <div class="row g-4" id="serviceGrid">
             @foreach($services as $index => $item)
               <div class="col-md-6 col-lg-4 service-col" 
-                   data-category="{{ $item['category'] }}"
-                   data-name="{{ strtolower($item['name']) }}"
-                   data-desc="{{ strtolower($item['description']) }}">
+                   data-category="{{ $item->category }}"
+                   data-name="{{ strtolower($item->name) }}"
+                   data-desc="{{ strtolower($item->description) }}">
                 
                 <div class="lq-shop-card {{ $index === 2 ? 'is-selected' : '' }}" 
-                     data-id="{{ $item['id'] }}" 
-                     data-name="{{ $item['name'] }}" 
-                     data-price="{{ $item['price'] }}"
-                     data-duration="{{ $item['duration'] }}"
+                     data-id="{{ $item->id }}" 
+                     data-name="{{ $item->name }}" 
+                     data-price="{{ $item->price }}"
+                     data-duration="{{ $item->duration }}"
                      style="cursor: pointer;">
                   
                   <div class="lq-shop-media">
-                    <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" loading="lazy">
-                    <span class="lq-shop-badge">{{ $item['category_label'] }}</span>
+                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" loading="lazy">
+                    <span class="lq-shop-badge">{{ $item->category_label }}</span>
                   </div>
 
                   <div class="lq-shop-body">
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span class="lq-shop-cat mb-0">&#9201; {{ $item['duration'] }} Menit</span>
+                      <span class="lq-shop-cat mb-0">&#9201; {{ $item->duration }} Menit</span>
                       <span style="font-size:0.75rem; color:var(--lq-rose-deep); font-weight:600;">
-                        By: {{ $item['uploaded_by'] }}
+                        By: {{ $item->uploaded_by }}
                       </span>
                     </div>
 
-                    <h4 style="margin-bottom: 0.35rem;">{{ $item['name'] }}</h4>
-                    <p class="lq-shop-desc">{{ $item['description'] }}</p>
+                    <h4 style="margin-bottom: 0.35rem;">{{ $item->name }}</h4>
+                    <p class="lq-shop-desc">{{ $item->description }}</p>
                     
                     <div class="lq-shop-foot">
-                      <span class="lq-shop-price">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
+                      <span class="lq-shop-price">Rp {{ number_format($item->price, 0, ',', '.') }}</span>
                       <button type="button" class="lq-btn {{ $index === 2 ? 'lq-btn-primary' : 'lq-btn-outline' }} lq-btn-sm btn-select-card">
                         {{ $index === 2 ? '✓ Dipilih' : 'Pilih Layanan' }}
                       </button>
@@ -233,7 +233,7 @@
           </div>
           <div class="col-lg-4">
             <h5>Amanails &middot; PROBIS</h5>
-            <p style="max-width:34ch">Modul Pembeli (Buyer - Sela): Melihat katalog dan memeriksa jadwal ketersediaan jam.</p>
+            <p style="max-width:34ch">Digitalisasi dan sentralisasi layanan reservasi salon kuku</p>
           </div>
         </div>
 

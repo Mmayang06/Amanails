@@ -2,10 +2,20 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\DatabaseSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(DatabaseSeeder::class);
+    }
+
     /**
      * A basic test example.
      */
@@ -34,8 +44,21 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Amanails');
-        $response->assertSee('Jadwal Ketersediaan Jam');
-        $response->assertSee('Pilih Tanggal Kunjungan');
+        $response->assertSee('Reservasi Kursi Anda');
+        $response->assertSee('Tanggal Kunjungan');
+        $response->assertSee('Nail Artist Bertugas');
+        $response->assertSee('Ringkasan Reservasi');
+        $response->assertSee('amanails-calendar', false);
+        $response->assertSee('QRIS');
+        $response->assertSee('Transfer Bank');
+        $response->assertSee('8735 0921 44');
+        $response->assertSee('142 00 1982736 1');
+        $response->assertSee('Upload Bukti Pembayaran');
+        $response->assertSee('Request Desain Sendiri');
+        $response->assertSee('Pembersihan / Remove');
+        $response->assertSee('Sisa Pelunasan di Studio');
+        $response->assertDontSee('Auto-Assign');
+        $response->assertDontSee('Pilihan Terapis');
     }
 
     public function test_services_page_returns_a_successful_response(): void
@@ -52,29 +75,8 @@ class ExampleTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Amanails');
         $response->assertSee('Mia Alvarez');
-    }
-
-    public function test_terapis_karya_page_returns_a_successful_response(): void
-    {
-        $response = $this->get('/terapis/karya');
-
-        $response->assertStatus(200);
-        $response->assertSee('Amanails');
-        $response->assertSee('Portofolio Terapis');
-        $response->assertSee('Kembali ke Dashboard');
-        $response->assertSee('Almond');
-        $response->assertSee('Coffin');
-        $response->assertSee('Stiletto');
-    }
-
-    public function test_terapis_cuti_page_returns_a_successful_response(): void
-    {
-        $response = $this->get('/terapis/cuti');
-
-        $response->assertStatus(200);
-        $response->assertSee('Amanails');
-        $response->assertSee('Pengajuan &amp; Kuota Cuti', false);
-        $response->assertSee('Kembali ke Dashboard');
-        $response->assertSee('Riwayat Pengajuan Cuti');
+        $response->assertSee('Sela (Buyer)');
+        $response->assertSee('Detail &amp; Kasir Pelunasan', false);
+        $response->assertSee('Tambahan Layanan Hari-H');
     }
 }

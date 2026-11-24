@@ -2,136 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class BuyerController extends Controller
 {
-    /**
-     * Data mock katalog layanan dan model kuku Amanails.
-     */
-    private function getServicesData(): array
-    {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Basic Gel Polish',
-                'category' => 'gel-polish',
-                'category_label' => 'Gel Polish',
-                'price' => 75000,
-                'duration' => 60,
-                'image' => asset('img/gallery-1.jpg'),
-                'uploaded_by' => 'Mayang',
-                'uploader_role' => 'Admin (Mayang)',
-                'uploader_avatar' => asset('img/tech-2.jpg'),
-                'description' => 'Aplikasi base, 2 lapis kutek gel solid tahan lama, dan glossy top coat.',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Russian Manicure + Gel',
-                'category' => 'gel-polish',
-                'category_label' => 'Gel Polish',
-                'price' => 125000,
-                'duration' => 75,
-                'image' => asset('img/gallery-2.jpg'),
-                'uploaded_by' => 'Mayang',
-                'uploader_role' => 'Admin (Mayang)',
-                'uploader_avatar' => asset('img/tech-2.jpg'),
-                'description' => 'Pembersihan kutikula elektrik mendalam gaya Rusia + pewarnaan gel rapi.',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Handpainted Custom Nail Art',
-                'category' => 'nail-art-custom',
-                'category_label' => 'Nail art custom',
-                'price' => 180000,
-                'duration' => 90,
-                'image' => asset('img/gallery-3.jpg'),
-                'uploaded_by' => 'Aurel',
-                'uploader_role' => 'Nail Artist (Aurel)',
-                'uploader_avatar' => asset('img/tech-1.jpg'),
-                'description' => 'Lukisan tangan bebas custom (floral, abstract, kartun, motif geometri) 10 jari.',
-            ],
-            [
-                'id' => 4,
-                'name' => '3D Floral & Gem Nail Art',
-                'category' => 'nail-art-custom',
-                'category_label' => 'Nail art custom',
-                'price' => 210000,
-                'duration' => 100,
-                'image' => asset('img/gallery-4.jpg'),
-                'uploaded_by' => 'Aurel',
-                'uploader_role' => 'Nail Artist (Aurel)',
-                'uploader_avatar' => asset('img/tech-1.jpg'),
-                'description' => 'Desain timbul 3D clay/akrilik aksen bunga dan taburan permata kristal mewah.',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Soft Gel Extensions',
-                'category' => 'nail-extension',
-                'category_label' => 'Nail Extension',
-                'price' => 250000,
-                'duration' => 90,
-                'image' => asset('img/gallery-5.jpg'),
-                'uploaded_by' => 'Aurel',
-                'uploader_role' => 'Nail Artist (Aurel)',
-                'uploader_avatar' => asset('img/tech-1.jpg'),
-                'description' => 'Penyambungan kuku tipis dan fleksibel menggunakan full-cover soft gel tips.',
-            ],
-            [
-                'id' => 6,
-                'name' => 'Polygel Extension Set',
-                'category' => 'nail-extension',
-                'category_label' => 'Nail Extension',
-                'price' => 300000,
-                'duration' => 120,
-                'image' => asset('img/gallery-6.jpg'),
-                'uploaded_by' => 'Nadia',
-                'uploader_role' => 'Nail Artist (Nadia)',
-                'uploader_avatar' => asset('img/tech-3.jpg'),
-                'description' => 'Sambung kuku kombinasi akrilik dan gel kuat, kokoh untuk kuku panjang.',
-            ],
-            [
-                'id' => 7,
-                'name' => 'Cat Eye & Metallic Chrome',
-                'category' => 'gel-polish',
-                'category_label' => 'Gel Polish',
-                'price' => 135000,
-                'duration' => 70,
-                'image' => asset('img/gallery-7.jpg'),
-                'uploaded_by' => 'Nadia',
-                'uploader_role' => 'Nail Artist (Nadia)',
-                'uploader_avatar' => asset('img/tech-3.jpg'),
-                'description' => 'Efek magnetik kilau cat eye galaksi dengan sentuhan bubuk mirror chrome.',
-            ],
-            [
-                'id' => 8,
-                'name' => 'French Ombre Aura Nails',
-                'category' => 'nail-art-custom',
-                'category_label' => 'Nail art custom',
-                'price' => 165000,
-                'duration' => 80,
-                'image' => asset('img/gallery-8.jpg'),
-                'uploaded_by' => 'Aurel',
-                'uploader_role' => 'Nail Artist (Aurel)',
-                'uploader_avatar' => asset('img/tech-1.jpg'),
-                'description' => 'Gradasi warna lembut gaya Korea/aura dengan ujung kuku french modern.',
-            ],
-            [
-                'id' => 9,
-                'name' => 'Express Gel Pedicure',
-                'category' => 'gel-polish',
-                'category_label' => 'Gel Polish',
-                'price' => 110000,
-                'duration' => 50,
-                'image' => asset('img/gallery-9.jpg'),
-                'uploaded_by' => 'Mayang',
-                'uploader_role' => 'Admin (Mayang)',
-                'uploader_avatar' => asset('img/tech-2.jpg'),
-                'description' => 'Perawatan kuku kaki, kikir, pembersihan kutikula, dan kutek gel kilau.',
-            ],
-        ];
-    }
-
     /**
      * Tampilkan katalog layanan (POV Buyer - Sela).
      */
@@ -144,9 +19,10 @@ class BuyerController extends Controller
             ['id' => 'nail-extension', 'name' => 'Nail Extension'],
         ];
 
-        $services = $this->getServicesData();
+        // Ambil data dari database melalui model Service
+        $services = Service::where('is_active', true)->get();
 
-        return view('katalog', compact('categories', 'services'));
+        return view('buyer.katalog', compact('categories', 'services'));
     }
 
     /**
@@ -154,17 +30,18 @@ class BuyerController extends Controller
      */
     public function jadwal(Request $request)
     {
-        $services = $this->getServicesData();
+        // Ambil semua layanan aktif dari database
+        $allServices = Service::where('is_active', true)->get();
 
         // Parameter layanan yang dipilih (jika dikirim dari katalog via query params)
         $selectedServicesRaw = $request->query('services', '3');
         $selectedServiceIds = array_filter(explode(',', (string) $selectedServicesRaw));
 
-        // Ambil layanan utama yang dipilih
+        // Ambil layanan utama dari database
         $primaryServiceId = ! empty($selectedServiceIds) ? (int) $selectedServiceIds[0] : 3;
-        $primaryService = collect($services)->firstWhere('id', $primaryServiceId) ?? $services[0];
+        $primaryService = $allServices->firstWhere('id', $primaryServiceId) ?? $allServices->first();
 
-        $creator = $primaryService['uploaded_by']; // misal 'Aurel', 'Mayang', atau 'Nadia'
+        $creator = $primaryService ? $primaryService->uploaded_by : 'Mayang';
 
         // Roster Nail Artists bertugas di studio
         $roster = [
@@ -189,8 +66,6 @@ class BuyerController extends Controller
         ];
 
         // Simulasi slot jam dan auto-assign artist
-        // Aturan bisnis: Jika model kuku di-upload oleh Nail Artist dan di jam itu dia kosong -> otomatis dia.
-        // Jika sedang booked/penuh di jam itu atau jika uploader adalah Admin -> sistem mengacak/mengalokasikan artist yang sedang kosong.
         $rawSlots = [
             ['time' => '09:00 - 10:00 WIB', 'status' => 'available', 'creator_busy' => false, 'fallback' => 'Mayang'],
             ['time' => '10:15 - 11:30 WIB', 'status' => 'booked', 'creator_busy' => true, 'fallback' => 'Mayang'],
@@ -231,7 +106,33 @@ class BuyerController extends Controller
             ];
         }
 
-        return view('jadwal', compact('timeSlots', 'selectedServiceIds', 'primaryService'));
+        // Kategori Layanan Terpisah: Manicure & Perawatan Dasar
+        $manicureServices = [
+            ['id' => 'mani-russian', 'name' => 'Russian Manicure (Deep Cuticle Care)', 'price' => 65000, 'duration' => 45, 'desc' => 'Pembersihan kutikula elektrik mendalam gaya Rusia yang ultra rapi dan bersih.'],
+            ['id' => 'mani-express', 'name' => 'Express Manicure & Shaping', 'price' => 45000, 'duration' => 30, 'desc' => 'Pemotongan, pembentukan kuku simetris, dan perapian kutikula ringan.'],
+            ['id' => 'mani-spa', 'name' => 'Spa Deluxe Hand & Warm Towel Care', 'price' => 85000, 'duration' => 50, 'desc' => 'Scrub organik tangan, masker pelembap kutikula, dan relaksasi handuk hangat.'],
+            ['id' => 'mani-none', 'name' => 'Tanpa Manicure (Hanya Nail Art / Remove)', 'price' => 0, 'duration' => 0, 'desc' => 'Hanya fokus pada pewarnaan atau pembersihan kuku.'],
+        ];
+
+        // Kategori Layanan Terpisah: Remove Nail Art Lama
+        $removeServices = [
+            ['id' => 'remove-none', 'name' => 'Tanpa Remove (Kuku Bersih/Alami)', 'price' => 0, 'duration' => 0, 'desc' => 'Kuku siap diaplikasikan treatment baru tanpa perlu pembersihan kutek lama.'],
+            ['id' => 'remove-gel', 'name' => 'Remove Kutek Gel Lama', 'price' => 30000, 'duration' => 20, 'desc' => 'Pelepasan kutek gel aman tanpa merusak lapisan keratin kuku alami.'],
+            ['id' => 'remove-ext', 'name' => 'Remove Akrilik / Extension Lama', 'price' => 50000, 'duration' => 35, 'desc' => 'Proses pelarutan dan pembersihan sambungan kuku akrilik/tip terdahulu.'],
+        ];
+
+        $dpPerGuest = 50000;
+
+        return view('buyer.jadwal', compact(
+            'timeSlots',
+            'selectedServiceIds',
+            'primaryService',
+            'allServices',
+            'manicureServices',
+            'removeServices',
+            'roster',
+            'dpPerGuest'
+        ));
     }
 
     /**
@@ -239,6 +140,6 @@ class BuyerController extends Controller
      */
     public function bantuan()
     {
-        return view('bantuan');
+        return view('buyer.bantuan');
     }
 }

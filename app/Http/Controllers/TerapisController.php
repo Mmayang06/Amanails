@@ -24,15 +24,34 @@ class TerapisController extends Controller
 
         // Ringkasan Statistik Kinerja
         $statistik = [
-            'janji_hari_ini' => 5,
-            'total_pelanggan_bulan_ini' => 118,
-            'klien_baru_bulan_ini' => 14,
+            'janji_hari_ini' => 6,
+            'total_pelanggan_bulan_ini' => 119,
+            'klien_baru_bulan_ini' => 15,
             'layanan_selesai_minggu_ini' => 28,
             'estimasi_komisi_mingguan' => 'Rp 2.450.000',
         ];
 
         // Jadwal Janji Temu Hari Ini
         $jadwalHariIni = [
+            [
+                'id' => 'APT-000',
+                'jam' => '09:00 - 10:30 WIB',
+                'klien' => 'Sela (Buyer)',
+                'kontak' => '0812-9876-5432',
+                'layanan' => 'Russian Manicure + Custom Nail Art + Remove Gel',
+                'durasi' => '90 Menit',
+                'status' => 'Sedang Berlangsung',
+                'catatan' => 'Request custom design kuku via upload foto (Lilac floral & aksen emas). DP Rp 50.000 sudah lunas.',
+                'tipe_klien' => 'Pelanggan Baru',
+                'kursi' => 'Station 01',
+                'layanan_awal' => [
+                    ['nama' => 'Russian Manicure (Deep Cuticle Care)', 'harga' => 65000],
+                    ['nama' => 'Handpainted Custom Nail Art (Request Desain Sendiri)', 'harga' => 180000],
+                    ['nama' => 'Remove Kutek Gel Lama', 'harga' => 30000],
+                ],
+                'dp_terbayar' => 50000,
+                'foto_desain' => asset('img/gallery-3.jpg'),
+            ],
             [
                 'id' => 'APT-001',
                 'jam' => '10:00 - 11:00 WIB',
