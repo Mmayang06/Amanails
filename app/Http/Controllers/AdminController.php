@@ -132,6 +132,7 @@ class AdminController extends Controller
     public function dashboard(Request $request)
     {
         $activeTab = $request->query('tab', 'appointment');
+
         return view('admin.dashboard', compact('activeTab'));
     }
 

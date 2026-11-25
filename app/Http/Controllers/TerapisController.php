@@ -44,6 +44,7 @@ class TerapisController extends Controller
                 'catatan' => 'Request custom design kuku via upload foto (Lilac floral & aksen emas). DP Rp 50.000 sudah lunas.',
                 'tipe_klien' => 'Pelanggan Baru',
                 'kursi' => 'Station 01',
+                'has_website_reference' => true,
                 'layanan_awal' => [
                     ['nama' => 'Russian Manicure (Deep Cuticle Care)', 'harga' => 65000],
                     ['nama' => 'Handpainted Custom Nail Art (Request Desain Sendiri)', 'harga' => 180000],
@@ -63,6 +64,15 @@ class TerapisController extends Controller
                 'catatan' => 'Minta aksen bunga daisy warna lilac di jari manis & telunjuk.',
                 'tipe_klien' => 'Member',
                 'kursi' => 'Station 01',
+                'has_website_reference' => true,
+                'layanan_awal' => [
+                    ['nama' => 'Manikur Gel Lengkap', 'harga' => 120000],
+                    ['nama' => 'Floral Daisy Nail Art (2 Jari)', 'harga' => 60000],
+                ],
+                'dp_terbayar' => 50000,
+                'addons' => [
+                    ['nama' => 'Aksesoris Kristal Swarovski', 'harga' => 25000],
+                ],
             ],
             [
                 'id' => 'APT-002',
@@ -75,6 +85,12 @@ class TerapisController extends Controller
                 'catatan' => 'Kuku alami sedikit rapuh setelah pelepasan akrilik lama.',
                 'tipe_klien' => 'Pelanggan Baru',
                 'kursi' => 'Station 01',
+                'has_website_reference' => true,
+                'layanan_awal' => [
+                    ['nama' => 'BIAB Overlay (Builder Gel)', 'harga' => 140000],
+                    ['nama' => 'Nude Glazed Chrome Finish', 'harga' => 60000],
+                ],
+                'dp_terbayar' => 50000,
             ],
             [
                 'id' => 'APT-003',
@@ -87,18 +103,27 @@ class TerapisController extends Controller
                 'catatan' => 'Bawa contoh foto dari Instagram (ujung almond sedang).',
                 'tipe_klien' => 'Member',
                 'kursi' => 'Station 02',
+                'has_website_reference' => true,
+                'layanan_awal' => [
+                    ['nama' => 'Soft Gel Extensions Full Set', 'harga' => 180000],
+                    ['nama' => 'French Chrome Tips', 'harga' => 70000],
+                ],
+                'dp_terbayar' => 50000,
             ],
             [
                 'id' => 'APT-004',
                 'jam' => '16:00 - 17:00 WIB',
                 'klien' => 'Diana Permata',
                 'kontak' => '0857-3344-9988',
-                'layanan' => 'Spa Manikur Deluxe + Parafin Lilin Hangat',
+                'layanan' => 'Konsultasi Perawatan di Tempat (Tanpa Referensi Website)',
                 'durasi' => '55 Menit',
                 'status' => 'Menunggu',
-                'catatan' => 'Kulit tangan kering, pijatan ekstra lembut.',
+                'catatan' => 'Konsumen tidak memilih paket dari website. Layanan dan harga ditentukan langsung di meja terapis.',
                 'tipe_klien' => 'Pelanggan Baru',
                 'kursi' => 'Station 01',
+                'has_website_reference' => false,
+                'layanan_awal' => [], // Tanpa referensi dari website
+                'dp_terbayar' => 50000,
             ],
             [
                 'id' => 'APT-005',
@@ -111,6 +136,12 @@ class TerapisController extends Controller
                 'catatan' => 'Persiapan acara pesta akhir pekan.',
                 'tipe_klien' => 'Member',
                 'kursi' => 'Station 01',
+                'has_website_reference' => true,
+                'layanan_awal' => [
+                    ['nama' => 'Infill & Retouch Gel', 'harga' => 150000],
+                    ['nama' => 'Aksen Kristal Swarovski', 'harga' => 60000],
+                ],
+                'dp_terbayar' => 50000,
             ],
         ];
 
