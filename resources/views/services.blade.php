@@ -76,7 +76,7 @@
           <button type="submit" class="lq-btn lq-btn-outline lq-btn-block">Keluar</button>
         </form>
       @else
-        <a class="lq-btn lq-btn-primary lq-btn-block" href="#booking">Buat Janji Temu</a>
+        <a class="lq-btn lq-btn-primary lq-btn-block" href="{{ url('/jadwal') }}">Buat Janji Temu</a>
       @endauth
     </div>
 
@@ -104,7 +104,7 @@
             </div>
             <div class="col-lg-4 reveal reveal-d1">
               <p class="lq-lead ms-lg-auto">Jelajahi seluruh menu layanan Amanails Nail Bar di bawah ini &mdash; lalu tentukan jadwal reservasi Anda dalam hitungan menit. Harga sudah termasuk proses sterilisasi alat medis, konsultasi kutikula, dan perawatan pelembap tangan.</p>
-              <a class="lq-btn lq-btn-gold" href="#booking" style="margin-top:1.5rem">Langsung ke Reservasi</a>
+              <a class="lq-btn lq-btn-gold" href="{{ url('/jadwal') }}" style="margin-top:1.5rem">Langsung ke Reservasi</a>
             </div>
           </div>
         </div>
@@ -260,7 +260,7 @@
               <li><a href="https://maps.google.com/?q=42+Cedar+Hill+Lane" target="_blank" rel="noopener">Petunjuk Lokasi</a></li>
               <li><a href="tel:+6281234567890">(021) 555-0142</a></li>
               <li><a href="mailto:halo@amanails.com">Kirim Email</a></li>
-              <li><a href="#booking">Reservasi Sekarang</a></li>
+              <li><a href="{{ url('/jadwal') }}">Reservasi Sekarang</a></li>
             </ul>
           </div>
           <div class="col-lg-4">

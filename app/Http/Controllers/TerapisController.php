@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\AppointmentItem;
+use App\Models\Service;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
 class TerapisController extends Controller
 {
     /**
-     * Tampilkan Dashboard Terapis dengan data simulasi (Mock Data tanpa DB).
+     * Tampilkan Dashboard Terapis dengan data dari database.
      */
     public function dashboard()
     {
@@ -22,363 +29,80 @@ class TerapisController extends Controller
             'meja_kerja' => 'Station 01',
         ];
 
-        // Ringkasan Statistik Kinerja
+        $today = Carbon::today()->toDateString();
+
+        // Ambil semua appointment dari database
+        $allAppointments = Appointment::with(['items', 'artist'])
+            ->orderBy('appointment_date')
+            ->orderBy('time_slot')
+            ->get();
+
+        // Format appointment dari DB untuk UI terapis
+        $mapAppointment = function (Appointment $appt): array {
+            $initialItems = $appt->items->where('is_addon', false)->values();
+            $addonItems = $appt->items->where('is_addon', true)->values();
+
+            $layananNames = $initialItems->pluck('item_name')->implode(' + ');
+            if ($layananNames === '') {
+                $layananNames = 'Konsultasi Perawatan Studio';
+            }
+
+            return [
+                'db_id' => $appt->id,
+                'id' => $appt->booking_code,
+                'jam' => $appt->time_slot,
+                'tanggal' => $appt->appointment_date->toDateString(),
+                'klien' => $appt->client_name,
+                'kontak' => $appt->client_phone,
+                'layanan' => $layananNames,
+                'durasi' => $appt->total_duration.' Menit',
+                'status' => $appt->status,
+                'catatan' => $appt->custom_design_note ?? $appt->notes,
+                'tipe_klien' => $appt->client_type,
+                'kursi' => $appt->station,
+                'artist_name' => $appt->artist?->name ?? 'Aurel',
+                'has_website_reference' => $initialItems->isNotEmpty(),
+                'layanan_awal' => $initialItems->map(fn ($i) => [
+                    'id' => $i->id,
+                    'nama' => $i->item_name,
+                    'harga' => $i->price,
+                ])->all(),
+                'addons' => $addonItems->map(fn ($i) => [
+                    'id' => $i->id,
+                    'name' => $i->item_name,
+                    'price' => $i->price,
+                ])->all(),
+                'dp_terbayar' => $appt->dp_amount,
+                'final_total' => $appt->final_total,
+                'final_payment_status' => $appt->final_payment_status,
+                'foto_desain' => $appt->custom_design_url,
+            ];
+        };
+
+        $todayAppts = $allAppointments->filter(fn ($a) => $a->appointment_date->toDateString() === $today);
+        if ($todayAppts->isEmpty()) {
+            $todayAppts = $allAppointments->take(5);
+        }
+
+        $jadwalHariIni = $todayAppts->map($mapAppointment)->values()->all();
+
+        $jadwalSatuBulan = [];
+        foreach ($allAppointments->groupBy(fn ($a) => $a->appointment_date->toDateString()) as $dateKey => $group) {
+            $jadwalSatuBulan[$dateKey] = $group->map($mapAppointment)->values()->all();
+        }
+
+        // Ambil daftar layanan tambahan hari-h (add-on) dari database
+        $addonServices = Service::where('is_active', true)
+            ->where('service_type', 'addon')
+            ->get();
+
+        // Ringkasan Statistik Kinerja dari DB
         $statistik = [
-            'janji_hari_ini' => 6,
-            'total_pelanggan_bulan_ini' => 119,
-            'klien_baru_bulan_ini' => 15,
-            'layanan_selesai_minggu_ini' => 28,
-            'estimasi_komisi_mingguan' => 'Rp 2.450.000',
-        ];
-
-        // Jadwal Janji Temu Hari Ini
-        $jadwalHariIni = [
-            [
-                'id' => 'APT-000',
-                'jam' => '09:00 - 10:30 WIB',
-                'klien' => 'Sela (Buyer)',
-                'kontak' => '0812-9876-5432',
-                'layanan' => 'Russian Manicure + Custom Nail Art + Remove Gel',
-                'durasi' => '90 Menit',
-                'status' => 'Sedang Berlangsung',
-                'catatan' => 'Request custom design kuku via upload foto (Lilac floral & aksen emas). DP Rp 50.000 sudah lunas.',
-                'tipe_klien' => 'Pelanggan Baru',
-                'kursi' => 'Station 01',
-                'has_website_reference' => true,
-                'layanan_awal' => [
-                    ['nama' => 'Russian Manicure (Deep Cuticle Care)', 'harga' => 65000],
-                    ['nama' => 'Handpainted Custom Nail Art (Request Desain Sendiri)', 'harga' => 180000],
-                    ['nama' => 'Remove Kutek Gel Lama', 'harga' => 30000],
-                ],
-                'dp_terbayar' => 50000,
-                'foto_desain' => asset('img/gallery-3.jpg'),
-            ],
-            [
-                'id' => 'APT-001',
-                'jam' => '10:00 - 11:00 WIB',
-                'klien' => 'Amanda Putri',
-                'kontak' => '0812-9876-5432',
-                'layanan' => 'Manikur Gel Lengkap + Floral Nail Art',
-                'durasi' => '60 Menit',
-                'status' => 'Selesai',
-                'catatan' => 'Minta aksen bunga daisy warna lilac di jari manis & telunjuk.',
-                'tipe_klien' => 'Member',
-                'kursi' => 'Station 01',
-                'has_website_reference' => true,
-                'layanan_awal' => [
-                    ['nama' => 'Manikur Gel Lengkap', 'harga' => 120000],
-                    ['nama' => 'Floral Daisy Nail Art (2 Jari)', 'harga' => 60000],
-                ],
-                'dp_terbayar' => 50000,
-                'addons' => [
-                    ['nama' => 'Aksesoris Kristal Swarovski', 'harga' => 25000],
-                ],
-            ],
-            [
-                'id' => 'APT-002',
-                'jam' => '11:30 - 12:30 WIB',
-                'klien' => 'Jessica Tan',
-                'kontak' => '0813-1122-3344',
-                'layanan' => 'BIAB Overlay (Builder Gel) + Nude Glazed',
-                'durasi' => '60 Menit',
-                'status' => 'Sedang Berlangsung',
-                'catatan' => 'Kuku alami sedikit rapuh setelah pelepasan akrilik lama.',
-                'tipe_klien' => 'Pelanggan Baru',
-                'kursi' => 'Station 01',
-                'has_website_reference' => true,
-                'layanan_awal' => [
-                    ['nama' => 'BIAB Overlay (Builder Gel)', 'harga' => 140000],
-                    ['nama' => 'Nude Glazed Chrome Finish', 'harga' => 60000],
-                ],
-                'dp_terbayar' => 50000,
-            ],
-            [
-                'id' => 'APT-003',
-                'jam' => '14:00 - 15:30 WIB',
-                'klien' => 'Clara Sitorus',
-                'kontak' => '0818-7766-5544',
-                'layanan' => 'Soft Gel Extensions + French Chrome Tips',
-                'durasi' => '85 Menit',
-                'status' => 'Menunggu',
-                'catatan' => 'Bawa contoh foto dari Instagram (ujung almond sedang).',
-                'tipe_klien' => 'Member',
-                'kursi' => 'Station 02',
-                'has_website_reference' => true,
-                'layanan_awal' => [
-                    ['nama' => 'Soft Gel Extensions Full Set', 'harga' => 180000],
-                    ['nama' => 'French Chrome Tips', 'harga' => 70000],
-                ],
-                'dp_terbayar' => 50000,
-            ],
-            [
-                'id' => 'APT-004',
-                'jam' => '16:00 - 17:00 WIB',
-                'klien' => 'Diana Permata',
-                'kontak' => '0857-3344-9988',
-                'layanan' => 'Konsultasi Perawatan di Tempat (Tanpa Referensi Website)',
-                'durasi' => '55 Menit',
-                'status' => 'Menunggu',
-                'catatan' => 'Konsumen tidak memilih paket dari website. Layanan dan harga ditentukan langsung di meja terapis.',
-                'tipe_klien' => 'Pelanggan Baru',
-                'kursi' => 'Station 01',
-                'has_website_reference' => false,
-                'layanan_awal' => [], // Tanpa referensi dari website
-                'dp_terbayar' => 50000,
-            ],
-            [
-                'id' => 'APT-005',
-                'jam' => '17:30 - 18:30 WIB',
-                'klien' => 'Nadira Alatas',
-                'kontak' => '0821-4455-6677',
-                'layanan' => 'Infill & Retouch Gel + Kristal Swarovski',
-                'durasi' => '60 Menit',
-                'status' => 'Menunggu',
-                'catatan' => 'Persiapan acara pesta akhir pekan.',
-                'tipe_klien' => 'Member',
-                'kursi' => 'Station 01',
-                'has_website_reference' => true,
-                'layanan_awal' => [
-                    ['nama' => 'Infill & Retouch Gel', 'harga' => 150000],
-                    ['nama' => 'Aksen Kristal Swarovski', 'harga' => 60000],
-                ],
-                'dp_terbayar' => 50000,
-            ],
-        ];
-
-        // Data Jadwal Janji Temu 1 Bulan Kedepan (Nov - Des 2026)
-        $jadwalSatuBulan = [
-            '2026-11-21' => $jadwalHariIni,
-            '2026-11-22' => [
-                [
-                    'id' => 'APT-006',
-                    'jam' => '10:00 - 11:30 WIB',
-                    'klien' => 'Fiona Salim',
-                    'kontak' => '0812-3344-5566',
-                    'layanan' => 'Manikur Gel Signature + Chrome Finish',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Minta warna chrome mutiara halus (pearl glazed).',
-                    'tipe_klien' => 'Member',
-                ],
-                [
-                    'id' => 'APT-007',
-                    'jam' => '13:00 - 14:00 WIB',
-                    'klien' => 'Ratu Maharani',
-                    'kontak' => '0878-1122-8899',
-                    'layanan' => 'BIAB Overlay + Nude Polish',
-                    'durasi' => '60 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Kuku tipis setelah pemakaian gel berturut-turut.',
-                    'tipe_klien' => 'Pelanggan Baru',
-                ],
-                [
-                    'id' => 'APT-008',
-                    'jam' => '15:00 - 16:30 WIB',
-                    'klien' => 'Giselle Wardhana',
-                    'kontak' => '0819-0011-2233',
-                    'layanan' => 'Soft Gel Extensions + French Micro Tips',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Bentuk almond panjang sedang.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-11-24' => [
-                [
-                    'id' => 'APT-009',
-                    'jam' => '11:00 - 12:00 WIB',
-                    'klien' => 'Karin Novita',
-                    'kontak' => '0813-8899-7700',
-                    'layanan' => 'Spa Manikur Deluxe',
-                    'durasi' => '60 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Perawatan kutikula kering dan scrub parafin.',
-                    'tipe_klien' => 'Pelanggan Baru',
-                ],
-                [
-                    'id' => 'APT-010',
-                    'jam' => '14:00 - 15:30 WIB',
-                    'klien' => 'Bella Graceva',
-                    'kontak' => '0822-5544-3322',
-                    'layanan' => 'Velvet Cat Eye Gel Polish',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Warna magnetic green emerald.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-11-26' => [
-                [
-                    'id' => 'APT-011',
-                    'jam' => '09:30 - 11:00 WIB',
-                    'klien' => 'Sheryl Sheinafia',
-                    'kontak' => '0812-7788-9900',
-                    'layanan' => 'Hand-painted Florals Art',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Desain bunga daisy minimalis warna pastel.',
-                    'tipe_klien' => 'Member',
-                ],
-                [
-                    'id' => 'APT-012',
-                    'jam' => '13:00 - 14:00 WIB',
-                    'klien' => 'Chelsea Islan',
-                    'kontak' => '0811-2233-4455',
-                    'layanan' => 'Manikur Klasik + Vitamin Kuku',
-                    'durasi' => '60 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Persiapan photoshoot kuku alami.',
-                    'tipe_klien' => 'Member',
-                ],
-                [
-                    'id' => 'APT-013',
-                    'jam' => '15:30 - 17:00 WIB',
-                    'klien' => 'Raisa Andriana',
-                    'kontak' => '0856-7788-1122',
-                    'layanan' => 'BIAB Overlay Nude & Soft Shimmer',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Bentuk kuku oval klasik.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-11-28' => [
-                [
-                    'id' => 'APT-014',
-                    'jam' => '10:00 - 11:30 WIB',
-                    'klien' => 'Tatjana Saphira',
-                    'kontak' => '0812-9988-7766',
-                    'layanan' => 'Cat Eye Gel + Micro Ombre',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Aksen gliter champagne di ujung kuku.',
-                    'tipe_klien' => 'Pelanggan Baru',
-                ],
-                [
-                    'id' => 'APT-015',
-                    'jam' => '13:30 - 15:00 WIB',
-                    'klien' => 'Pevita Pearce',
-                    'kontak' => '0878-9900-1122',
-                    'layanan' => 'Gel Extensions Almond + Rose Gold',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Panjang medium, kikir rapi.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-12-01' => [
-                [
-                    'id' => 'APT-016',
-                    'jam' => '10:30 - 12:00 WIB',
-                    'klien' => 'Anya Geraldine',
-                    'kontak' => '0813-1133-5577',
-                    'layanan' => 'Glazed Donut Nails + Hand Scrub',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Chrome powder shade mutiara putih.',
-                    'tipe_klien' => 'Member',
-                ],
-                [
-                    'id' => 'APT-017',
-                    'jam' => '14:00 - 15:00 WIB',
-                    'klien' => 'Enzy Storia',
-                    'kontak' => '0818-4455-6677',
-                    'layanan' => 'Express Tidy & Cuticle Care',
-                    'durasi' => '60 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Poles kutek bening bernutrisi.',
-                    'tipe_klien' => 'Pelanggan Baru',
-                ],
-            ],
-            '2026-12-03' => [
-                [
-                    'id' => 'APT-018',
-                    'jam' => '11:00 - 12:30 WIB',
-                    'klien' => 'Laura Basuki',
-                    'kontak' => '0821-3344-9900',
-                    'layanan' => 'Manikur Gel Organik 10-Free',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Warna deep plum red elegan.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-12-05' => [
-                [
-                    'id' => 'APT-019',
-                    'jam' => '10:00 - 11:30 WIB',
-                    'klien' => 'Prilly Latuconsina',
-                    'kontak' => '0812-5566-7788',
-                    'layanan' => 'Soft Gel Extensions Coffin + French',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Bentuk coffin sedang, garis tipis putih.',
-                    'tipe_klien' => 'Member',
-                ],
-                [
-                    'id' => 'APT-020',
-                    'jam' => '13:00 - 14:30 WIB',
-                    'klien' => 'Sheila Dara',
-                    'kontak' => '0857-1122-3344',
-                    'layanan' => 'Tortoiseshell Amber Gel Art',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Motif tempurung kura-kura dengan serpihan emas.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-12-08' => [
-                [
-                    'id' => 'APT-021',
-                    'jam' => '11:00 - 12:00 WIB',
-                    'klien' => 'Luna Maya',
-                    'kontak' => '0811-9988-3344',
-                    'layanan' => 'Spa Manikur Deluxe & Pijat Tangan',
-                    'durasi' => '60 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Rendaman minyak esensial mawar.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-12-12' => [
-                [
-                    'id' => 'APT-022',
-                    'jam' => '10:00 - 11:30 WIB',
-                    'klien' => 'Cinta Laura',
-                    'kontak' => '0812-4455-8899',
-                    'layanan' => 'Stiletto Gel Extension + Chrome Gold',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Bentuk kuku stiletto tajam dan berani.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
-            '2026-12-15' => [
-                [
-                    'id' => 'APT-023',
-                    'jam' => '14:00 - 15:30 WIB',
-                    'klien' => 'Tiara Andini',
-                    'kontak' => '0813-7788-2233',
-                    'layanan' => 'Milky White Minimalist Gel',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Kuku pendek bulat rapi.',
-                    'tipe_klien' => 'Pelanggan Baru',
-                ],
-            ],
-            '2026-12-19' => [
-                [
-                    'id' => 'APT-024',
-                    'jam' => '10:30 - 12:00 WIB',
-                    'klien' => 'Mahalini Raharja',
-                    'kontak' => '0819-3322-1100',
-                    'layanan' => 'Bridal Pre-Wedding Nail Art',
-                    'durasi' => '90 Menit',
-                    'status' => 'Menunggu',
-                    'catatan' => 'Pita mutiara 3D dan swarovski halus.',
-                    'tipe_klien' => 'Member',
-                ],
-            ],
+            'janji_hari_ini' => count($jadwalHariIni),
+            'total_pelanggan_bulan_ini' => $allAppointments->count(),
+            'klien_baru_bulan_ini' => $allAppointments->where('client_type', 'Pelanggan Baru')->count(),
+            'layanan_selesai_minggu_ini' => $allAppointments->where('status', 'Selesai')->count(),
+            'estimasi_komisi_mingguan' => 'Rp '.number_format((int) $allAppointments->sum('final_total'), 0, ',', '.'),
         ];
 
         // Data Kuota & Riwayat Pengajuan Cuti Terapis (Jatah Cuti 8 Hari Sebulan)
@@ -479,7 +203,7 @@ class TerapisController extends Controller
             ],
         ];
 
-        return view('terapis.dashboard', compact('terapis', 'statistik', 'jadwalHariIni', 'dataCuti', 'karyaTerapis', 'jadwalSatuBulan'));
+        return view('terapis.dashboard', compact('terapis', 'statistik', 'jadwalHariIni', 'dataCuti', 'karyaTerapis', 'jadwalSatuBulan', 'addonServices'));
     }
 
     /**
@@ -633,5 +357,113 @@ class TerapisController extends Controller
         ];
 
         return view('terapis.cuti', compact('terapis', 'dataCuti'));
+    }
+
+    /**
+     * Tambahkan layanan ekstra hari-h ke appointment di database.
+     */
+    public function addAddon(Request $request, Appointment $appointment): JsonResponse
+    {
+        $validated = $request->validate([
+            'service_id' => ['nullable', 'integer', 'exists:services,id'],
+            'item_name' => ['required_without:service_id', 'nullable', 'string', 'max:255'],
+            'price' => ['required_without:service_id', 'nullable', 'integer', 'min:0'],
+        ]);
+
+        if (! empty($validated['service_id'])) {
+            $service = Service::findOrFail($validated['service_id']);
+            $name = $service->name;
+            $price = $service->price;
+            $duration = $service->duration;
+            $serviceId = $service->id;
+        } else {
+            $name = (string) $validated['item_name'];
+            $price = (int) $validated['price'];
+            $duration = 15;
+            $serviceId = null;
+        }
+
+        $item = AppointmentItem::create([
+            'appointment_id' => $appointment->id,
+            'service_id' => $serviceId,
+            'item_name' => $name,
+            'item_type' => 'addon',
+            'price' => $price,
+            'duration' => $duration,
+            'is_addon' => true,
+        ]);
+
+        $appointment->recalculateTotals();
+
+        return response()->json([
+            'success' => true,
+            'item' => [
+                'id' => $item->id,
+                'nama' => $item->item_name,
+                'harga' => $item->price,
+            ],
+            'initial_total' => $appointment->initial_total,
+            'addons_total' => $appointment->addons_total,
+            'final_total' => $appointment->final_total,
+            'remaining_balance' => max(0, $appointment->final_total - $appointment->dp_amount),
+        ]);
+    }
+
+    /**
+     * Hapus layanan tambahan hari-h dari appointment di database.
+     */
+    public function removeAddon(Appointment $appointment, AppointmentItem $item): JsonResponse
+    {
+        if ($item->appointment_id !== $appointment->id || ! $item->is_addon) {
+            return response()->json(['success' => false, 'message' => 'Item tidak valid.'], 422);
+        }
+
+        $item->delete();
+        $appointment->recalculateTotals();
+
+        return response()->json([
+            'success' => true,
+            'initial_total' => $appointment->initial_total,
+            'addons_total' => $appointment->addons_total,
+            'final_total' => $appointment->final_total,
+            'remaining_balance' => max(0, $appointment->final_total - $appointment->dp_amount),
+        ]);
+    }
+
+    /**
+     * Mulai layanan appointment di database.
+     */
+    public function startAppointment(Appointment $appointment): JsonResponse
+    {
+        $appointment->status = 'Sedang Berlangsung';
+        $appointment->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $appointment->status,
+        ]);
+    }
+
+    /**
+     * Selesaikan appointment & catat pelunasan di database.
+     */
+    public function completeAppointment(Request $request, Appointment $appointment): JsonResponse
+    {
+        $validated = $request->validate([
+            'payment_method' => ['required', 'in:cash,qris,edc'],
+        ]);
+
+        $appointment->recalculateTotals();
+        $appointment->final_payment_method = $validated['payment_method'];
+        $appointment->final_payment_status = 'paid';
+        $appointment->status = 'Selesai';
+        $appointment->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $appointment->status,
+            'final_total' => $appointment->final_total,
+            'remaining_balance' => max(0, $appointment->final_total - $appointment->dp_amount),
+        ]);
     }
 }

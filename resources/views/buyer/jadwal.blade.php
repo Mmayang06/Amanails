@@ -4,6 +4,7 @@
     <script>document.documentElement.classList.add('js')</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Layanan &amp; Reservasi &mdash; Amanails Nail Bar</title>
     <meta name="description" content="Reservasi online cepat dan mudah di Amanails Nail Bar.">
 
@@ -637,23 +638,23 @@
                     </p>
 
                     @foreach($manicureServices as $index => $mani)
-                      <label class="lq-service-card-select {{ $index === 0 ? 'is-selected' : '' }}" for="mani-{{ $mani['id'] }}">
+                      <label class="lq-service-card-select {{ $index === 0 ? 'is-selected' : '' }}" for="mani-{{ $mani->id }}">
                         <div class="d-flex align-items-center gap-2">
                           <input type="radio" 
                                  name="manicure_service" 
-                                 id="mani-{{ $mani['id'] }}" 
-                                 value="{{ $mani['id'] }}" 
-                                 data-name="{{ $mani['name'] }}"
-                                 data-price="{{ $mani['price'] }}"
-                                 data-duration="{{ $mani['duration'] }}"
+                                 id="mani-{{ $mani->id }}" 
+                                 value="{{ $mani->id }}" 
+                                 data-name="{{ $mani->name }}"
+                                 data-price="{{ $mani->price }}"
+                                 data-duration="{{ $mani->duration }}"
                                  {{ $index === 0 ? 'checked' : '' }}>
                           <div>
-                            <div style="font-weight:600; font-size:0.88rem; color:var(--lq-plum);">{{ $mani['name'] }}</div>
-                            <small style="font-size:0.75rem; color:var(--lq-mauve);">{{ $mani['desc'] }} ({{ $mani['duration'] }} Menit)</small>
+                            <div style="font-weight:600; font-size:0.88rem; color:var(--lq-plum);">{{ $mani->name }}</div>
+                            <small style="font-size:0.75rem; color:var(--lq-mauve);">{{ $mani->description }} ({{ $mani->duration }} Menit)</small>
                           </div>
                         </div>
                         <div style="font-family:var(--lq-serif); font-weight:600; font-size:0.95rem; color:var(--lq-rose-deep);">
-                          {{ $mani['price'] > 0 ? '+ Rp ' . number_format($mani['price'], 0, ',', '.') : 'Gratis / Skip' }}
+                          {{ $mani->price > 0 ? '+ Rp ' . number_format($mani->price, 0, ',', '.') : 'Gratis / Skip' }}
                         </div>
                       </label>
                     @endforeach
@@ -751,23 +752,23 @@
                     </p>
 
                     @foreach($removeServices as $index => $rem)
-                      <label class="lq-service-card-select {{ $index === 0 ? 'is-selected' : '' }}" for="rem-{{ $rem['id'] }}">
+                      <label class="lq-service-card-select {{ $index === 0 ? 'is-selected' : '' }}" for="rem-{{ $rem->id }}">
                         <div class="d-flex align-items-center gap-2">
                           <input type="radio" 
                                  name="remove_service" 
-                                 id="rem-{{ $rem['id'] }}" 
-                                 value="{{ $rem['id'] }}" 
-                                 data-name="{{ $rem['name'] }}"
-                                 data-price="{{ $rem['price'] }}"
-                                 data-duration="{{ $rem['duration'] }}"
+                                 id="rem-{{ $rem->id }}" 
+                                 value="{{ $rem->id }}" 
+                                 data-name="{{ $rem->name }}"
+                                 data-price="{{ $rem->price }}"
+                                 data-duration="{{ $rem->duration }}"
                                  {{ $index === 0 ? 'checked' : '' }}>
                           <div>
-                            <div style="font-weight:600; font-size:0.88rem; color:var(--lq-plum);">{{ $rem['name'] }}</div>
-                            <small style="font-size:0.75rem; color:var(--lq-mauve);">{{ $rem['desc'] }} ({{ $rem['duration'] }} Menit)</small>
+                            <div style="font-weight:600; font-size:0.88rem; color:var(--lq-plum);">{{ $rem->name }}</div>
+                            <small style="font-size:0.75rem; color:var(--lq-mauve);">{{ $rem->description }} ({{ $rem->duration }} Menit)</small>
                           </div>
                         </div>
                         <div style="font-family:var(--lq-serif); font-weight:600; font-size:0.95rem; color:var(--lq-rose-deep);">
-                          {{ $rem['price'] > 0 ? '+ Rp ' . number_format($rem['price'], 0, ',', '.') : 'Gratis / Tidak Perlu' }}
+                          {{ $rem->price > 0 ? '+ Rp ' . number_format($rem->price, 0, ',', '.') : 'Gratis / Tidak Perlu' }}
                         </div>
                       </label>
                     @endforeach
@@ -861,11 +862,11 @@
                   <div class="lq-field-row mb-2">
                     <div class="lq-field">
                       <label for="bk-name">Nama Lengkap <span class="req">*</span></label>
-                      <input class="lq-input" type="text" id="bk-name" name="name" value="Sela" placeholder="Nama Anda">
+                      <input class="lq-input" type="text" id="bk-name" name="name" value="{{ Auth::check() ? Auth::user()->name : 'Amanda' }}" placeholder="Nama Anda">
                     </div>
                     <div class="lq-field">
                       <label for="bk-phone">Nomor HP / WhatsApp <span class="req">*</span></label>
-                      <input class="lq-input" type="tel" id="bk-phone" name="phone" value="0812-9876-5432" placeholder="08xxxxxxxxxx">
+                      <input class="lq-input" type="tel" id="bk-phone" name="phone" value="{{ Auth::check() && Auth::user()->phone ? Auth::user()->phone : '0812-9876-5432' }}" placeholder="08xxxxxxxxxx">
                     </div>
                   </div>
 
@@ -1026,7 +1027,7 @@
                 <div>
                   <span class="lq-bank-badge lq-bank-badge-bca">Bank BCA</span>
                   <div class="lq-bank-acc-num" id="accBca">8735 0921 44</div>
-                  <div style="font-size:0.78rem; color:var(--lq-mauve);">a.n. Amanails Nail Bar / Mayang</div>
+                  <div style="font-size:0.78rem; color:var(--lq-mauve);">a.n. Amanails Nail Bar / Admin</div>
                 </div>
                 <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" onclick="copyText('8735092144', this, 'Salin No. Rek')">
                   Salin No. Rek
@@ -1038,7 +1039,7 @@
                 <div>
                   <span class="lq-bank-badge lq-bank-badge-mandiri">Bank Mandiri</span>
                   <div class="lq-bank-acc-num" id="accMandiri">142 00 1982736 1</div>
-                  <div style="font-size:0.78rem; color:var(--lq-mauve);">a.n. Amanails Nail Bar / Mayang</div>
+                  <div style="font-size:0.78rem; color:var(--lq-mauve);">a.n. Amanails Nail Bar / Admin</div>
                 </div>
                 <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" onclick="copyText('1420019827361', this, 'Salin No. Rek')">
                   Salin No. Rek
@@ -1087,7 +1088,7 @@
               </div>
 
               <small class="text-muted d-block mt-2" style="font-size:0.75rem; line-height:1.4;">
-                *Setelah bukti DP diunggah, <strong>Admin (Mayang)</strong> akan memverifikasi dan jadwal Anda otomatis tercatat di sistem studio.
+                *Setelah bukti DP diunggah, <strong>Admin</strong> akan memverifikasi dan jadwal Anda otomatis tercatat di sistem studio.
               </small>
             </div>
 
@@ -1130,7 +1131,7 @@
           </div>
           <div class="col-lg-4">
             <h5>Amanails &middot; PROBIS</h5>
-            <p style="max-width:34ch">Modul Pembeli (Buyer - Sela): Reservasi online multi-layanan dan sistem pembayaran DP.</p>
+            <p style="max-width:34ch">Modul Pembeli (Buyer - Amanda): Reservasi online multi-layanan dan sistem pembayaran DP.</p>
           </div>
         </div>
 
@@ -1147,69 +1148,56 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        // Data Roster Nail Artists dari PHP
-        const rosterData = {
-          'Aurel': {
-            name: 'Aurel',
-            role: 'Senior Nail Artist',
-            specialty: 'Handpainted Art, 3D Sculpting & Extensions',
-            avatar: "{{ asset('img/tech-1.jpg') }}"
-          },
-          'Mayang': {
-            name: 'Mayang',
-            role: 'Admin & Lead Technician',
-            specialty: 'Russian Manicure & Color Specialist',
-            avatar: "{{ asset('img/tech-2.jpg') }}"
-          },
-          'Nadia': {
-            name: 'Nadia',
-            role: 'Nail Artist',
-            specialty: 'Ombre, Chrome & Express Care',
-            avatar: "{{ asset('img/tech-3.jpg') }}"
-          }
-        };
+        // Data Roster, Tanggal Penuh, dan Slot Terbooking langsung dari Database
+        const rosterData = @json($roster);
+        const artistList = Object.keys(rosterData).filter(n => n !== 'Admin');
+        const fullyBookedDates = @json($fullyBookedDates);
+        const bookedSlotsByDate = @json($bookedSlotsByDate);
+        const studioSlots = @json($studioSlots);
+        const todayStr = @json($today);
 
-        const artistList = ['Aurel', 'Nadia', 'Mayang'];
-
-        // Tanggal Hari Ini (2026-11-24)
-        const todayYear = 2026;
-        const todayMonth = 10; // 0-indexed (10 = November)
-        const todayDate = 24;
-
-        // Tanggal-tanggal simulasi yang penuh (fully booked)
-        const fullyBookedDates = ['2026-11-26', '2026-11-29', '2026-12-05'];
+        const todayParts = todayStr.split('-');
+        const todayYear = parseInt(todayParts[0], 10);
+        const todayMonth = parseInt(todayParts[1], 10) - 1;
+        const todayDate = parseInt(todayParts[2], 10);
 
         // State Kalender
         let currentYear = todayYear;
         let currentMonth = todayMonth;
-        let selectedDateStr = '2026-11-24';
-        let selectedTimeStr = '09:00 - 10:00 WIB';
+        let selectedDateStr = todayStr;
+        let selectedTimeStr = studioSlots[0] || '09:00 - 10:00 WIB';
 
-        // State Layanan Terpilih
-        let currentMani = { name: 'Russian Manicure', price: 65000, duration: 45 };
+        // State Layanan Terpilih (dari DB)
+        const firstManiRadio = document.querySelector('input[name="manicure_service"]:checked');
+        let currentMani = firstManiRadio ? {
+          id: firstManiRadio.value,
+          name: firstManiRadio.getAttribute('data-name'),
+          price: parseInt(firstManiRadio.getAttribute('data-price'), 10),
+          duration: parseInt(firstManiRadio.getAttribute('data-duration'), 10)
+        } : { id: null, name: 'Tanpa Manicure', price: 0, duration: 0 };
+
         let currentArt = { 
-          type: 'catalog', 
-          name: "{{ $primaryService->name }}", 
-          price: {{ $primaryService->price }}, 
-          duration: {{ $primaryService->duration }}, 
+          type: 'catalog',
+          id: "{{ $primaryService->id ?? '' }}",
+          name: "{{ $primaryService->name ?? 'Handpainted Custom Nail Art' }}", 
+          price: {{ $primaryService->price ?? 180000 }}, 
+          duration: {{ $primaryService->duration ?? 90 }}, 
           uploader: "{{ $primaryService->uploaded_by ?? 'Aurel' }}",
           image: "{{ $primaryService->image_url ?? asset('img/booking-side.jpg') }}",
           hasCustomUpload: false
         };
-        let currentRemove = { name: 'Tanpa Remove', price: 0, duration: 0 };
-        let currentGuests = 1;
-        const DP_RATE = 50000;
 
-        // Template Slot Waktu
-        const baseSlots = [
-          { time: '09:00 - 10:00 WIB', defaultBooked: false, artist: 'Aurel' },
-          { time: '10:15 - 11:30 WIB', defaultBooked: true,  artist: 'Mayang' },
-          { time: '11:45 - 13:00 WIB', defaultBooked: false, artist: 'Nadia' },
-          { time: '13:30 - 14:45 WIB', defaultBooked: false, artist: 'Aurel' },
-          { time: '15:00 - 16:30 WIB', defaultBooked: true,  artist: 'Mayang' },
-          { time: '16:45 - 18:00 WIB', defaultBooked: false, artist: 'Nadia' },
-          { time: '18:30 - 19:45 WIB', defaultBooked: false, artist: 'Aurel' }
-        ];
+        const firstRemoveRadio = document.querySelector('input[name="remove_service"]:checked');
+        let currentRemove = firstRemoveRadio ? {
+          id: firstRemoveRadio.value,
+          name: firstRemoveRadio.getAttribute('data-name'),
+          price: parseInt(firstRemoveRadio.getAttribute('data-price'), 10),
+          duration: parseInt(firstRemoveRadio.getAttribute('data-duration'), 10)
+        } : { id: null, name: 'Tanpa Remove', price: 0, duration: 0 };
+
+        let currentGuests = 1;
+        const DP_RATE = {{ $dpPerGuest }};
+        let activePaymentMethod = 'qris';
 
         // Elemen UI
         const calMonthTitle = document.getElementById('calMonthTitle');
@@ -1298,6 +1286,7 @@
             this.closest('.lq-service-card-select').classList.add('is-selected');
 
             currentMani = {
+              id: this.value,
               name: this.getAttribute('data-name'),
               price: parseInt(this.getAttribute('data-price'), 10),
               duration: parseInt(this.getAttribute('data-duration'), 10)
@@ -1322,6 +1311,7 @@
           const opt = bkService.options[bkService.selectedIndex];
           currentArt = {
             type: 'catalog',
+            id: opt.value === 'none' ? null : opt.value,
             name: opt.getAttribute('data-name'),
             price: parseInt(opt.getAttribute('data-price'), 10),
             duration: parseInt(opt.getAttribute('data-duration'), 10),
@@ -1345,6 +1335,7 @@
 
           currentArt = {
             type: 'custom',
+            id: null,
             name: 'Request Desain Sendiri (Custom Request)',
             price: 160000,
             duration: 90,
@@ -1362,6 +1353,7 @@
           const opt = this.options[this.selectedIndex];
           currentArt = {
             type: 'catalog',
+            id: opt.value === 'none' ? null : opt.value,
             name: opt.getAttribute('data-name'),
             price: parseInt(opt.getAttribute('data-price'), 10),
             duration: parseInt(opt.getAttribute('data-duration'), 10),
@@ -1415,6 +1407,7 @@
             this.closest('.lq-service-card-select').classList.add('is-selected');
 
             currentRemove = {
+              id: this.value,
               name: this.getAttribute('data-name'),
               price: parseInt(this.getAttribute('data-price'), 10),
               duration: parseInt(this.getAttribute('data-duration'), 10)
@@ -1486,25 +1479,39 @@
           }
         }
 
-        // ================= RENDER SLOT JAM =================
-        function renderSlotsForDate(dateStr, dayNum) {
-          slotsContainer.innerHTML = '';
+        // ================= RENDER SLOT JAM DARI DATABASE =================
+        async function renderSlotsForDate(dateStr, dayNum) {
+          slotsContainer.innerHTML = '<small style="color:var(--lq-mauve);">Memuat ketersediaan jadwal...</small>';
           const targetArtist = currentArt.uploader || 'Aurel';
 
-          const slots = baseSlots.map((slot, index) => {
-            let isBooked = slot.defaultBooked;
-            if ((dayNum + index) % 3 === 0) isBooked = true;
-            if (index === 0) isBooked = false;
+          let slots = [];
+          try {
+            const resp = await fetch(`{{ route('jadwal.availability') }}?date=${encodeURIComponent(dateStr)}&creator=${encodeURIComponent(targetArtist)}`, {
+              headers: { 'Accept': 'application/json' }
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              slots = (data.slots || []).map(s => ({
+                time: s.time,
+                status: s.status,
+                artist: s.assigned_artist ? s.assigned_artist.name : targetArtist
+              }));
+            }
+          } catch (err) {
+            // Fallback ke data bookedSlotsByDate dari server
+            const bookedForDate = bookedSlotsByDate[dateStr] || [];
+            slots = studioSlots.map((time, index) => {
+              const isBooked = bookedForDate.includes(time);
+              const fallbackName = artistList[index % Math.max(1, artistList.length)] || 'Aurel';
+              return {
+                time: time,
+                status: isBooked ? 'booked' : 'available',
+                artist: (!isBooked && (targetArtist in rosterData)) ? targetArtist : fallbackName
+              };
+            });
+          }
 
-            const assignedName = (!isBooked && (targetArtist in rosterData)) ? targetArtist : slot.artist;
-
-            return {
-              time: slot.time,
-              status: isBooked ? 'booked' : 'available',
-              artist: assignedName
-            };
-          });
-
+          slotsContainer.innerHTML = '';
           let firstAvailableSelected = false;
 
           slots.forEach(slot => {
@@ -1620,6 +1627,7 @@
         const panelBank = document.getElementById('panelBank');
 
         tabQrisBtn.addEventListener('click', function () {
+          activePaymentMethod = 'qris';
           tabQrisBtn.classList.add('is-active');
           tabBankBtn.classList.remove('is-active');
           panelQris.style.display = 'block';
@@ -1627,6 +1635,7 @@
         });
 
         tabBankBtn.addEventListener('click', function () {
+          activePaymentMethod = 'bank_transfer';
           tabBankBtn.classList.add('is-active');
           tabQrisBtn.classList.remove('is-active');
           panelBank.style.display = 'block';
@@ -1661,16 +1670,75 @@
           receiptPreviewBox.style.display = 'none';
         };
 
-        // Submit Pembayaran DP
+        // Submit Pembayaran DP ke Database
         const btnSubmitPayment = document.getElementById('btnSubmitPayment');
-        btnSubmitPayment.addEventListener('click', function () {
+        btnSubmitPayment.addEventListener('click', async function () {
+          const clientName = document.getElementById('bk-name').value.trim();
+          const clientPhone = document.getElementById('bk-phone').value.trim();
+
+          if (!clientName || !clientPhone) {
+            alert('Mohon lengkapi Nama Lengkap dan Nomor HP / WhatsApp Anda.');
+            return;
+          }
+
           if (!receiptInput.files || receiptInput.files.length === 0) {
-            if (!confirm('Anda belum melampirkan foto struk/screenshot transfer DP. Lanjutkan simulasi reservasi?')) {
+            if (!confirm('Anda belum melampirkan foto struk/screenshot transfer DP. Tetap kirim reservasi?')) {
               return;
             }
           }
-          alert(`Uang Muka (DP) ${sumDpNow.textContent} Berhasil Dikonfirmasi!\n\nMayang (Admin) telah memvalidasi pembayaran awal Anda. Sisa pelunasan (${sumRemainingBalance.textContent}) dibayarkan setelah sesi nail art Anda selesai di studio.`);
-          location.href = "{{ url('/katalog') }}";
+
+          const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+          const formData = new FormData();
+          formData.append('client_name', clientName);
+          formData.append('client_phone', clientPhone);
+          formData.append('appointment_date', selectedDateStr);
+          formData.append('time_slot', selectedTimeStr);
+          formData.append('guests', currentGuests);
+          if (currentMani.id) formData.append('manicure_id', currentMani.id);
+          formData.append('design_type', currentArt.type);
+          if (currentArt.type === 'catalog' && currentArt.id) {
+            formData.append('nail_art_id', currentArt.id);
+          }
+          if (currentRemove.id) formData.append('remove_id', currentRemove.id);
+          if (currentArt.type === 'custom' && customDesignFile.files[0]) {
+            formData.append('custom_design_image', customDesignFile.files[0]);
+          }
+          const designNote = document.getElementById('customDesignNote')?.value || '';
+          if (designNote) formData.append('custom_design_note', designNote);
+
+          formData.append('dp_payment_method', activePaymentMethod);
+          if (receiptInput.files && receiptInput.files[0]) {
+            formData.append('dp_payment_proof', receiptInput.files[0]);
+          }
+
+          btnSubmitPayment.disabled = true;
+          btnSubmitPayment.textContent = 'Menyimpan Reservasi...';
+
+          try {
+            const response = await fetch("{{ route('booking.store') }}", {
+              method: 'POST',
+              headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+              },
+              body: formData
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+              alert(result.message || 'Gagal menyimpan reservasi. Periksa kembali data Anda.');
+              btnSubmitPayment.disabled = false;
+              btnSubmitPayment.innerHTML = 'Kirim Bukti DP &amp; Selesaikan Reservasi &rarr;';
+              return;
+            }
+
+            alert(`Reservasi Berhasil Disimpan!\nKode Booking: ${result.booking_code}\nNail Artist: ${result.artist_name}\nDP Terbayar: ${formatRupiah(result.dp_amount)}\nSisa Pelunasan di Studio: ${formatRupiah(result.remaining_balance)}`);
+            location.href = "{{ url('/katalog') }}";
+          } catch (error) {
+            alert('Terjadi kesalahan koneksi saat menyimpan reservasi.');
+            btnSubmitPayment.disabled = false;
+            btnSubmitPayment.innerHTML = 'Kirim Bukti DP &amp; Selesaikan Reservasi &rarr;';
+          }
         });
 
         // Inisialisasi awal

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Service extends Model
 {
@@ -14,6 +13,7 @@ class Service extends Model
         'name',
         'category',
         'category_label',
+        'service_type',
         'price',
         'duration',
         'image',

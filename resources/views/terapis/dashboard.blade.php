@@ -4,6 +4,7 @@
     <script>document.documentElement.classList.add('js')</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard Terapis &mdash; Amanails Nail Bar</title>
     <meta name="description" content="Dashboard terapis Amanails Nail Bar untuk melihat jadwal janji temu dan catatan khusus klien.">
 
@@ -532,15 +533,11 @@
                 <div class="col-sm-7">
                   <select class="lq-select" id="kasirPresetAddon" style="font-size: 0.82rem; padding: 0.45rem 0.65rem;">
                     <option value="" disabled selected>Pilih Tambahan Hari-H (Manik-manik, dll)...</option>
-                    <option value="Aksesoris Manik-manik &amp; Pearls" data-price="25000">Aksesoris Manik-manik &amp; Pearls (+Rp 25.000)</option>
-                    <option value="Kristal Swarovski Halus" data-price="35000">Kristal Swarovski Halus (+Rp 35.000)</option>
-                    <option value="Aksen Chrome / Aurora Powder" data-price="30000">Aksen Chrome / Aurora Powder (+Rp 30.000)</option>
-                    <option value="Cat Eye &amp; Velvet Effect" data-price="25000">Cat Eye &amp; Velvet Effect (+Rp 25.000)</option>
-                    <option value="3D Ribbon / Gel Emboss Art" data-price="40000">3D Ribbon / Gel Emboss Art (+Rp 40.000)</option>
-                    <option value="Ekstra Layer Builder Gel (BIAB)" data-price="40000">Ekstra Layer Builder Gel (+Rp 40.000)</option>
-                    <option value="Nail Tip Extension Tambahan (2 Jari)" data-price="35000">Nail Tip Extension Tambahan (2 Jari) (+Rp 35.000)</option>
-                    <option value="Hapus / Remove Kutek Gel Lama" data-price="30000">Hapus / Remove Kutek Gel Lama (+Rp 30.000)</option>
-                    <option value="Spa Hand Massage &amp; Pelembap" data-price="30000">Spa Hand Massage &amp; Pelembap (+Rp 30.000)</option>
+                    @foreach($addonServices as $addon)
+                      <option value="{{ $addon->id }}" data-name="{{ $addon->name }}" data-price="{{ $addon->price }}">
+                        {{ $addon->name }} (+Rp {{ number_format($addon->price, 0, ',', '.') }})
+                      </option>
+                    @endforeach
                     <option value="custom" data-price="0">+ Input Custom Tambahan Lainnya...</option>
                   </select>
                 </div>
@@ -929,7 +926,22 @@
         recalculateKasirTotals();
       }
 
-      function hapusKasirAddon(idx) {
+      async function hapusKasirAddon(idx) {
+        var item = currentAddons[idx];
+        if (item && item.id && currentActiveAppt && currentActiveAppt.db_id) {
+          try {
+            var csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            await fetch('/appointments/' + currentActiveAppt.db_id + '/addons/' + item.id, {
+              method: 'DELETE',
+              headers: {
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json'
+              }
+            });
+          } catch (e) {
+            // Abaikan jika gagal koneksi
+          }
+        }
         currentAddons.splice(idx, 1);
         renderKasirAddons();
       }
@@ -1054,7 +1066,7 @@
 
       var btnAddAddon = document.getElementById('btnKasirAddService');
       if (btnAddAddon) {
-        btnAddAddon.addEventListener('click', function() {
+        btnAddAddon.addEventListener('click', async function() {
           var select = document.getElementById('kasirPresetAddon');
           var val = select.value;
           if (!val) {
@@ -1062,6 +1074,7 @@
             return;
           }
 
+          var payload = {};
           var name = '';
           var price = 0;
 
@@ -1070,23 +1083,49 @@
             if (!customInput) return;
             name = customInput;
             price = parseInt(document.getElementById('kasirCustomPrice').value, 10) || 25000;
+            payload = { item_name: name, price: price };
           } else {
             var opt = select.options[select.selectedIndex];
-            name = opt.value;
+            name = opt.getAttribute('data-name') || opt.textContent;
             price = parseInt(opt.getAttribute('data-price'), 10) || 0;
+            payload = { service_id: parseInt(val, 10) };
           }
 
-          currentAddons.push({ name: name, price: price });
+          if (currentActiveAppt && currentActiveAppt.db_id) {
+            try {
+              var csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+              var res = await fetch('/appointments/' + currentActiveAppt.db_id + '/addons', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': csrf,
+                  'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+              });
+              if (res.ok) {
+                var data = await res.json();
+                currentAddons.push({ id: data.item.id, name: data.item.nama, price: data.item.harga });
+              } else {
+                currentAddons.push({ name: name, price: price });
+              }
+            } catch (e) {
+              currentAddons.push({ name: name, price: price });
+            }
+          } else {
+            currentAddons.push({ name: name, price: price });
+          }
+
           select.selectedIndex = 0;
           document.getElementById('kasirCustomPriceCol').style.display = 'none';
           renderKasirAddons();
         });
       }
 
-      // Event Listener: Konfirmasi Pelunasan & Selesaikan Appointment
+      // Event Listener: Konfirmasi Pelunasan & Selesaikan Appointment (Simpan ke Database)
       var btnSelesaikan = document.getElementById('btnKasirSelesaikan');
       if (btnSelesaikan) {
-        btnSelesaikan.addEventListener('click', function() {
+        btnSelesaikan.addEventListener('click', async function() {
           if (!currentActiveAppt) return;
 
           if (currentPrimaryServices.length === 0 && currentAddons.length === 0) {
@@ -1096,6 +1135,25 @@
 
           var remaining = document.getElementById('kasirValFinalRemaining').textContent;
           var grand = document.getElementById('kasirValGrandTotal').textContent;
+          var methodEl = document.querySelector('input[name="payment_method_final"]:checked');
+          var method = methodEl ? methodEl.value : 'cash';
+
+          if (currentActiveAppt.db_id) {
+            try {
+              var csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+              await fetch('/appointments/' + currentActiveAppt.db_id + '/complete', {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': csrf,
+                  'Accept': 'application/json'
+                },
+                body: JSON.stringify({ payment_method: method })
+              });
+            } catch (e) {
+              // Abaikan jika offline
+            }
+          }
 
           // Update data di jadwalList
           currentActiveAppt.status = 'Selesai';
