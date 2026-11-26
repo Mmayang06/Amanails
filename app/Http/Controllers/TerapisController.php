@@ -206,7 +206,11 @@ class TerapisController extends Controller
             ],
         ];
 
-        return view('terapis.dashboard', compact('terapis', 'statistik', 'jadwalHariIni', 'dataCuti', 'karyaTerapis', 'jadwalSatuBulan', 'addonServices'));
+        $todayDate = $today;
+        $todayShort = Carbon::today()->format('d M');
+        $todayFullShort = Carbon::today()->format('d M Y');
+
+        return view('terapis.dashboard', compact('terapis', 'statistik', 'jadwalHariIni', 'dataCuti', 'karyaTerapis', 'jadwalSatuBulan', 'addonServices', 'todayDate', 'todayShort', 'todayFullShort'));
     }
 
     /**

@@ -178,4 +178,16 @@ class ExampleTest extends TestCase
             'password' => 'password',
         ])->assertRedirect(route('home'));
     }
+
+    public function test_admin_dashboard_uses_database_appointments_and_current_date(): void
+    {
+        $response = $this->get('/admin/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertSee(now()->format('d M'));
+        $response->assertSee('Amanda (Buyer)');
+        $response->assertSee('Keluar');
+        $response->assertDontSee('21 Nov');
+        $response->assertDontSee('Angelina');
+    }
 }

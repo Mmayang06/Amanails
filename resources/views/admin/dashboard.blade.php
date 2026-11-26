@@ -20,18 +20,6 @@
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
   <style>
-    @media (min-width: 992px) {
-      .lq-nav .container {
-        position: relative;
-      }
-      .lq-nav-desktop {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-
     /* ================= KALENDER JADWAL BULANAN ================= */
     .lq-calendar-card {
       background: var(--lq-white);
@@ -404,10 +392,10 @@
 <body style="background: var(--lq-cream); min-height: 100vh;">
   <a class="lq-skip" href="#main">Lewati ke konten utama</a>
 
-  <!-- ===================== NAVBAR (katalog) ===================== -->
+  <!-- ===================== NAVBAR (Admin) ===================== -->
   <header class="lq-nav is-scrolled" data-nav>
     <div class="container">
-      <a class="lq-brand" href="{{ url('/') }}" aria-label="Amanails Nail Bar — Beranda">
+      <a class="lq-brand" href="{{ route('admin.dashboard') }}" aria-label="Amanails Nail Bar — Dashboard Admin">
         Amanails<span class="lq-dot">.</span>
         <small>Nail Bar</small>
       </a>
@@ -424,30 +412,15 @@
       </nav>
 
       <div class="lq-nav-cta d-flex align-items-center gap-2">
-        @auth
-          <span class="lq-nav-desktop me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Halo,
-            <strong>{{ Auth::user()->name }}</strong></span>
-          <form action="{{ route('logout') }}" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop">Keluar</button>
-          </form>
-        @endauth
-        <button class="lq-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-nav"
-          aria-label="Buka menu navigasi">
-          <span></span><span></span><span></span>
-        </button>
+        <span class="me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Halo,
+          <strong>{{ Auth::user()->name ?? 'Admin' }}</strong></span>
+        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+          @csrf
+          <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm">Keluar</button>
+        </form>
       </div>
     </div>
   </header>
-
-  <div class="lq-nav-mobile" id="mobile-nav" data-nav-mobile>
-    <ul>
-      <li><a href="{{ url('/admin/dashboard') }}" class="{{ $currentTab === 'appointment' ? 'is-active' : '' }}">Appointment</a></li>
-      <li><a href="{{ url('/admin/cuti') }}" class="{{ $currentTab === 'cuti' ? 'is-active' : '' }}">Approve Cuti</a></li>
-      <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
-      <li><span style="display:block; padding:0.5rem 0; color:var(--lq-mauve); opacity:0.5;">Laporan</span></li>
-    </ul>
-  </div>
 
   <!-- ===================== MAIN ===================== -->
   <main id="main" style="padding-top: 115px; padding-bottom: 4rem;">
@@ -462,7 +435,7 @@
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: var(--lq-rose-deep); line-height: 1; margin-bottom: 0.35rem;">
               9</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Total Appointment</div>
-            <small id="statDateLabel1" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
+            <small id="statDateLabel1" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal {{ $todayFullShort }}</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
@@ -471,9 +444,9 @@
               style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Perlu Dikonfirmasi</span>
             <div id="statPendingAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: var(--lq-gold); line-height: 1; margin-bottom: 0.35rem;">
-              2</div>
+              0</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Menunggu Accept</div>
-            <small id="statDateLabel2" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
+            <small id="statDateLabel2" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal {{ $todayFullShort }}</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
@@ -481,9 +454,9 @@
             <span class="lq-eyebrow" style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Terkonfirmasi</span>
             <div id="statLunasAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: #27ae60; line-height: 1; margin-bottom: 0.35rem;">
-              6</div>
+              0</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Lunas &amp; Terjadwal</div>
-            <small id="statDateLabel3" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
+            <small id="statDateLabel3" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal {{ $todayFullShort }}</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
@@ -491,9 +464,9 @@
             <span class="lq-eyebrow" style="font-size: 0.7rem; margin-bottom: 0.35rem; display: block;">Dibatalkan</span>
             <div id="statBatalAppt"
               style="font-family: var(--lq-serif); font-size: 2.8rem; color: #c62828; line-height: 1; margin-bottom: 0.35rem;">
-              1</div>
+              0</div>
             <div style="font-size: 0.95rem; font-weight: 500; color: var(--lq-ink); margin-bottom: 0.2rem;">Jadwal Batal</div>
-            <small id="statDateLabel4" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal 21 Nov 2026</small>
+            <small id="statDateLabel4" style="font-size: 0.8rem; color: var(--lq-mauve);">Jadwal {{ $todayFullShort }}</small>
           </div>
         </div>
       </div>
@@ -527,7 +500,7 @@
                 <!-- Legend Indikator -->
                 <div class="d-flex align-items-center gap-3 mb-3 flex-wrap" style="font-size: 0.76rem; color: var(--lq-mauve);">
                   <span class="d-flex align-items-center gap-1">
-                    <span style="width: 10px; height: 10px; background: var(--lq-gold); border-radius: 2px; display: inline-block;"></span> Hari Ini (21 Nov)
+                    <span style="width: 10px; height: 10px; background: var(--lq-gold); border-radius: 2px; display: inline-block;"></span> Hari Ini ({{ $todayShort }})
                   </span>
                   <span class="d-flex align-items-center gap-1">
                     <span style="width: 10px; height: 10px; background: rgba(162,93,107,0.3); border-radius: 2px; display: inline-block;"></span> Ada Klien Booking
@@ -560,7 +533,7 @@
               <div class="adm-toolbar-left">
                 <div>
                   <div class="adm-section-eyebrow">Daftar Reservasi</div>
-                  <h3 class="adm-section-title" id="selectedDateTableTitle">Jadwal appointment: Sabtu, 21 November 2026</h3>
+                  <h3 class="adm-section-title" id="selectedDateTableTitle">Jadwal appointment: {{ $todayFullShort }}</h3>
                 </div>
               </div>
               <div class="adm-toolbar-right">
@@ -833,48 +806,14 @@
   <script src="{{ asset('js/main.js') }}"></script>
 
   <script>
-    /* ══ DATA JADWAL APPOINTMENT BULANAN (Simulasi Multi-Hari) ══ */
-    var jadwalAppointmentBulan = {
-      '2026-11-01': [
-        { jam: '10:00–11:00', pelanggan: 'Fani', layanan: 'Basic Gel Polish', artist: 'Lena', status: 'Lunas' }
-      ],
-      '2026-11-21': [
-        { jam: '09:00–10:00', pelanggan: 'Aurellia', layanan: 'Basic Gel Polish', artist: 'Ami', status: 'Lunas' },
-        { jam: '09:00–10:00', pelanggan: 'Mayang', layanan: 'Nail Art Custom', artist: 'Rara', status: 'Pending' },
-        { jam: '10:00–11:00', pelanggan: 'Sela', layanan: 'Soft Gel Extensions', artist: 'Ami', status: 'Lunas' },
-        { jam: '11:00–12:00', pelanggan: 'Dina', layanan: 'Manikur Classic', artist: 'Lena', status: 'Lunas' },
-        { jam: '13:00–14:00', pelanggan: 'Rina', layanan: 'Pedikur + Gel Polish', artist: 'Rara', status: 'Pending' },
-        { jam: '14:00–15:00', pelanggan: 'Cindy', layanan: 'BIAB Overlay', artist: 'Ami', status: 'Lunas' },
-        { jam: '15:00–16:00', pelanggan: 'Tari', layanan: 'Acrylic Set', artist: 'Lena', status: 'Lunas' },
-        { jam: '16:00–17:00', pelanggan: 'Bella', layanan: 'Basic Gel Polish', artist: 'Rara', status: 'Batal' },
-        { jam: '17:00–18:00', pelanggan: 'Nadia', layanan: 'Nail Art Custom', artist: 'Ami', status: 'Lunas' }
-      ],
-      '2026-11-22': [
-        { jam: '10:00–11:00', pelanggan: 'Jessica', layanan: 'Spa Manikur Deluxe', artist: 'Ami', status: 'Lunas' },
-        { jam: '13:00–14:30', pelanggan: 'Clara', layanan: 'Nail Art Custom', artist: 'Rara', status: 'Pending' },
-        { jam: '15:00–16:00', pelanggan: 'Valerie', layanan: 'Manikur Gel Lengkap', artist: 'Lena', status: 'Lunas' }
-      ],
-      '2026-11-23': [
-        { jam: '11:00–12:00', pelanggan: 'Stephanie', layanan: 'BIAB Overlay', artist: 'Ami', status: 'Lunas' },
-        { jam: '14:00–15:00', pelanggan: 'Natasha', layanan: 'Akrilik Full Set', artist: 'Lena', status: 'Pending' }
-      ],
-      '2026-11-25': [
-        { jam: '09:30–10:30', pelanggan: 'Priscilla', layanan: 'Basic Gel Polish', artist: 'Rara', status: 'Lunas' },
-        { jam: '11:00–12:30', pelanggan: 'Gisella', layanan: 'Soft Gel Extensions', artist: 'Ami', status: 'Lunas' },
-        { jam: '13:30–14:30', pelanggan: 'Kezia', layanan: 'Pedikur Signature', artist: 'Lena', status: 'Pending' },
-        { jam: '16:00–17:00', pelanggan: 'Michelle', layanan: 'Hot Stone Pedikur', artist: 'Rara', status: 'Lunas' }
-      ],
-      '2026-11-28': [
-        { jam: '10:00–11:00', pelanggan: 'Angelina', layanan: 'Nail Art Custom', artist: 'Ami', status: 'Lunas' },
-        { jam: '13:00–14:00', pelanggan: 'Bianca', layanan: 'Infill & Retouch', artist: 'Lena', status: 'Pending' },
-        { jam: '15:30–16:30', pelanggan: 'Patricia', layanan: 'Manikur Classic', artist: 'Rara', status: 'Lunas' }
-      ]
-    };
+    /* ══ DATA JADWAL APPOINTMENT BULANAN LANGSUNG DARI DATABASE ══ */
+    var jadwalAppointmentBulan = @json($appointmentsByDate);
 
-    var currentCalYear = 2026;
-    var currentCalMonth = 10; // November (0-based)
-    var selectedCalDate = '2026-11-21';
-    var todayDateStr = '2026-11-21';
+    var todayDateStr = @json($todayDate);
+    var todayParts = todayDateStr.split('-');
+    var currentCalYear = parseInt(todayParts[0], 10);
+    var currentCalMonth = parseInt(todayParts[1], 10) - 1;
+    var selectedCalDate = todayDateStr;
     var namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
     var namaHari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
@@ -910,8 +849,8 @@
     }
 
     function goToTodayCal() {
-      currentCalYear = 2026;
-      currentCalMonth = 10;
+      currentCalYear = parseInt(todayParts[0], 10);
+      currentCalMonth = parseInt(todayParts[1], 10) - 1;
       selectedCalDate = todayDateStr;
       renderCalendarGrid();
       renderSelectedDateDetails(selectedCalDate);
@@ -1021,8 +960,8 @@
       appts.forEach(function(item) {
         var s = (item.status || '').toLowerCase();
         if (s === 'pending' || s === 'menunggu') pending++;
-        else if (s === 'lunas' || s === 'disetujui') lunas++;
-        else if (s === 'batal' || s === 'ditolak') batal++;
+        else if (s === 'lunas' || s === 'disetujui' || s === 'selesai' || s === 'sedang berlangsung') lunas++;
+        else if (s === 'batal' || s === 'ditolak' || s === 'dibatalkan') batal++;
       });
 
       // Update stat cards
@@ -1062,9 +1001,9 @@
       appts.forEach(function(item, idx) {
         var badgeClass = 'adm-badge ';
         var s = (item.status || '').toLowerCase();
-        if (s === 'lunas' || s === 'disetujui') badgeClass += 'lunas';
+        if (s === 'lunas' || s === 'disetujui' || s === 'selesai' || s === 'sedang berlangsung') badgeClass += 'lunas';
         else if (s === 'pending' || s === 'menunggu') badgeClass += 'pending';
-        else if (s === 'batal' || s === 'ditolak') badgeClass += 'batal';
+        else if (s === 'batal' || s === 'ditolak' || s === 'dibatalkan') badgeClass += 'batal';
         else badgeClass += 'pending';
 
         var actionHtml = '';

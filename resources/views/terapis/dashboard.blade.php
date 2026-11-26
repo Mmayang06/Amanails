@@ -18,44 +18,34 @@
   </head>
   <body style="background: var(--lq-cream); min-height: 100vh;">
 
-    <!-- ===================== TOPBAR ===================== -->
-    <header class="lq-terapis-header">
+    <!-- ===================== NAVBAR (Terapis) ===================== -->
+    <header class="lq-nav is-scrolled" data-nav>
       <div class="container">
-        <div class="d-flex justify-content-between align-items-center">
-          <!-- Logo -->
-          <div class="d-flex align-items-center">
-            <a class="lq-brand" href="{{ route('terapis.dashboard') }}" style="font-size: 1.45rem;">
-              Amanails<span class="lq-dot">.</span>
-              <small style="font-size: 0.65rem;">Nail Bar</small>
-            </a>
-          </div>
+        <a class="lq-brand" href="{{ route('terapis.dashboard') }}" aria-label="Amanails Nail Bar — Portal Terapis">
+          Amanails<span class="lq-dot">.</span>
+          <small>Nail Bar</small>
+        </a>
 
-          <!-- Navigasi Menu Burger (Icon Garis Tumpuk) -->
-          <div class="dropdown">
-            <button class="lq-menu-burger" type="button" id="menuTerapisToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Buka Menu Navigasi" title="Menu Navigasi">
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end lq-portal-dropdown" aria-labelledby="menuTerapisToggle">
-              <li>
-                <a class="dropdown-item" href="{{ route('terapis.karya') }}">
-                  Portofolio Saya
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{{ route('terapis.cuti') }}">
-                  Pengajuan Cuti
-                </a>
-              </li>
-            </ul>
-          </div>
+        <nav class="lq-nav-desktop" aria-label="Navigasi Terapis">
+          <ul class="lq-nav-links">
+            <li><a href="{{ route('terapis.dashboard') }}" class="is-active">Jadwal Saya</a></li>
+            <li><a href="{{ route('terapis.karya') }}">Portofolio Saya</a></li>
+            <li><a href="{{ route('terapis.cuti') }}">Pengajuan Cuti</a></li>
+          </ul>
+        </nav>
+
+        <div class="lq-nav-cta d-flex align-items-center gap-2">
+          <span class="me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Halo, <strong>{{ Auth::user()->name ?? $terapis['nama'] }}</strong></span>
+          <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm">Keluar</button>
+          </form>
         </div>
       </div>
     </header>
 
     <!-- ===================== MAIN CONTENT ===================== -->
-    <main class="py-4 py-lg-5">
+    <main style="padding-top: 105px; padding-bottom: 4rem;">
       <div class="container">
 
         <!-- Banner Profil Terapis (Sesuai Kartu Unggulan Template .lq-pkg-card.is-featured) -->
@@ -237,7 +227,7 @@
               <!-- Legend Indikator -->
               <div class="d-flex align-items-center gap-3 mb-3 flex-wrap" style="font-size: 0.76rem; color: var(--lq-mauve);">
                 <span class="d-flex align-items-center gap-1">
-                  <span style="width: 10px; height: 10px; background: var(--lq-gold); border-radius: 2px; display: inline-block;"></span> Hari Ini (21 Nov)
+                  <span style="width: 10px; height: 10px; background: var(--lq-gold); border-radius: 2px; display: inline-block;"></span> Hari Ini ({{ $todayShort }})
                 </span>
                 <span class="d-flex align-items-center gap-1">
                   <span style="width: 10px; height: 10px; background: rgba(162,93,107,0.3); border-radius: 2px; display: inline-block;"></span> Ada Klien Booking
@@ -270,7 +260,7 @@
                 <div>
                   <span class="lq-eyebrow" style="margin-bottom: 0.15rem;">Detail Jadwal Harian</span>
                   <h3 id="selectedDateTitle" style="font-family: var(--lq-serif); font-size: 1.35rem; margin: 0; color: var(--lq-ink);">
-                    Sabtu, 21 November 2026
+                    {{ $todayFullShort }}
                   </h3>
                 </div>
                 <span id="selectedDateCountBadge" class="lq-pkg-tag" style="position: static; font-size: 0.72rem; padding: 0.35rem 0.85rem; background: var(--lq-plum); color: #fff;">
@@ -1205,10 +1195,11 @@
 
       // ================= LOGIKA KALENDER 1 BULAN KEDEPAN =================
       var jadwalSatuBulan = @json($jadwalSatuBulan);
-      var currentCalYear = 2026;
-      var currentCalMonth = 10; // November (0-based)
-      var selectedCalDate = '2026-11-21';
-      var todayDateStr = '2026-11-21';
+      var todayDateStr = @json($todayDate);
+      var todayParts = todayDateStr.split('-');
+      var currentCalYear = parseInt(todayParts[0], 10);
+      var currentCalMonth = parseInt(todayParts[1], 10) - 1;
+      var selectedCalDate = todayDateStr;
       var namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       var namaHari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
@@ -1260,8 +1251,8 @@
       }
 
       function goToTodayCal() {
-        currentCalYear = 2026;
-        currentCalMonth = 10;
+        currentCalYear = parseInt(todayParts[0], 10);
+        currentCalMonth = parseInt(todayParts[1], 10) - 1;
         selectedCalDate = todayDateStr;
         renderCalendarGrid();
         renderSelectedDateDetails(selectedCalDate);

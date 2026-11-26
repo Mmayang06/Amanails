@@ -17,46 +17,34 @@
   </head>
   <body style="background: var(--lq-cream); min-height: 100vh;">
 
-    <!-- ===================== TOPBAR ===================== -->
-    <header class="lq-terapis-header">
+    <!-- ===================== NAVBAR (Terapis) ===================== -->
+    <header class="lq-nav is-scrolled" data-nav>
       <div class="container">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <!-- Logo & Nav Breadcrumb -->
-          <div class="d-flex align-items-center gap-3">
-            <a class="lq-brand" href="{{ route('terapis.dashboard') }}" style="font-size: 1.45rem;">
-              Amanails<span class="lq-dot">.</span>
-              <small style="font-size: 0.65rem;">Nail Bar</small>
-            </a>
-            <span style="color: var(--lq-line-soft);">|</span>
-            <span style="font-size: 0.84rem; font-weight: 500; color: var(--lq-mauve);">Pengajuan Cuti</span>
-          </div>
+        <a class="lq-brand" href="{{ route('terapis.dashboard') }}" aria-label="Amanails Nail Bar — Portal Terapis">
+          Amanails<span class="lq-dot">.</span>
+          <small>Nail Bar</small>
+        </a>
 
-          <!-- Tombol Aksi Topbar (Menu Burger) -->
-          <div class="dropdown">
-            <button class="lq-menu-burger" type="button" id="menuTerapisToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Buka Menu Navigasi" title="Menu Navigasi">
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end lq-portal-dropdown" aria-labelledby="menuTerapisToggle">
-              <li>
-                <a class="dropdown-item" href="{{ route('terapis.dashboard') }}">
-                  Kembali ke Dashboard
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{{ route('terapis.karya') }}">
-                  Portofolio Saya
-                </a>
-              </li>
-            </ul>
-          </div>
+        <nav class="lq-nav-desktop" aria-label="Navigasi Terapis">
+          <ul class="lq-nav-links">
+            <li><a href="{{ route('terapis.dashboard') }}">Jadwal Saya</a></li>
+            <li><a href="{{ route('terapis.karya') }}">Portofolio Saya</a></li>
+            <li><a href="{{ route('terapis.cuti') }}" class="is-active">Pengajuan Cuti</a></li>
+          </ul>
+        </nav>
+
+        <div class="lq-nav-cta d-flex align-items-center gap-2">
+          <span class="me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Halo, <strong>{{ Auth::user()->name ?? 'Terapis' }}</strong></span>
+          <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm">Keluar</button>
+          </form>
         </div>
       </div>
     </header>
 
     <!-- ===================== MAIN CONTENT ===================== -->
-    <main class="py-4 py-lg-5">
+    <main style="padding-top: 105px; padding-bottom: 4rem;">
       <div class="container">
 
         <!-- Header Section -->

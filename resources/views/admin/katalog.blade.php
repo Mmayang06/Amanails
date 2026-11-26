@@ -14,20 +14,6 @@
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-    <style>
-      @media (min-width: 992px) {
-        .lq-nav .container {
-          position: relative;
-        }
-        .lq-nav-desktop {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-        }
-      }
-    </style>
-
   </head>
   <body>
     <a class="lq-skip" href="#main">Lewati ke konten utama</a>
@@ -35,7 +21,7 @@
     <!-- ===================== NAVBAR (Admin) ===================== -->
     <header class="lq-nav is-scrolled" data-nav>
       <div class="container">
-        <a class="lq-brand" href="{{ url('/') }}" aria-label="Amanails Nail Bar — Beranda">
+        <a class="lq-brand" href="{{ route('admin.dashboard') }}" aria-label="Amanails Nail Bar — Dashboard Admin">
           Amanails<span class="lq-dot">.</span>
           <small>Nail Bar</small>
         </a>
@@ -50,29 +36,14 @@
         </nav>
 
         <div class="lq-nav-cta d-flex align-items-center gap-2">
-          @auth
-            <span class="lq-nav-desktop me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Halo, <strong>{{ Auth::user()->name }}</strong></span>
-            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-              @csrf
-              <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm lq-nav-desktop">Keluar</button>
-            </form>
-          @endauth
-          <button class="lq-nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-nav" aria-label="Buka menu navigasi">
-            <span></span><span></span><span></span>
-          </button>
+          <span class="me-2" style="font-size: 0.82rem; color: var(--lq-mauve);">Halo, <strong>{{ Auth::user()->name ?? 'Admin' }}</strong></span>
+          <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="lq-btn lq-btn-outline lq-btn-sm">Keluar</button>
+          </form>
         </div>
       </div>
     </header>
-
-    <!-- Drawer Menu Mobile -->
-    <div class="lq-nav-mobile" id="mobile-nav" data-nav-mobile>
-      <ul>
-        <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
-        <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
-        <li><a href="{{ url('/admin/katalog') }}" class="is-active">Katalog</a></li>
-        <li><span style="display:block; padding:0.5rem 0; color:var(--lq-mauve); opacity:0.5;">Laporan</span></li>
-      </ul>
-    </div>
 
     <main id="main">
 

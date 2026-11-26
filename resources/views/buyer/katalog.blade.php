@@ -139,7 +139,7 @@
                    data-name="{{ strtolower($item->name) }}"
                    data-desc="{{ strtolower($item->description) }}">
                 
-                <div class="lq-shop-card {{ $index === 2 ? 'is-selected' : '' }}" 
+                <div class="lq-shop-card" 
                      data-id="{{ $item->id }}" 
                      data-name="{{ $item->name }}" 
                      data-price="{{ $item->price }}"
@@ -164,8 +164,8 @@
                     
                     <div class="lq-shop-foot">
                       <span class="lq-shop-price">Rp {{ number_format($item->price, 0, ',', '.') }}</span>
-                      <button type="button" class="lq-btn {{ $index === 2 ? 'lq-btn-primary' : 'lq-btn-outline' }} lq-btn-sm btn-select-card">
-                        {{ $index === 2 ? '✓ Dipilih' : 'Pilih Layanan' }}
+                      <button type="button" class="lq-btn lq-btn-outline lq-btn-sm btn-select-card">
+                        Pilih Layanan
                       </button>
                     </div>
                   </div>
@@ -193,13 +193,13 @@
             Layanan Terpilih
           </span>
           <div style="color: #fff; font-size: 1.05rem;">
-            <strong id="selectedCountText">1 layanan dipilih</strong> &nbsp;&middot;&nbsp; 
-            <span style="font-family: var(--lq-serif); color: var(--lq-gold); font-size: 1.25rem;" id="selectedPriceText">Rp 180.000</span>
+            <strong id="selectedCountText">Belum ada layanan dipilih</strong> &nbsp;&middot;&nbsp; 
+            <span style="font-family: var(--lq-serif); color: var(--lq-gold); font-size: 1.25rem;" id="selectedPriceText">Rp 0</span>
           </div>
         </div>
 
         <div>
-          <a href="{{ url('/jadwal?services=3') }}" id="btnNextSchedule" class="lq-btn lq-btn-gold lq-btn-sm">
+          <a href="#" id="btnNextSchedule" class="lq-btn lq-btn-gold lq-btn-sm" style="opacity: 0.4; pointer-events: none;">
             Lanjut Pilih Jadwal &rarr;
           </a>
         </div>
@@ -260,10 +260,8 @@
         const selectedPriceText = document.getElementById('selectedPriceText');
         const btnNextSchedule = document.getElementById('btnNextSchedule');
 
-        // State awal (default id 3: Handpainted Custom Nail Art di-upload oleh Aurel)
-        let selectedServices = [
-          { id: '3', name: 'Handpainted Custom Nail Art', price: 180000 }
-        ];
+        // State awal kosong (belum ada layanan yang dipilih)
+        let selectedServices = [];
 
         function formatRupiah(number) {
           return 'Rp ' + number.toLocaleString('id-ID');

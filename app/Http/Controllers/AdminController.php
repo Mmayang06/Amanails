@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Service;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,14 +14,49 @@ class AdminController extends Controller
     {
         $activeTab = $request->query('tab', 'appointment');
         $appointments = Appointment::with(['items', 'artist'])
-            ->orderByDesc('appointment_date')
+            ->orderBy('appointment_date')
             ->orderBy('time_slot')
             ->get();
+
+        $appointmentsByDate = [];
+        foreach ($appointments as $appt) {
+            $dateKey = $appt->appointment_date->toDateString();
+            $layananNames = $appt->items
+                ->where('is_addon', false)
+                ->pluck('item_name')
+                ->implode(' + ');
+
+            $appointmentsByDate[$dateKey][] = [
+                'id' => $appt->id,
+                'booking_code' => $appt->booking_code,
+                'jam' => $appt->time_slot,
+                'pelanggan' => $appt->client_name,
+                'layanan' => $layananNames !== '' ? $layananNames : 'Perawatan Studio',
+                'artist' => $appt->artist?->name ?? 'Aurel',
+                'status' => $appt->status,
+                'dp_amount' => $appt->dp_amount,
+                'final_total' => $appt->final_total,
+                'final_payment_status' => $appt->final_payment_status,
+            ];
+        }
+
+        $todayDate = Carbon::today()->toDateString();
+        $todayShort = Carbon::today()->format('d M');
+        $todayFullShort = Carbon::today()->format('d M Y');
+
         $addonServices = Service::where('is_active', true)
             ->where('service_type', 'addon')
             ->get();
 
-        return view('admin.dashboard', compact('activeTab', 'appointments', 'addonServices'));
+        return view('admin.dashboard', compact(
+            'activeTab',
+            'appointments',
+            'appointmentsByDate',
+            'todayDate',
+            'todayShort',
+            'todayFullShort',
+            'addonServices'
+        ));
     }
 
     public function cuti(): View
