@@ -8,6 +8,7 @@ use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TerapisController extends Controller
 {
@@ -16,12 +17,14 @@ class TerapisController extends Controller
      */
     public function dashboard()
     {
-        // Profil terapis aktif (simulasi data)
+        $user = Auth::user();
+        $isArtist = $user && $user->role === 'nail_artist';
+
         $terapis = [
-            'nama' => 'Mia Alvarez',
-            'role' => 'Nail Art Lead & Senior Technician',
-            'spesialisasi' => 'Freehand Florals, Chrome & Micro-Detailing',
-            'foto' => asset('img/tech-1.jpg'),
+            'nama' => $isArtist ? $user->name : 'Mia Alvarez',
+            'role' => $isArtist ? 'Nail Artist' : 'Nail Art Lead & Senior Technician',
+            'spesialisasi' => ($isArtist && $user->specialty) ? $user->specialty : 'Freehand Florals, Chrome & Micro-Detailing',
+            'foto' => asset(($isArtist && $user->avatar) ? $user->avatar : 'img/tech-1.jpg'),
             'rating' => '4.95',
             'total_ulasan' => 148,
             'status' => 'Tersedia', // Tersedia, Sedang Melayani, Istirahat

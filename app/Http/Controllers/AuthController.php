@@ -10,12 +10,24 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     /**
+     * Tentukan URL tujuan setelah login berdasarkan role pengguna.
+     */
+    private function redirectPathForRole(?User $user): string
+    {
+        return match ($user?->role) {
+            'admin' => route('admin.dashboard'),
+            'nail_artist' => route('terapis.dashboard'),
+            default => route('home'),
+        };
+    }
+
+    /**
      * Tampilkan formulir login.
      */
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect('/');
+            return redirect($this->redirectPathForRole(Auth::user()));
         }
 
         return view('auth.login');
@@ -40,7 +52,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/')->with('success', 'Selamat datang kembali, '.Auth::user()->name.'!');
+            return redirect($this->redirectPathForRole(Auth::user()))
+                ->with('success', 'Selamat datang kembali, '.Auth::user()->name.'!');
         }
 
         return back()->withErrors([
@@ -54,7 +67,7 @@ class AuthController extends Controller
     public function showRegisterForm()
     {
         if (Auth::check()) {
-            return redirect('/');
+            return redirect($this->redirectPathForRole(Auth::user()));
         }
 
         return view('auth.register');
@@ -83,13 +96,14 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => 'buyer',
         ]);
 
         Auth::login($user);
 
         $request->session()->regenerate();
 
-        return redirect('/')->with('success', 'Pendaftaran berhasil! Selamat datang di Amanails Nail Bar.');
+        return redirect($this->redirectPathForRole($user))->with('success', 'Pendaftaran berhasil! Selamat datang di Amanails Nail Bar.');
     }
 
     /**

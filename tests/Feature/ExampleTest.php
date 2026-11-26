@@ -155,4 +155,27 @@ class ExampleTest extends TestCase
             'final_total' => 300000,
         ]);
     }
+
+    public function test_login_redirects_each_role_to_their_dashboard(): void
+    {
+        // Admin -> /admin/dashboard
+        $this->post('/login', [
+            'email' => 'admin@amanails.com',
+            'password' => 'password',
+        ])->assertRedirect(route('admin.dashboard'));
+        $this->post('/logout');
+
+        // Nail Artist -> /terapis/dashboard
+        $this->post('/login', [
+            'email' => 'sela@amanails.com',
+            'password' => 'password',
+        ])->assertRedirect(route('terapis.dashboard'));
+        $this->post('/logout');
+
+        // Buyer -> /
+        $this->post('/login', [
+            'email' => 'amanda@gmail.com',
+            'password' => 'password',
+        ])->assertRedirect(route('home'));
+    }
 }
