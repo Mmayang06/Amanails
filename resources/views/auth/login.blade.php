@@ -66,7 +66,23 @@
                 <!-- Password Field -->
                 <div class="lq-field @error('password') has-error @enderror">
                   <label for="password">Kata Sandi <span class="req">*</span></label>
-                  <input class="lq-input" type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                  <div style="position: relative; width: 100%; display: flex; align-items: center;">
+                    <input class="lq-input" type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" style="padding-right: 2.75rem; width: 100%;">
+                    <button type="button" id="togglePasswordBtn" aria-label="Tampilkan atau sembunyikan kata sandi" title="Tampilkan / sembunyikan kata sandi" style="position: absolute; right: 0.75rem; background: none; border: none; padding: 0.25rem 0.35rem; color: var(--lq-mauve); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: color 0.2s ease;">
+                      <!-- Eye Icon (Password hidden, click to show) -->
+                      <svg id="eyeIconOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <!-- Eye Off Icon (Password visible, click to hide) -->
+                      <svg id="eyeIconClosed" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                        <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                        <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                        <line x1="2" x2="22" y1="2" y2="22"></line>
+                      </svg>
+                    </button>
+                  </div>
                   @error('password')
                     <span class="lq-field-error" style="display:block;">{{ $message }}</span>
                   @enderror
@@ -103,5 +119,23 @@
 
     <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+    <script>
+      (function() {
+        const toggleBtn = document.getElementById('togglePasswordBtn');
+        const passInput = document.getElementById('password');
+        const eyeOpen = document.getElementById('eyeIconOpen');
+        const eyeClosed = document.getElementById('eyeIconClosed');
+
+        if (toggleBtn && passInput && eyeOpen && eyeClosed) {
+          toggleBtn.addEventListener('click', function() {
+            const isPassword = passInput.getAttribute('type') === 'password';
+            passInput.setAttribute('type', isPassword ? 'text' : 'password');
+            eyeOpen.style.display = isPassword ? 'none' : 'block';
+            eyeClosed.style.display = isPassword ? 'block' : 'none';
+            toggleBtn.setAttribute('aria-label', isPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

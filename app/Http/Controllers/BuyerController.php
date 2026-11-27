@@ -75,6 +75,19 @@ class BuyerController extends Controller
         $primaryServiceId = ! empty($selectedServiceIds) ? (int) $selectedServiceIds[0] : 3;
         $primaryService = $allServices->firstWhere('id', $primaryServiceId) ?? $allServices->first();
 
+        if (! $primaryService) {
+            $primaryService = new Service([
+                'id' => 3,
+                'name' => 'Handpainted Custom Nail Art',
+                'service_type' => 'catalog',
+                'price' => 180000,
+                'duration' => 90,
+                'uploaded_by' => 'Aurel',
+                'image' => 'nails/gallery-3.jpg',
+                'is_active' => true,
+            ]);
+        }
+
         // Ambil roster Nail Artist & Admin dari database users
         $staffUsers = User::whereIn('role', ['nail_artist', 'admin'])->get();
         $roster = [];

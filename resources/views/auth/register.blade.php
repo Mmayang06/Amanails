@@ -72,7 +72,21 @@
                   <!-- Password -->
                   <div class="lq-field @error('password') has-error @enderror">
                     <label for="password">Kata Sandi <span class="req">*</span></label>
-                    <input class="lq-input" type="password" id="password" name="password" placeholder="Min. 8 karakter" required autocomplete="new-password">
+                    <div style="position: relative; width: 100%; display: flex; align-items: center;">
+                      <input class="lq-input" type="password" id="password" name="password" placeholder="Min. 8 karakter" required autocomplete="new-password" style="padding-right: 2.5rem; width: 100%;">
+                      <button type="button" id="togglePasswordBtn" aria-label="Tampilkan atau sembunyikan kata sandi" style="position: absolute; right: 0.65rem; background: none; border: none; padding: 0.25rem; color: var(--lq-mauve); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                        <svg id="eyeIconOpen" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg id="eyeIconClosed" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                          <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                          <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                          <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                          <line x1="2" x2="22" y1="2" y2="22"></line>
+                        </svg>
+                      </button>
+                    </div>
                     @error('password')
                       <span class="lq-field-error" style="display:block;">{{ $message }}</span>
                     @enderror
@@ -81,7 +95,21 @@
                   <!-- Confirm Password -->
                   <div class="lq-field">
                     <label for="password_confirmation">Konfirmasi Sandi <span class="req">*</span></label>
-                    <input class="lq-input" type="password" id="password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi" required autocomplete="new-password">
+                    <div style="position: relative; width: 100%; display: flex; align-items: center;">
+                      <input class="lq-input" type="password" id="password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi" required autocomplete="new-password" style="padding-right: 2.5rem; width: 100%;">
+                      <button type="button" id="toggleConfirmPasswordBtn" aria-label="Tampilkan atau sembunyikan konfirmasi kata sandi" style="position: absolute; right: 0.65rem; background: none; border: none; padding: 0.25rem; color: var(--lq-mauve); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                        <svg id="eyeConfirmOpen" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg id="eyeConfirmClosed" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                          <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                          <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                          <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                          <line x1="2" x2="22" y1="2" y2="22"></line>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -113,5 +141,28 @@
 
     <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+    <script>
+      (function() {
+        function setupToggle(btnId, inputId, openId, closedId) {
+          const btn = document.getElementById(btnId);
+          const input = document.getElementById(inputId);
+          const open = document.getElementById(openId);
+          const closed = document.getElementById(closedId);
+
+          if (btn && input && open && closed) {
+            btn.addEventListener('click', function() {
+              const isPassword = input.getAttribute('type') === 'password';
+              input.setAttribute('type', isPassword ? 'text' : 'password');
+              open.style.display = isPassword ? 'none' : 'block';
+              closed.style.display = isPassword ? 'block' : 'none';
+              btn.setAttribute('aria-label', isPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+            });
+          }
+        }
+
+        setupToggle('togglePasswordBtn', 'password', 'eyeIconOpen', 'eyeIconClosed');
+        setupToggle('toggleConfirmPasswordBtn', 'password_confirmation', 'eyeConfirmOpen', 'eyeConfirmClosed');
+      })();
+    </script>
   </body>
 </html>
