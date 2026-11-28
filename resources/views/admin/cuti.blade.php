@@ -145,9 +145,9 @@
         <nav class="lq-nav-desktop" aria-label="Navigasi Admin">
           <ul class="lq-nav-links">
             <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
+            <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
             <li><a href="{{ url('/admin/cuti') }}" class="is-active">Approve Cuti</a></li>
             <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
-            <li><a href="#" style="pointer-events:none; opacity:0.45; cursor:default;">Laporan</a></li>
           </ul>
         </nav>
 
@@ -287,9 +287,9 @@
             <h5>Admin</h5>
             <ul>
               <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
+              <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
               <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
               <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
-              <li><span style="color: var(--lq-mauve);">Laporan</span></li>
             </ul>
           </div>
           <div class="col-6 col-lg-2">

@@ -29,9 +29,9 @@
         <nav class="lq-nav-desktop" aria-label="Navigasi Admin">
           <ul class="lq-nav-links">
             <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
+            <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
             <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
             <li><a href="{{ url('/admin/katalog') }}" class="is-active">Katalog</a></li>
-            <li><a href="#" style="pointer-events:none; opacity:0.45; cursor:default;">Laporan</a></li>
           </ul>
         </nav>
 

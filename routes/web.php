@@ -40,6 +40,9 @@ Route::patch('/appointments/{appointment}/complete', [TerapisController::class, 
 
 // Admin Routes
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/pembayaran', [AdminController::class, 'pembayaran'])->name('admin.pembayaran');
+Route::patch('/admin/pembayaran/{appointment}/approve', [AdminController::class, 'approvePembayaran'])->name('admin.pembayaran.approve');
+Route::patch('/admin/pembayaran/{appointment}/reject', [AdminController::class, 'rejectPembayaran'])->name('admin.pembayaran.reject');
 Route::get('/admin/cuti', [AdminController::class, 'cuti'])->name('admin.cuti');
 Route::get('/admin/katalog', [AdminController::class, 'katalog'])->name('admin.katalog');
 Route::get('/admin/laporan', [AdminController::class, 'dashboard'])->name('admin.laporan');

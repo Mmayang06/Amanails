@@ -404,10 +404,10 @@
         <ul class="lq-nav-links">
           <li><a href="{{ url('/admin/dashboard') }}"
               class="{{ $currentTab === 'appointment' ? 'is-active' : '' }}">Appointment</a></li>
+          <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
           <li><a href="{{ url('/admin/cuti') }}" class="{{ $currentTab === 'cuti' ? 'is-active' : '' }}">Approve
               Cuti</a></li>
           <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
-          <li><a href="#" style="pointer-events:none; opacity:0.45; cursor:default;">Laporan</a></li>
         </ul>
       </nav>
 
@@ -572,80 +572,7 @@
             </div>
           </div>
 
-          <!-- ── TAB 2: APPROVE PEMBAYARAN ── -->
-          <div class="adm-tab-panel {{ $currentTab === 'pembayaran' ? 'is-active' : '' }}" id="tab-pembayaran">
-            <div class="adm-toolbar">
-              <div>
-                <div class="adm-section-eyebrow">Admin</div>
-                <h3 class="adm-section-title">Approve Pembayaran</h3>
-              </div>
-            </div>
-
-            <div class="adm-table-wrap">
-              <table class="table table-borderless">
-                <thead>
-                  <tr>
-                    <th>Tanggal</th>
-                    <th>Pelanggan</th>
-                    <th>Layanan</th>
-                    <th>Total</th>
-                    <th>Bukti</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="pembayaranBody">
-                  <tr>
-                    <td>20 Nov 2026</td>
-                    <td>Mayang</td>
-                    <td>Nail Art Custom</td>
-                    <td>Rp&nbsp;220.000</td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Simulasi: Lihat bukti transfer')">Lihat Bukti</button></td>
-                    <td><span class="adm-badge menunggu">Menunggu</span></td>
-                    <td>
-                      <div class="d-flex align-items-center gap-1">
-                        <button type="button" class="lq-btn lq-btn-primary lq-btn-table"
-                          onclick="approveRow(this,'Lunas')">Setujui</button>
-                        <button type="button" class="lq-btn lq-btn-table lq-btn-table-danger"
-                          onclick="rejectRow(this)">Tolak</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>20 Nov 2026</td>
-                    <td>Rina</td>
-                    <td>Pedikur + Gel Polish</td>
-                    <td>Rp&nbsp;185.000</td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Simulasi: Lihat bukti transfer')">Lihat Bukti</button></td>
-                    <td><span class="adm-badge menunggu">Menunggu</span></td>
-                    <td>
-                      <div class="d-flex align-items-center gap-1">
-                        <button type="button" class="lq-btn lq-btn-primary lq-btn-table"
-                          onclick="approveRow(this,'Lunas')">Setujui</button>
-                        <button type="button" class="lq-btn lq-btn-table lq-btn-table-danger"
-                          onclick="rejectRow(this)">Tolak</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>19 Nov 2026</td>
-                    <td>Aurellia</td>
-                    <td>Basic Gel Polish</td>
-                    <td>Rp&nbsp;150.000</td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Simulasi: Lihat bukti transfer')">Lihat Bukti</button></td>
-                    <td><span class="adm-badge disetujui">Lunas</span></td>
-                    <td><button type="button" class="lq-btn lq-btn-outline lq-btn-table"
-                        onclick="alert('Sudah disetujui')">Detail</button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div><!-- /col-lg-8 -->
+        </div><!-- /col-12 -->
       </div><!-- /row -->
 
     </div>
@@ -776,9 +703,9 @@
           <h5>Admin</h5>
           <ul>
             <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
+            <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
             <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
             <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
-            <li><span style="color: var(--lq-mauve);">Laporan</span></li>
           </ul>
         </div>
         <div class="col-6 col-lg-2">

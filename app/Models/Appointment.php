@@ -81,6 +81,26 @@ class Appointment extends Model
     }
 
     /**
+     * Accessor URL gambar bukti transfer DP jika ada.
+     */
+    public function getDpProofUrlAttribute(): ?string
+    {
+        if (! $this->dp_payment_proof) {
+            return null;
+        }
+
+        if (str_starts_with($this->dp_payment_proof, 'http://') || str_starts_with($this->dp_payment_proof, 'https://')) {
+            return $this->dp_payment_proof;
+        }
+
+        if (file_exists(public_path($this->dp_payment_proof))) {
+            return asset($this->dp_payment_proof);
+        }
+
+        return asset('storage/'.$this->dp_payment_proof);
+    }
+
+    /**
      * Hitung ulang total dari item layanan dan simpan ke database.
      */
     public function recalculateTotals(): void

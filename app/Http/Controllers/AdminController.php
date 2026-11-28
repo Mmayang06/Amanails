@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Service;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -57,6 +58,123 @@ class AdminController extends Controller
             'todayFullShort',
             'addonServices'
         ));
+    }
+
+    /**
+     * Tampilkan halaman persetujuan & verifikasi pembayaran DP buyer.
+     */
+    public function pembayaran(): View
+    {
+        $appointments = Appointment::with(['items', 'artist', 'user'])
+            ->orderByRaw("CASE dp_status WHEN 'pending' THEN 0 WHEN 'verified' THEN 1 ELSE 2 END")
+            ->orderByDesc('created_at')
+            ->get();
+
+        $pembayaranList = $appointments->map(function (Appointment $appt): array {
+            $nonAddonNames = $appt->items
+                ->where('is_addon', false)
+                ->pluck('item_name')
+                ->implode(' + ');
+
+            $methodLabel = match ($appt->dp_payment_method) {
+                'qris' => 'QRIS Amanails',
+                'bank_transfer' => 'Transfer Bank',
+                default => strtoupper((string) ($appt->dp_payment_method ?: '-')),
+            };
+
+            $dpStatus = $appt->dp_status ?: 'pending';
+
+            return [
+                'id' => $appt->id,
+                'booking_code' => $appt->booking_code,
+                'tanggal' => $appt->appointment_date->format('d M Y'),
+                'tanggal_raw' => $appt->appointment_date->toDateString(),
+                'jam' => $appt->time_slot,
+                'pelanggan' => $appt->client_name,
+                'telepon' => $appt->client_phone,
+                'tipe_klien' => $appt->client_type,
+                'email' => $appt->user?->email ?? '-',
+                'artist' => $appt->artist?->name ?? 'Aurel',
+                'station' => $appt->station,
+                'layanan' => $nonAddonNames !== '' ? $nonAddonNames : 'Perawatan Studio',
+                'items' => $appt->items->map(fn ($i) => [
+                    'name' => $i->item_name,
+                    'type' => $i->item_type,
+                    'price' => $i->price,
+                    'is_addon' => (bool) $i->is_addon,
+                ])->values()->all(),
+                'dp_amount' => $appt->dp_amount,
+                'initial_total' => $appt->initial_total,
+                'addons_total' => $appt->addons_total,
+                'final_total' => $appt->final_total,
+                'sisa_tagihan' => max(0, $appt->final_total - $appt->dp_amount),
+                'dp_payment_method' => $appt->dp_payment_method,
+                'dp_payment_method_label' => $methodLabel,
+                'dp_proof_url' => $appt->dp_proof_url,
+                'has_proof' => ! empty($appt->dp_payment_proof),
+                'dp_status' => $dpStatus,
+                'status' => $appt->status,
+                'notes' => $appt->notes,
+                'created_at' => $appt->created_at?->format('d M Y, H:i') ?? '-',
+            ];
+        })->values()->all();
+
+        $stats = [
+            'total' => count($pembayaranList),
+            'pending' => collect($pembayaranList)->where('dp_status', 'pending')->count(),
+            'verified' => collect($pembayaranList)->where('dp_status', 'verified')->count(),
+            'rejected' => collect($pembayaranList)->where('dp_status', 'rejected')->count(),
+        ];
+
+        return view('admin.pembayaran', compact('pembayaranList', 'stats'));
+    }
+
+    /**
+     * Setujui (verifikasi) bukti pembayaran DP buyer.
+     */
+    public function approvePembayaran(Appointment $appointment): JsonResponse
+    {
+        $appointment->dp_status = 'verified';
+        if ($appointment->status === 'Dibatalkan') {
+            $appointment->status = 'Menunggu';
+        }
+        $appointment->save();
+
+        return response()->json([
+            'success' => true,
+            'dp_status' => $appointment->dp_status,
+            'status' => $appointment->status,
+            'message' => 'Pembayaran DP untuk '.$appointment->booking_code.' berhasil disetujui.',
+        ]);
+    }
+
+    /**
+     * Tolak bukti pembayaran DP (misal bukti bodong / nominal tidak sesuai).
+     */
+    public function rejectPembayaran(Request $request, Appointment $appointment): JsonResponse
+    {
+        $validated = $request->validate([
+            'reason' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $appointment->dp_status = 'rejected';
+        $appointment->status = 'Dibatalkan';
+
+        $reason = trim((string) ($validated['reason'] ?? ''));
+        if ($reason !== '') {
+            $baseNotes = preg_replace('/\s*\[Ditolak Admin:[^\]]*\]$/', '', (string) $appointment->notes);
+            $appointment->notes = trim($baseNotes.($baseNotes !== '' ? "\n" : '').'[Ditolak Admin: '.$reason.']');
+        }
+
+        $appointment->save();
+
+        return response()->json([
+            'success' => true,
+            'dp_status' => $appointment->dp_status,
+            'status' => $appointment->status,
+            'notes' => $appointment->notes,
+            'message' => 'Pembayaran DP untuk '.$appointment->booking_code.' ditolak dan jadwal dibatalkan.',
+        ]);
     }
 
     public function cuti(): View
