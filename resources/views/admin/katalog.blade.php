@@ -30,7 +30,7 @@
           <ul class="lq-nav-links">
             <li><a href="{{ url('/admin/dashboard') }}">Appointment</a></li>
             <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
-            <li><a href="{{ url('/admin/cuti') }}">Approve Cuti</a></li>
+            <li><a href="{{ url('/admin/cuti') }}">Approve Cuti <span class="adm-nav-badge {{ ($pendingCutiCount ?? 0) === 0 ? 'is-zero' : '' }}">{{ $pendingCutiCount ?? 0 }}</span></a></li>
             <li><a href="{{ url('/admin/katalog') }}" class="is-active">Katalog</a></li>
           </ul>
         </nav>

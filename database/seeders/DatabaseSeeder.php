@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Appointment;
 use App\Models\AppointmentItem;
+use App\Models\LeaveRequest;
 use App\Models\Service;
 use App\Models\User;
 use Carbon\Carbon;
@@ -633,6 +634,59 @@ class DatabaseSeeder extends Seeder
             foreach ($items as $item) {
                 AppointmentItem::create(array_merge($item, ['appointment_id' => $appointment->id]));
             }
+        }
+
+        // 4. Seed Pengajuan Cuti Nail Artist
+        $leaveSeedData = [
+            [
+                'id' => 1,
+                'user_id' => $userModels['Aurel']->id,
+                'artist_name' => 'Aurel',
+                'leave_type' => 'Keperluan Keluarga',
+                'start_date' => Carbon::today()->addDays(4)->toDateString(),
+                'end_date' => Carbon::today()->addDays(6)->toDateString(),
+                'duration_days' => 3,
+                'reason' => 'Acara keluarga di luar kota.',
+                'status' => 'menunggu',
+                'admin_note' => null,
+                'reviewed_by' => null,
+                'reviewed_at' => null,
+            ],
+            [
+                'id' => 2,
+                'user_id' => $userModels['Mayang']->id,
+                'artist_name' => 'Mayang',
+                'leave_type' => 'Izin Sakit',
+                'start_date' => Carbon::today()->addDays(8)->toDateString(),
+                'end_date' => Carbon::today()->addDays(8)->toDateString(),
+                'duration_days' => 1,
+                'reason' => 'Kontrol kesehatan rutin ke dokter.',
+                'status' => 'menunggu',
+                'admin_note' => null,
+                'reviewed_by' => null,
+                'reviewed_at' => null,
+            ],
+            [
+                'id' => 3,
+                'user_id' => $userModels['Sela']->id,
+                'artist_name' => 'Sela',
+                'leave_type' => 'Cuti Khusus',
+                'start_date' => Carbon::today()->subDays(5)->toDateString(),
+                'end_date' => Carbon::today()->subDays(5)->toDateString(),
+                'duration_days' => 1,
+                'reason' => 'Menghadiri acara wisuda keluarga.',
+                'status' => 'disetujui',
+                'admin_note' => 'Disetujui, slot meja kerja sudah dialihkan sementara.',
+                'reviewed_by' => $userModels['Admin']->id,
+                'reviewed_at' => Carbon::today()->subDays(6),
+            ],
+        ];
+
+        foreach ($leaveSeedData as $leave) {
+            LeaveRequest::updateOrCreate(
+                ['id' => $leave['id']],
+                $leave
+            );
         }
     }
 }

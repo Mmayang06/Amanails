@@ -31,6 +31,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/terapis/dashboard', [TerapisController::class, 'dashboard'])->name('terapis.dashboard');
 Route::get('/terapis/karya', [TerapisController::class, 'karya'])->name('terapis.karya');
 Route::get('/terapis/cuti', [TerapisController::class, 'cuti'])->name('terapis.cuti');
+Route::post('/terapis/cuti', [TerapisController::class, 'storeCuti'])->name('terapis.cuti.store');
 
 // Appointment & Kasir Hari-H API (Terapis & Admin)
 Route::post('/appointments/{appointment}/addons', [TerapisController::class, 'addAddon'])->name('appointments.addons.store');
@@ -44,6 +45,8 @@ Route::get('/admin/pembayaran', [AdminController::class, 'pembayaran'])->name('a
 Route::patch('/admin/pembayaran/{appointment}/approve', [AdminController::class, 'approvePembayaran'])->name('admin.pembayaran.approve');
 Route::patch('/admin/pembayaran/{appointment}/reject', [AdminController::class, 'rejectPembayaran'])->name('admin.pembayaran.reject');
 Route::get('/admin/cuti', [AdminController::class, 'cuti'])->name('admin.cuti');
+Route::patch('/admin/cuti/{leaveRequest}/approve', [AdminController::class, 'approveCuti'])->name('admin.cuti.approve');
+Route::patch('/admin/cuti/{leaveRequest}/reject', [AdminController::class, 'rejectCuti'])->name('admin.cuti.reject');
 Route::get('/admin/katalog', [AdminController::class, 'katalog'])->name('admin.katalog');
 Route::post('/admin/katalog', [AdminController::class, 'storeKatalog'])->name('admin.katalog.store');
 Route::get('/admin/laporan', [AdminController::class, 'dashboard'])->name('admin.laporan');

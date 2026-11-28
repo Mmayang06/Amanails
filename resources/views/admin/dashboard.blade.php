@@ -406,7 +406,7 @@
               class="{{ $currentTab === 'appointment' ? 'is-active' : '' }}">Appointment</a></li>
           <li><a href="{{ url('/admin/pembayaran') }}">Pembayaran</a></li>
           <li><a href="{{ url('/admin/cuti') }}" class="{{ $currentTab === 'cuti' ? 'is-active' : '' }}">Approve
-              Cuti</a></li>
+              Cuti <span class="adm-nav-badge {{ ($pendingCutiCount ?? 0) === 0 ? 'is-zero' : '' }}">{{ $pendingCutiCount ?? 0 }}</span></a></li>
           <li><a href="{{ url('/admin/katalog') }}">Katalog</a></li>
         </ul>
       </nav>

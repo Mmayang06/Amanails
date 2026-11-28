@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\AppointmentItem;
+use App\Models\LeaveRequest;
 use App\Models\Service;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -326,44 +329,119 @@ class TerapisController extends Controller
     }
 
     /**
+     * Tentukan akun nail artist aktif (dari user login atau fallback pertama).
+     */
+    private function resolveCurrentArtist(): ?User
+    {
+        $user = Auth::user();
+        if ($user && $user->role === 'nail_artist') {
+            return $user;
+        }
+
+        return User::where('role', 'nail_artist')->orderBy('id')->first();
+    }
+
+    /**
      * Halaman Khusus Pengajuan & Manajemen Cuti Terapis.
      */
     public function cuti()
     {
+        $artist = $this->resolveCurrentArtist();
+        $artistName = $artist?->name ?? 'Aurel';
+
         $terapis = [
-            'nama' => 'Mia Alvarez',
-            'role' => 'Nail Art Lead & Senior Technician',
+            'nama' => $artistName,
+            'role' => 'Nail Artist',
             'meja_kerja' => 'Station 01',
         ];
 
+        $leaveQuery = LeaveRequest::query()
+            ->when($artist, function ($q) use ($artist) {
+                $q->where(function ($sub) use ($artist) {
+                    $sub->where('user_id', $artist->id)
+                        ->orWhere('artist_name', $artist->name);
+                });
+            }, function ($q) use ($artistName) {
+                $q->where('artist_name', $artistName);
+            })
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->get();
+
+        $kuotaBulanan = 8;
+        $cutiTerpakai = (int) $leaveQuery->where('status', 'disetujui')->sum('duration_days');
+        $sisaCuti = max(0, $kuotaBulanan - $cutiTerpakai);
+
+        $riwayat = $leaveQuery->map(function (LeaveRequest $item): array {
+            $statusLabel = match ($item->status) {
+                'disetujui' => 'Disetujui',
+                'ditolak' => 'Ditolak',
+                default => 'Menunggu Persetujuan',
+            };
+
+            return [
+                'id' => $item->id,
+                'tipe' => $item->leave_type,
+                'tanggal' => $item->formatted_date_range,
+                'durasi' => $item->duration_days.' Hari',
+                'alasan' => $item->reason,
+                'status_key' => $item->status,
+                'status' => $statusLabel,
+                'admin_note' => $item->admin_note,
+                'tanggal_pengajuan' => $item->created_at?->format('d M Y') ?? '-',
+            ];
+        })->values()->all();
+
         $dataCuti = [
-            'kuota_bulanan' => 8,
-            'cuti_terpakai' => 2,
-            'sisa_cuti' => 6,
+            'kuota_bulanan' => $kuotaBulanan,
+            'cuti_terpakai' => $cutiTerpakai,
+            'sisa_cuti' => $sisaCuti,
             'periode' => 'Bulan Ini ('.date('F Y').')',
-            'riwayat' => [
-                [
-                    'id' => 'CUTI-02',
-                    'tipe' => 'Cuti Bulanan',
-                    'tanggal' => '10 Nov 2026',
-                    'durasi' => '1 Hari',
-                    'alasan' => 'Keperluan keluarga mendesak.',
-                    'status' => 'Selesai',
-                    'tanggal_pengajuan' => '08 Nov 2026',
-                ],
-                [
-                    'id' => 'CUTI-01',
-                    'tipe' => 'Izin Sakit',
-                    'tanggal' => '02 Nov 2026',
-                    'durasi' => '1 Hari',
-                    'alasan' => 'Istirahat flu dan demam (surat dokter terlampir).',
-                    'status' => 'Selesai',
-                    'tanggal_pengajuan' => '02 Nov 2026',
-                ],
-            ],
+            'riwayat' => $riwayat,
         ];
 
         return view('terapis.cuti', compact('terapis', 'dataCuti'));
+    }
+
+    /**
+     * Simpan pengajuan cuti baru dari nail artist ke database.
+     */
+    public function storeCuti(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'leave_type' => ['required', 'string', 'max:100'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'reason' => ['required', 'string', 'max:1000'],
+        ], [
+            'leave_type.required' => 'Jenis cuti / izin wajib dipilih.',
+            'start_date.required' => 'Tanggal mulai wajib diisi.',
+            'end_date.required' => 'Tanggal selesai wajib diisi.',
+            'end_date.after_or_equal' => 'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.',
+            'reason.required' => 'Alasan / keterangan cuti wajib diisi.',
+        ]);
+
+        $artist = $this->resolveCurrentArtist();
+        $artistName = $artist?->name ?? 'Aurel';
+
+        $start = Carbon::parse($validated['start_date'])->startOfDay();
+        $end = Carbon::parse($validated['end_date'])->startOfDay();
+        $durationDays = (int) $start->diffInDays($end) + 1;
+
+        LeaveRequest::create([
+            'user_id' => $artist?->id,
+            'artist_name' => $artistName,
+            'leave_type' => $validated['leave_type'],
+            'start_date' => $start->toDateString(),
+            'end_date' => $end->toDateString(),
+            'duration_days' => $durationDays,
+            'reason' => $validated['reason'],
+            'status' => 'menunggu',
+        ]);
+
+        return redirect()
+            ->route('terapis.cuti')
+            ->with('success', 'Pengajuan cuti berhasil dikirim dan menunggu persetujuan Admin.');
     }
 
     /**

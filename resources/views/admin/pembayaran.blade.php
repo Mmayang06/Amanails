@@ -294,7 +294,7 @@
         <ul class="lq-nav-links">
           <li><a href="{{ route('admin.dashboard') }}">Appointment</a></li>
           <li><a href="{{ route('admin.pembayaran') }}" class="is-active">Pembayaran</a></li>
-          <li><a href="{{ route('admin.cuti') }}">Approve Cuti</a></li>
+          <li><a href="{{ route('admin.cuti') }}">Approve Cuti <span class="adm-nav-badge {{ ($pendingCutiCount ?? 0) === 0 ? 'is-zero' : '' }}">{{ $pendingCutiCount ?? 0 }}</span></a></li>
           <li><a href="{{ route('admin.katalog') }}">Katalog</a></li>
         </ul>
       </nav>
@@ -317,7 +317,7 @@
     <ul>
       <li><a href="{{ route('admin.dashboard') }}">Appointment</a></li>
       <li><a href="{{ route('admin.pembayaran') }}" class="is-active">Pembayaran</a></li>
-      <li><a href="{{ route('admin.cuti') }}">Approve Cuti</a></li>
+      <li><a href="{{ route('admin.cuti') }}">Approve Cuti <span class="adm-nav-badge {{ ($pendingCutiCount ?? 0) === 0 ? 'is-zero' : '' }}">{{ $pendingCutiCount ?? 0 }}</span></a></li>
       <li><a href="{{ route('admin.katalog') }}">Katalog</a></li>
     </ul>
   </div>
@@ -574,7 +574,7 @@
           <ul>
             <li><a href="{{ route('admin.dashboard') }}">Appointment</a></li>
             <li><a href="{{ route('admin.pembayaran') }}">Pembayaran</a></li>
-            <li><a href="{{ route('admin.cuti') }}">Approve Cuti</a></li>
+            <li><a href="{{ route('admin.cuti') }}">Approve Cuti <span class="adm-nav-badge {{ ($pendingCutiCount ?? 0) === 0 ? 'is-zero' : '' }}">{{ $pendingCutiCount ?? 0 }}</span></a></li>
             <li><a href="{{ route('admin.katalog') }}">Katalog</a></li>
           </ul>
         </div>

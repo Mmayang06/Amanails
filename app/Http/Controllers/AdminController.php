@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\LeaveRequest;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -179,9 +180,98 @@ class AdminController extends Controller
         ]);
     }
 
+    /**
+     * Tampilkan daftar pengajuan cuti nail artist dari database.
+     */
     public function cuti(): View
     {
-        return view('admin.cuti');
+        $requests = LeaveRequest::with('user')
+            ->orderByRaw("CASE status WHEN 'menunggu' THEN 0 WHEN 'disetujui' THEN 1 ELSE 2 END")
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->get();
+
+        $cutiList = $requests->map(function (LeaveRequest $item): array {
+            $statusLabel = match ($item->status) {
+                'disetujui' => 'Disetujui',
+                'ditolak' => 'Ditolak',
+                default => 'Menunggu',
+            };
+
+            return [
+                'id' => $item->id,
+                'artist_name' => $item->artist_name,
+                'leave_type' => $item->leave_type,
+                'tanggal' => $item->formatted_date_range,
+                'durasi' => $item->duration_days.' hari',
+                'reason' => $item->reason,
+                'status' => $item->status,
+                'status_label' => $statusLabel,
+                'admin_note' => $item->admin_note,
+                'created_at' => $item->created_at?->format('d M Y, H:i') ?? '-',
+            ];
+        })->values()->all();
+
+        $stats = [
+            'total' => count($cutiList),
+            'menunggu' => collect($cutiList)->where('status', 'menunggu')->count(),
+            'disetujui' => collect($cutiList)->where('status', 'disetujui')->count(),
+            'ditolak' => collect($cutiList)->where('status', 'ditolak')->count(),
+        ];
+
+        return view('admin.cuti', compact('cutiList', 'stats'));
+    }
+
+    /**
+     * Setujui pengajuan cuti nail artist.
+     */
+    public function approveCuti(Request $request, LeaveRequest $leaveRequest): JsonResponse
+    {
+        $validated = $request->validate([
+            'admin_note' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $leaveRequest->status = 'disetujui';
+        if (! empty($validated['admin_note'])) {
+            $leaveRequest->admin_note = trim((string) $validated['admin_note']);
+        }
+        $leaveRequest->reviewed_by = Auth::id();
+        $leaveRequest->reviewed_at = now();
+        $leaveRequest->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $leaveRequest->status,
+            'admin_note' => $leaveRequest->admin_note,
+            'pending_count' => LeaveRequest::where('status', 'menunggu')->count(),
+            'message' => 'Pengajuan cuti '.$leaveRequest->artist_name.' telah disetujui.',
+        ]);
+    }
+
+    /**
+     * Tolak pengajuan cuti nail artist.
+     */
+    public function rejectCuti(Request $request, LeaveRequest $leaveRequest): JsonResponse
+    {
+        $validated = $request->validate([
+            'admin_note' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $leaveRequest->status = 'ditolak';
+        if (! empty($validated['admin_note'])) {
+            $leaveRequest->admin_note = trim((string) $validated['admin_note']);
+        }
+        $leaveRequest->reviewed_by = Auth::id();
+        $leaveRequest->reviewed_at = now();
+        $leaveRequest->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $leaveRequest->status,
+            'admin_note' => $leaveRequest->admin_note,
+            'pending_count' => LeaveRequest::where('status', 'menunggu')->count(),
+            'message' => 'Pengajuan cuti '.$leaveRequest->artist_name.' telah ditolak.',
+        ]);
     }
 
     public function katalog(): View

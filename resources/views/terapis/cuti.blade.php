@@ -112,11 +112,19 @@
               </div>
 
               <div id="riwayatCutiList">
-                @foreach($dataCuti['riwayat'] as $cuti)
+                @forelse($dataCuti['riwayat'] as $cuti)
+                  @php
+                    $statusKey = $cuti['status_key'] ?? 'menunggu';
+                    $badgeStyle = match ($statusKey) {
+                        'disetujui' => 'background: #eef6ee; color: #27ae60;',
+                        'ditolak' => 'background: #fdf0f0; color: #c62828;',
+                        default => 'background: var(--lq-gold); color: var(--lq-plum-deep);',
+                    };
+                  @endphp
                   <div class="p-3 rounded mb-3" style="background: var(--lq-cream-2); border: 1px solid var(--lq-line-soft); font-size: 0.86rem;">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                       <strong style="color: var(--lq-ink); font-family: var(--lq-serif); font-size: 1.05rem;">{{ $cuti['tipe'] }}</strong>
-                      <span class="lq-pkg-tag" style="position: static; font-size: 0.62rem; padding: 0.25rem 0.65rem; background: #eef6ee; color: #27ae60;">
+                      <span class="lq-pkg-tag" style="position: static; font-size: 0.62rem; padding: 0.25rem 0.65rem; {{ $badgeStyle }}">
                         {{ $cuti['status'] }}
                       </span>
                     </div>
@@ -126,8 +134,17 @@
                     <div style="font-size: 0.84rem; color: var(--lq-ink); font-style: italic;">
                       &ldquo;{{ $cuti['alasan'] }}&rdquo;
                     </div>
+                    @if(! empty($cuti['admin_note']))
+                      <div class="mt-2 pt-2" style="border-top: 1px dashed var(--lq-line-soft); font-size: 0.78rem; color: var(--lq-mauve);">
+                        <strong>Catatan Admin:</strong> {{ $cuti['admin_note'] }}
+                      </div>
+                    @endif
                   </div>
-                @endforeach
+                @empty
+                  <p class="mb-0 text-center py-4" style="color: var(--lq-mauve); font-size: 0.88rem;">
+                    Belum ada riwayat pengajuan cuti.
+                  </p>
+                @endforelse
               </div>
             </div>
           </div>
@@ -143,15 +160,32 @@
                 Pilih jenis cuti dan tanggal untuk diteruskan ke manajer salon.
               </p>
 
-              <form id="formCuti" onsubmit="event.preventDefault(); submitCuti();">
+              @if(session('success'))
+                <div id="terapisCutiSuccess" class="alert alert-success mb-3" role="alert" style="background: #eef6ee; color: #2e6930; border: 1px solid #d4ebd4; border-radius: var(--lq-radius); padding: 0.8rem 1rem; font-size: 0.86rem; transition: opacity 0.4s ease;">
+                  {{ session('success') }}
+                </div>
+              @endif
+
+              @if($errors->any())
+                <div class="alert alert-danger mb-3" role="alert" style="background: #fdf2f2; color: #a82323; border: 1px solid #f9d4d4; border-radius: var(--lq-radius); padding: 0.8rem 1rem; font-size: 0.86rem;">
+                  <ul class="mb-0 ps-3">
+                    @foreach($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                    @endforeach
+                  </ul>
+                </div>
+              @endif
+
+              <form id="formCuti" action="{{ route('terapis.cuti.store') }}" method="POST">
+                @csrf
                 <div class="lq-field mb-3">
                   <label for="jenisCuti">Jenis Cuti / Izin <span class="req">*</span></label>
-                  <select class="lq-select" id="jenisCuti" required>
+                  <select class="lq-select" id="jenisCuti" name="leave_type" required>
                     <option value="">Pilih jenis cuti...</option>
-                    <option value="Cuti Bulanan">Cuti Bulanan Reguler</option>
-                    <option value="Izin Sakit">Izin Sakit</option>
-                    <option value="Keperluan Keluarga">Keperluan Keluarga / Mendesak</option>
-                    <option value="Cuti Khusus">Cuti Khusus (Acara Keluarga / Penting)</option>
+                    <option value="Cuti Bulanan" {{ old('leave_type') === 'Cuti Bulanan' ? 'selected' : '' }}>Cuti Bulanan Reguler</option>
+                    <option value="Izin Sakit" {{ old('leave_type') === 'Izin Sakit' ? 'selected' : '' }}>Izin Sakit</option>
+                    <option value="Keperluan Keluarga" {{ old('leave_type') === 'Keperluan Keluarga' ? 'selected' : '' }}>Keperluan Keluarga / Mendesak</option>
+                    <option value="Cuti Khusus" {{ old('leave_type') === 'Cuti Khusus' ? 'selected' : '' }}>Cuti Khusus (Acara Keluarga / Penting)</option>
                   </select>
                 </div>
 
@@ -159,20 +193,20 @@
                   <div class="col-6">
                     <div class="lq-field mb-0">
                       <label for="tglMulai">Tanggal Mulai <span class="req">*</span></label>
-                      <input type="date" class="lq-input" id="tglMulai" required>
+                      <input type="date" class="lq-input" id="tglMulai" name="start_date" value="{{ old('start_date') }}" required>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="lq-field mb-0">
                       <label for="tglSelesai">Tanggal Selesai <span class="req">*</span></label>
-                      <input type="date" class="lq-input" id="tglSelesai" required>
+                      <input type="date" class="lq-input" id="tglSelesai" name="end_date" value="{{ old('end_date') }}" required>
                     </div>
                   </div>
                 </div>
 
                 <div class="lq-field mb-3">
                   <label for="alasanCuti">Alasan / Keterangan <span class="req">*</span></label>
-                  <textarea class="lq-textarea" id="alasanCuti" placeholder="Jelaskan alasan pengajuan cuti secara singkat..." required style="min-height: 90px;"></textarea>
+                  <textarea class="lq-textarea" id="alasanCuti" name="reason" placeholder="Jelaskan alasan pengajuan cuti secara singkat..." required style="min-height: 90px;">{{ old('reason') }}</textarea>
                 </div>
 
                 <div class="p-3 rounded mb-3" style="background: var(--lq-cream-2); font-size: 0.82rem; color: var(--lq-mauve); line-height: 1.45;">
@@ -197,35 +231,15 @@
 
     <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
     <script>
-      function submitCuti() {
-        var jenis = document.getElementById('jenisCuti').value;
-        var tglMulai = document.getElementById('tglMulai').value;
-        var tglSelesai = document.getElementById('tglSelesai').value;
-        var alasan = document.getElementById('alasanCuti').value;
-
-        if (!jenis || !tglMulai || !tglSelesai || !alasan) {
-          alert('Silakan lengkapi semua data formulir pengajuan cuti.');
-          return;
+      document.addEventListener('DOMContentLoaded', function () {
+        var alertEl = document.getElementById('terapisCutiSuccess');
+        if (alertEl) {
+          setTimeout(function () {
+            alertEl.style.opacity = '0';
+            setTimeout(function () { alertEl.remove(); }, 400);
+          }, 3500);
         }
-
-        var riwayatContainer = document.getElementById('riwayatCutiList');
-        var itemBaru = document.createElement('div');
-        itemBaru.className = 'p-3 rounded mb-3';
-        itemBaru.style.cssText = 'background: var(--lq-cream-2); border: 1px solid var(--lq-line-soft); font-size: 0.86rem;';
-        itemBaru.innerHTML = '<div class="d-flex justify-content-between align-items-center mb-1">' +
-                             '<strong style="color: var(--lq-ink); font-family: var(--lq-serif); font-size: 1.05rem;">' + jenis + '</strong>' +
-                             '<span class="lq-pkg-tag" style="position: static; font-size: 0.62rem; padding: 0.25rem 0.65rem; background: var(--lq-gold); color: var(--lq-plum-deep);">Menunggu Persetujuan</span>' +
-                             '</div>' +
-                             '<div style="font-size: 0.82rem; color: var(--lq-mauve); margin-bottom: 0.35rem;">' +
-                             'Tanggal: <strong>' + tglMulai + ' s/d ' + tglSelesai + '</strong>' +
-                             '</div>' +
-                             '<div style="font-size: 0.84rem; color: var(--lq-ink); font-style: italic;">&ldquo;' + alasan + '&rdquo;</div>';
-        
-        riwayatContainer.insertBefore(itemBaru, riwayatContainer.firstChild);
-
-        alert('Pengajuan cuti (' + jenis + ') berhasil dikirim ke manajer salon!');
-        document.getElementById('formCuti').reset();
-      }
+      });
     </script>
   </body>
 </html>
