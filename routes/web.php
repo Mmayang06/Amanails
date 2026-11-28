@@ -45,4 +45,5 @@ Route::patch('/admin/pembayaran/{appointment}/approve', [AdminController::class,
 Route::patch('/admin/pembayaran/{appointment}/reject', [AdminController::class, 'rejectPembayaran'])->name('admin.pembayaran.reject');
 Route::get('/admin/cuti', [AdminController::class, 'cuti'])->name('admin.cuti');
 Route::get('/admin/katalog', [AdminController::class, 'katalog'])->name('admin.katalog');
+Route::post('/admin/katalog', [AdminController::class, 'storeKatalog'])->name('admin.katalog.store');
 Route::get('/admin/laporan', [AdminController::class, 'dashboard'])->name('admin.laporan');

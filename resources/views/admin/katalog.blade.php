@@ -58,11 +58,18 @@
             </div>
           </div>
 
-          <!-- Action: Tambah Desain -->
-          <div class="mt-4 mb-2">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4">
             <button type="button" class="lq-btn lq-btn-primary lq-btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahDesain">
-              + Tambah Desain
+              + Tambah Katalog
             </button>
+
+            <div class="lq-filters mb-0" style="justify-content: flex-end;">
+              @foreach($categories as $cat)
+                <button type="button" class="lq-filter-btn {{ $cat['id'] === 'all' ? 'is-active' : '' }}" data-service-filter="{{ $cat['id'] }}">
+                  {{ $cat['name'] }}
+                </button>
+              @endforeach
+            </div>
           </div>
         </div>
       </section>
@@ -70,10 +77,28 @@
       <!-- ===================== SERVICE CATALOG (Shop Grid Template) ===================== -->
       <section class="lq-section lq-bg-cream" style="padding-top:3.5rem; padding-bottom:5rem;">
         <div class="container">
+          @if(session('success'))
+            <div id="katalogSuccessAlert" class="alert alert-success mb-4" role="alert" style="background: #eef6ee; color: #2e6930; border: 1px solid #d4ebd4; border-radius: var(--lq-radius); padding: 0.9rem 1.15rem; font-size: 0.9rem; transition: opacity 0.4s ease;">
+              {{ session('success') }}
+            </div>
+          @endif
+
+          @if($errors->any())
+            <div class="alert alert-danger mb-4" role="alert" style="background: #fdf2f2; color: #a82323; border: 1px solid #f9d4d4; border-radius: var(--lq-radius); padding: 0.9rem 1.15rem; font-size: 0.9rem;">
+              <strong>Gagal menyimpan data:</strong>
+              <ul class="mb-0 mt-1 ps-3">
+                @foreach($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          @endif
+
           <div class="row g-4" id="serviceGrid">
             @foreach($services as $index => $item)
               <div class="col-md-6 col-lg-4 service-col" 
                    data-category="{{ $item['category'] }}"
+                   data-service-type="{{ $item['service_type'] }}"
                    data-name="{{ strtolower($item['name']) }}"
                    data-desc="{{ strtolower($item['description']) }}">
                 
@@ -173,54 +198,52 @@
                 <img id="previewSideImg" src="{{ asset('img/booking-side.jpg') }}" alt="Preview Model Kuku" width="720" height="900" loading="lazy" style="opacity: 1; transition: opacity 0.35s ease;">
               </div>
 
-              <!-- Sisi Kanan: Form Reservasi Style (Template Services) -->
+              <!-- Sisi Kanan: Form Input Layanan & Katalog (Sesuai Tabel services Database) -->
               <div class="lq-booking-form" style="max-height: 85vh; overflow-y: auto;">
-                <form data-booking-form novalidate id="formTambahDesain">
-                  <div class="lq-booking-success" data-booking-success role="status" aria-live="polite"></div>
+                <form action="{{ route('admin.katalog.store') }}" method="POST" enctype="multipart/form-data" id="formTambahDesain">
+                  @csrf
 
                   <div class="lq-field">
-                    <label for="ds-name">Nama Model / Desain <span class="req" aria-hidden="true">*</span></label>
-                    <input class="lq-input" type="text" id="ds-name" name="name" data-required aria-required="true" placeholder="Contoh: Marble Rose Gold Custom Art">
-                    <span class="lq-field-error">Silakan masukkan nama model desain.</span>
+                    <label for="ds-name">Nama Model / Layanan <span class="req" aria-hidden="true">*</span></label>
+                    <input class="lq-input" type="text" id="ds-name" name="name" value="{{ old('name') }}" required placeholder="Contoh: Marble Rose Gold Custom Art">
                   </div>
 
                   <div class="lq-field">
-                    <label for="ds-category">Pilihan Kategori Layanan <span class="req" aria-hidden="true">*</span></label>
-                    <select class="lq-select" id="ds-category" name="category" data-required aria-required="true">
-                      <option value="">Pilih kategori perawatan&hellip;</option>
-                      <option value="gel-polish">Gel Polish</option>
-                      <option value="nail-art-custom">Nail Art Custom</option>
-                      <option value="nail-extension">Nail Extension</option>
+                    <label for="ds-category">Kategori Layanan <span class="req" aria-hidden="true">*</span></label>
+                    <select class="lq-select" id="ds-category" name="category" required>
+                      <option value="">Pilih kategori layanan&hellip;</option>
+                      <option value="gel-polish" {{ old('category') === 'gel-polish' ? 'selected' : '' }}>Gel Polish</option>
+                      <option value="nail-art-custom" {{ old('category') === 'nail-art-custom' ? 'selected' : '' }}>Nail art custom</option>
+                      <option value="nail-extension" {{ old('category') === 'nail-extension' ? 'selected' : '' }}>Nail Extension</option>
+                      <option value="remove" {{ old('category') === 'remove' ? 'selected' : '' }}>Remove</option>
+                      <option value="addon" {{ old('category') === 'addon' ? 'selected' : '' }}>Tambahan Hari-H</option>
+                      <option value="manicure" {{ old('category') === 'manicure' ? 'selected' : '' }}>Manicure</option>
                     </select>
-                    <span class="lq-field-error">Silakan pilih kategori layanan.</span>
                   </div>
 
                   <div class="lq-field-row">
                     <div class="lq-field">
                       <label for="ds-duration">Durasi Pengerjaan (Menit) <span class="req" aria-hidden="true">*</span></label>
-                      <input class="lq-input" type="number" id="ds-duration" name="duration" data-required aria-required="true" placeholder="60" value="60">
-                      <span class="lq-field-error">Masukkan estimasi durasi pengerjaan.</span>
+                      <input class="lq-input" type="number" id="ds-duration" name="duration" min="0" required placeholder="60" value="{{ old('duration', 60) }}">
                     </div>
                     <div class="lq-field">
                       <label for="ds-price">Harga Layanan (Rp) <span class="req" aria-hidden="true">*</span></label>
-                      <input class="lq-input" type="number" id="ds-price" name="price" data-required aria-required="true" placeholder="Contoh: 150000" step="5000">
-                      <span class="lq-field-error">Silakan tentukan harga layanan.</span>
+                      <input class="lq-input" type="number" id="ds-price" name="price" min="0" step="5000" required placeholder="Contoh: 150000" value="{{ old('price') }}">
                     </div>
                   </div>
 
                   <div class="lq-field">
-                    <label for="ds-photo">Upload Foto Model Kuku <span class="req" aria-hidden="true">*</span></label>
-                    <input class="lq-input" type="file" id="ds-photo" name="photo" accept="image/*" data-required aria-required="true" style="padding: 0.65rem 0.9rem;">
-                    <span class="lq-field-error">Silakan pilih file foto model kuku.</span>
+                    <label for="ds-photo">Upload Foto Model / Layanan <span class="req" aria-hidden="true">*</span></label>
+                    <input class="lq-input" type="file" id="ds-photo" name="image" accept="image/*" required style="padding: 0.65rem 0.9rem;">
                   </div>
 
                   <div class="lq-field">
                     <label for="ds-desc">Deskripsi &amp; Detail Perawatan</label>
-                    <textarea class="lq-textarea" id="ds-desc" name="description" placeholder="Jelaskan detail perawatan, bahan kutek gel, ornamen 3D, atau gaya lukisan..."></textarea>
+                    <textarea class="lq-textarea" id="ds-desc" name="description" placeholder="Jelaskan detail perawatan, bahan kutek gel, ornamen 3D, atau teknik pengerjaan...">{{ old('description') }}</textarea>
                   </div>
 
-                  <button class="lq-btn lq-btn-primary lq-btn-block" type="submit">Simpan &amp; Terbitkan Desain</button>
-                  <p style="font-size:.78rem;color:var(--lq-mauve-soft);margin:1rem 0 0;text-align:center">Desain yang ditambahkan akan otomatis muncul di katalog publik Amanails Nail Bar.</p>
+                  <button class="lq-btn lq-btn-primary lq-btn-block" type="submit">Simpan &amp; Tampilkan ke Halaman Pelanggan</button>
+                  <p style="font-size:.78rem;color:var(--lq-mauve-soft);margin:1rem 0 0;text-align:center">Layanan yang ditambahkan akan tersimpan di database dan langsung tampil ke pelanggan.</p>
                 </form>
               </div>
             </div>
@@ -236,6 +259,32 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+        const filterButtons = document.querySelectorAll('[data-service-filter]');
+        const serviceCols = document.querySelectorAll('#serviceGrid .service-col');
+        const noResultsEl = document.getElementById('noResults');
+
+        filterButtons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const targetFilter = this.getAttribute('data-service-filter');
+
+            filterButtons.forEach(function (b) {
+              b.classList.toggle('is-active', b === btn);
+            });
+
+            let visibleCount = 0;
+            serviceCols.forEach(function (col) {
+              const svcType = col.getAttribute('data-service-type');
+              const match = targetFilter === 'all' || svcType === targetFilter;
+              col.style.display = match ? '' : 'none';
+              if (match) visibleCount++;
+            });
+
+            if (noResultsEl) {
+              noResultsEl.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+          });
+        });
+
         const photoInput = document.getElementById('ds-photo');
         const previewSideImg = document.getElementById('previewSideImg');
         const modalEl = document.getElementById('modalTambahDesain');
@@ -263,35 +312,20 @@
             modalEl.addEventListener('hidden.bs.modal', function () {
               previewSideImg.src = defaultSrc;
               previewSideImg.style.opacity = '1';
-              const successBox = formTambahDesain ? formTambahDesain.querySelector('[data-booking-success]') : null;
-              if (successBox) {
-                successBox.classList.remove('is-visible');
-                successBox.innerHTML = '';
-              }
             });
           }
         }
 
-        const formTambahDesain = document.getElementById('formTambahDesain');
-        if (formTambahDesain) {
-          formTambahDesain.addEventListener('submit', function (e) {
-            let allValid = true;
-            formTambahDesain.querySelectorAll('[data-required]').forEach(function (el) {
-              if (!(el.value || '').trim()) allValid = false;
-            });
-            if (allValid) {
-              const nameInput = document.getElementById('ds-name');
-              const nameVal = nameInput ? nameInput.value.trim() : 'Desain Baru';
-              setTimeout(function () {
-                const successBox = formTambahDesain.querySelector('[data-booking-success]');
-                if (successBox) {
-                  successBox.innerHTML = '<strong>Desain Berhasil Diterbitkan!</strong> Model "<em>' + nameVal + '</em>" telah disimpan dan otomatis tampil di katalog publik.';
-                  successBox.classList.add('is-visible');
-                }
-              }, 15);
-            }
-          });
+        const successAlert = document.getElementById('katalogSuccessAlert');
+        if (successAlert) {
+          setTimeout(function () {
+            successAlert.style.opacity = '0';
+            setTimeout(function () {
+              successAlert.remove();
+            }, 400);
+          }, 3500);
         }
+
       });
     </script>
   </body>

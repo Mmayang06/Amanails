@@ -42,7 +42,20 @@ class Service extends Model
             return $this->image;
         }
 
-        // Render menggunakan Storage link (storage/nails/...)
-        return asset('storage/'.$this->image);
+        if (file_exists(public_path($this->image))) {
+            return asset($this->image);
+        }
+
+        if (file_exists(storage_path('app/public/'.$this->image))) {
+            return asset('storage/'.$this->image);
+        }
+
+        // Fallback untuk data seeder berawalan 'nails/...' agar tetap terbaca dari public/img/
+        $fallbackImg = 'img/'.basename($this->image);
+        if (file_exists(public_path($fallbackImg))) {
+            return asset($fallbackImg);
+        }
+
+        return asset('img/gallery-1.jpg');
     }
 }

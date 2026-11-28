@@ -6,7 +6,9 @@ use App\Models\Appointment;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -186,14 +188,15 @@ class AdminController extends Controller
     {
         $categories = [
             ['id' => 'all', 'name' => 'Semua'],
-            ['id' => 'gel-polish', 'name' => 'Gel Polish'],
-            ['id' => 'nail-art-custom', 'name' => 'Nail art custom'],
-            ['id' => 'nail-extension', 'name' => 'Nail Extension'],
+            ['id' => 'catalog', 'name' => 'Katalog'],
+            ['id' => 'remove', 'name' => 'Remove'],
+            ['id' => 'addon', 'name' => 'Tambahan Hari-H'],
         ];
 
         $services = Service::where('is_active', true)
-            ->where('service_type', 'catalog')
             ->where('uploader_role', 'like', '%Admin%')
+            ->orderByRaw("CASE service_type WHEN 'catalog' THEN 0 WHEN 'remove' THEN 1 WHEN 'addon' THEN 2 ELSE 3 END")
+            ->orderBy('id')
             ->get()
             ->map(function (Service $svc): array {
                 return [
@@ -201,6 +204,7 @@ class AdminController extends Controller
                     'name' => $svc->name,
                     'category' => $svc->category,
                     'category_label' => $svc->category_label,
+                    'service_type' => $svc->service_type,
                     'price' => $svc->price,
                     'duration' => $svc->duration,
                     'image' => $svc->image_url,
@@ -213,5 +217,65 @@ class AdminController extends Controller
             ->all();
 
         return view('admin.katalog', compact('categories', 'services'));
+    }
+
+    /**
+     * Simpan layanan / desain katalog baru dari Admin ke tabel services.
+     */
+    public function storeKatalog(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'in:gel-polish,nail-art-custom,nail-extension,remove,addon,manicure'],
+            'duration' => ['required', 'integer', 'min:0', 'max:600'],
+            'price' => ['required', 'integer', 'min:0'],
+            'image' => ['required', 'image', 'max:5120'],
+            'description' => ['nullable', 'string', 'max:2000'],
+        ], [
+            'name.required' => 'Nama model / layanan wajib diisi.',
+            'category.required' => 'Kategori layanan wajib dipilih.',
+            'duration.required' => 'Durasi pengerjaan wajib diisi.',
+            'price.required' => 'Harga layanan wajib diisi.',
+            'image.required' => 'Foto model / layanan wajib diunggah.',
+            'image.image' => 'File harus berupa gambar (JPG, PNG, WEBP).',
+        ]);
+
+        $categoryLabelMap = [
+            'gel-polish' => 'Gel Polish',
+            'nail-art-custom' => 'Nail art custom',
+            'nail-extension' => 'Nail Extension',
+            'remove' => 'Remove',
+            'addon' => 'Tambahan Hari-H',
+            'manicure' => 'Manicure',
+        ];
+
+        $serviceTypeMap = [
+            'gel-polish' => 'catalog',
+            'nail-art-custom' => 'catalog',
+            'nail-extension' => 'catalog',
+            'remove' => 'remove',
+            'addon' => 'addon',
+            'manicure' => 'manicure',
+        ];
+
+        $imagePath = $request->file('image')->store('nails', 'public');
+
+        Service::create([
+            'name' => $validated['name'],
+            'category' => $validated['category'],
+            'category_label' => $categoryLabelMap[$validated['category']] ?? ucwords(str_replace('-', ' ', $validated['category'])),
+            'service_type' => $serviceTypeMap[$validated['category']] ?? 'catalog',
+            'price' => (int) $validated['price'],
+            'duration' => (int) $validated['duration'],
+            'image' => $imagePath,
+            'uploaded_by' => Auth::user()?->name ?? 'Admin',
+            'uploader_role' => 'Admin',
+            'description' => $validated['description'] ?? null,
+            'is_active' => true,
+        ]);
+
+        return redirect()
+            ->route('admin.katalog')
+            ->with('success', 'Layanan "'.$validated['name'].'" berhasil disimpan dan ditampilkan ke halaman pelanggan!');
     }
 }
