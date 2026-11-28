@@ -556,7 +556,6 @@
                     <th>Layanan</th>
                     <th>Nail Artist</th>
                     <th>Status</th>
-                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="appointmentBody">
@@ -933,47 +932,16 @@
         else if (s === 'batal' || s === 'ditolak' || s === 'dibatalkan') badgeClass += 'batal';
         else badgeClass += 'pending';
 
-        var actionHtml = '';
-        if (s === 'pending' || s === 'menunggu') {
-          actionHtml = '<div class="d-flex align-items-center gap-1">' +
-            '<button type="button" class="lq-btn lq-btn-primary lq-btn-table" onclick="approveApptRow(this, \'' + dateKey + '\', ' + idx + ')">Accept</button>' +
-            '<button type="button" class="lq-btn lq-btn-table lq-btn-table-danger" onclick="rejectApptRow(this, \'' + dateKey + '\', ' + idx + ')">Tolak</button>' +
-            '</div>';
-        } else {
-          actionHtml = '<button type="button" class="lq-btn lq-btn-outline lq-btn-table" onclick="showApptDetail(\'' + item.pelanggan + '\', \'' + item.layanan + '\', \'' + item.jam + '\', \'' + item.artist + '\')">Detail</button>';
-        }
-
         rowsHtml += '<tr>' +
           '<td>' + item.jam + '</td>' +
           '<td>' + item.pelanggan + '</td>' +
           '<td>' + item.layanan + '</td>' +
           '<td>' + item.artist + '</td>' +
           '<td><span class="' + badgeClass + '">' + item.status + '</span></td>' +
-          '<td>' + actionHtml + '</td>' +
           '</tr>';
       });
 
       tbody.innerHTML = rowsHtml;
-    }
-
-    function approveApptRow(btn, dateKey, index) {
-      if (jadwalAppointmentBulan[dateKey] && jadwalAppointmentBulan[dateKey][index]) {
-        jadwalAppointmentBulan[dateKey][index].status = 'Lunas';
-      }
-      renderSelectedDateDetails(dateKey);
-      alert('Reservasi berhasil di-accept (Lunas)!');
-    }
-
-    function rejectApptRow(btn, dateKey, index) {
-      if (jadwalAppointmentBulan[dateKey] && jadwalAppointmentBulan[dateKey][index]) {
-        jadwalAppointmentBulan[dateKey][index].status = 'Batal';
-      }
-      renderSelectedDateDetails(dateKey);
-      alert('Reservasi telah ditolak.');
-    }
-
-    function showApptDetail(pelanggan, layanan, jam, artist) {
-      alert('Detail Appointment\n-------------------------\nPelanggan: ' + pelanggan + '\nLayanan: ' + layanan + '\nJam: ' + jam + '\nNail Artist: ' + artist + '\nStatus: Terverifikasi di sistem Amanails');
     }
 
     /* ══ FILTER APPOINTMENTS (BY STATUS KLIK KARTU STATS) ══ */
