@@ -147,6 +147,12 @@
                         {{ $item['status'] }}
                       </span>
 
+                      @if(($item['guests'] ?? 1) > 1)
+                        <span class="lq-pkg-tag" style="position: static; font-size: 0.62rem; padding: 0.35rem 0.7rem; background: var(--lq-plum); color: #fff;">
+                          {{ $item['guests'] }} ORANG
+                        </span>
+                      @endif
+
                       @if($item['tipe_klien'] === 'Member')
                         <span class="lq-pkg-tag" style="position: static; font-size: 0.62rem; padding: 0.35rem 0.7rem; background: var(--lq-blush); color: var(--lq-rose-deep);">
                           MEMBER
@@ -425,6 +431,14 @@
                   <small style="font-size: 0.72rem; color: var(--lq-mauve); text-transform: uppercase;">Pelanggan</small>
                   <div style="font-size: 1.05rem; font-weight: 600; color: var(--lq-ink);" id="kasirClientName">Sela (Buyer)</div>
                   <div style="font-size: 0.8rem; color: var(--lq-mauve);" id="kasirClientPhone">WhatsApp: 0812-9876-5432</div>
+                  <div class="d-flex align-items-center gap-2 mt-1">
+                    <span style="font-size: 0.78rem; color: var(--lq-mauve); font-weight: 500;">Jumlah Tamu:</span>
+                    <div class="d-inline-flex align-items-center" style="border: 1px solid var(--lq-line-soft); border-radius: 6px; background: var(--lq-cream);">
+                      <button type="button" class="btn btn-sm py-0 px-2" onclick="ubahJumlahTamu(-1)" style="border: none; color: var(--lq-plum); font-weight: 700;" title="Kurangi jumlah tamu">-</button>
+                      <span id="kasirGuestsCountDisplay" style="font-size: 0.8rem; font-weight: 700; color: var(--lq-plum); padding: 0 6px;">1 Orang</span>
+                      <button type="button" class="btn btn-sm py-0 px-2" onclick="ubahJumlahTamu(1)" style="border: none; color: var(--lq-plum); font-weight: 700;" title="Tambah jumlah tamu">+</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-sm-6 text-sm-end">
                   <small style="font-size: 0.72rem; color: var(--lq-mauve); text-transform: uppercase;">Jadwal &amp; Meja</small>
@@ -520,7 +534,7 @@
 
               <!-- Input Tambah Item Ekstra -->
               <div class="row g-2 align-items-center mb-2">
-                <div class="col-sm-7">
+                <div class="col-sm" id="kasirAddonSelectCol">
                   <select class="lq-select" id="kasirPresetAddon" style="font-size: 0.82rem; padding: 0.45rem 0.65rem;">
                     <option value="" disabled selected>Pilih Tambahan Hari-H (Manik-manik, dll)...</option>
                     @foreach($addonServices as $addon)
@@ -529,6 +543,11 @@
                       </option>
                     @endforeach
                     <option value="custom" data-price="0">+ Input Custom Tambahan Lainnya...</option>
+                  </select>
+                </div>
+                <div class="col-sm-3" id="kasirAddonGuestCol" style="display: none;">
+                  <select class="lq-select" id="kasirAddonGuestSelect" style="font-size: 0.82rem; padding: 0.45rem 0.55rem;">
+                    <option value="1">Untuk: 1 Orang</option>
                   </select>
                 </div>
                 <div class="col-sm-3" id="kasirCustomPriceCol" style="display: none;">
@@ -567,11 +586,11 @@
                 <span id="kasirValGrandTotal">Rp 0</span>
               </div>
               
-              <!-- Potongan DP Rp 50.000 Sesuai Permintaan -->
+              <!-- Potongan DP Sesuai Jumlah Tamu -->
               <div class="d-flex justify-content-between align-items-center py-2 px-2 mt-2 rounded" style="background: #f0f9f1; border: 1px solid #c9ebd0; font-size: 0.85rem;">
                 <label class="d-flex align-items-center gap-2 m-0" style="cursor: pointer; color: #1e7e34; font-weight: 500;">
                   <input type="checkbox" id="kasirDpCheckbox" checked onchange="toggleDpDeduction()">
-                  <span>Potong Uang Muka (DP Booking)</span>
+                  <span id="kasirDpLabel">Potong Uang Muka (DP Booking)</span>
                 </label>
                 <span id="kasirValDpPaid" style="color: #27ae60; font-weight: 700;">- Rp 50.000</span>
               </div>
@@ -606,7 +625,7 @@
           <div class="modal-footer" style="background: var(--lq-cream-2); padding: 0.85rem 1.5rem;">
             <button type="button" class="lq-btn lq-btn-outline lq-btn-sm" data-bs-dismiss="modal">Tutup</button>
             <button type="button" class="lq-btn lq-btn-primary lq-btn-sm" id="btnKasirSelesaikan">
-              Konfirmasi Pelunasan &amp; Selesaikan Perawatan &rarr;
+              Kirim Rincian Pembayaran ke Admin &rarr;
             </button>
           </div>
         </div>
@@ -636,7 +655,7 @@
       <div class="modal-dialog modal-dialog-centered" style="max-width: 460px;">
         <div class="modal-content" style="border-radius: var(--lq-radius); border: 1px solid var(--lq-line-soft); box-shadow: var(--lq-shadow); overflow: hidden; background: #fff;">
           <div class="modal-body text-center p-4">
-            <h5 style="font-family: var(--lq-serif); font-size: 1.25rem; color: var(--lq-plum); margin-bottom: 0.75rem;">Perawatan Selesai &amp; Pelunasan Dicatat</h5>
+            <h5 style="font-family: var(--lq-serif); font-size: 1.25rem; color: var(--lq-plum); margin-bottom: 0.75rem;">Perawatan Selesai &amp; Rincian Terkirim ke Admin</h5>
             <div id="modalPelunasanSuksesBody" class="text-start p-3 mb-3 rounded" style="background: var(--lq-cream-2); font-size: 0.84rem; color: var(--lq-ink); line-height: 1.6;">
               <!-- Detail pelunasan di-render oleh JS -->
             </div>
@@ -770,12 +789,93 @@
       // ================= LOGIKA KASIR PELUNASAN, TAMBAHAN HARI-H & PERHITUNGAN =================
       var jadwalList = @json($jadwalHariIni);
       var currentActiveAppt = null;
+      var currentGuests = 1;
       var currentPrimaryServices = [];
       var currentAddons = [];
       var currentDpDeducted = true;
 
       function formatRupiahKasir(num) {
         return 'Rp ' + (parseInt(num, 10) || 0).toLocaleString('id-ID');
+      }
+
+      function syncGuestUI() {
+        var display = document.getElementById('kasirGuestsCountDisplay');
+        if (display) {
+          display.textContent = currentGuests + ' Orang';
+        }
+
+        // Tampilkan atau sembunyikan pemilih tamu pada input Add-on
+        var guestCol = document.getElementById('kasirAddonGuestCol');
+        var selectCol = document.getElementById('kasirAddonSelectCol');
+        var guestSelect = document.getElementById('kasirAddonGuestSelect');
+
+        if (guestCol && selectCol && guestSelect) {
+          if (currentGuests > 1) {
+            guestCol.style.display = 'block';
+            selectCol.className = 'col-sm-4';
+            var opts = '<option value="1">Untuk: 1 Orang</option>';
+            for (var g = 1; g <= currentGuests; g++) {
+              opts += '<option value="Orang ' + g + '">Orang ke-' + g + ' (1x)</option>';
+            }
+            opts += '<option value="all">Semua (' + currentGuests + ' Orang)</option>';
+            guestSelect.innerHTML = opts;
+          } else {
+            guestCol.style.display = 'none';
+            selectCol.className = 'col-sm-7';
+          }
+        }
+
+        // Update banner referensi website beserta info jumlah tamu
+        if (currentActiveAppt) {
+          renderReferenceBanner();
+        }
+      }
+
+      function renderReferenceBanner() {
+        var refBanner = document.getElementById('kasirReferenceBanner');
+        if (!refBanner || !currentActiveAppt) return;
+
+        var guestNote = currentGuests > 1
+          ? '<div class="mt-1 pt-1" style="border-top: 1px dashed rgba(0,0,0,0.1); font-size: 0.76rem; color: var(--lq-plum); font-weight: 600;">Booking untuk ' + currentGuests + ' Orang — Layanan utama &amp; potongan DP (Rp 50.000/orang = ' + formatRupiahKasir(50000 * currentGuests) + ') disesuaikan otomatis.</div>'
+          : '';
+
+        if (currentActiveAppt.has_website_reference === false || currentPrimaryServices.length === 0) {
+          refBanner.innerHTML = '<div class="p-2 px-3 rounded" style="background: #fff8e8; border: 1px solid #f6e2b5; color: #8a6414; font-size: 0.8rem;">' +
+                                '  <strong>Konsumen Tanpa Referensi Website (Walk-in / Request Langsung):</strong>' +
+                                '  <div style="font-size: 0.76rem; color: #73530e; margin-top: 2px;">Layanan pokok belum tercatat di website. Silakan pilih atau tambahkan layanan utama di bawah ini untuk memulai perhitungan.</div>' +
+                                guestNote +
+                                '</div>';
+          var subTitle = document.getElementById('kasirPrimarySubtitle');
+          if (subTitle) subTitle.textContent = 'Pilih atau input paket perawatan pokok yang dikerjakan (per orang)';
+        } else {
+          refBanner.innerHTML = '<div class="p-2 px-3 rounded" style="background: #f3faf3; border: 1px solid #c9ebd0; font-size: 0.8rem; color: #1e7e34;">' +
+                                '  <div class="d-flex align-items-center gap-2 flex-wrap">' +
+                                '    <span class="badge" style="background: #eef6ee; color: #27ae60; font-size: 0.72rem;">Referensi Booking Website</span>' +
+                                '    <span>Konsumen memilih paket perawatan melalui reservasi website Amanails.</span>' +
+                                '  </div>' +
+                                guestNote +
+                                '</div>';
+          var subTitle = document.getElementById('kasirPrimarySubtitle');
+          if (subTitle) subTitle.textContent = 'Rincian paket perawatan yang dipesan via website (dapat disesuaikan per orang)';
+        }
+      }
+
+      function ubahJumlahTamu(delta) {
+        var oldGuests = currentGuests;
+        var nextGuests = Math.max(1, currentGuests + delta);
+        if (nextGuests === oldGuests) return;
+
+        currentGuests = nextGuests;
+        // Sinkronkan layanan utama yang masih mengikuti jumlah tamu sebelumnya
+        currentPrimaryServices.forEach(function(s) {
+          if ((parseInt(s.qty, 10) || 1) === oldGuests) {
+            s.qty = currentGuests;
+          }
+        });
+
+        syncGuestUI();
+        renderKasirPrimaryServices();
+        renderKasirAddons();
       }
 
       function bukaKasirPelunasan(id) {
@@ -787,6 +887,7 @@
             kontak: '0812-9876-5432',
             jam: '10:00 - 11:00 WIB',
             kursi: 'Station 01',
+            guests: 1,
             layanan: 'Perawatan Kuku',
             has_website_reference: false,
             layanan_awal: [],
@@ -794,17 +895,24 @@
           };
         }
         currentActiveAppt = appt;
+        currentGuests = Math.max(1, parseInt(appt.guests, 10) || 1);
 
-        // Inisialisasi daftar layanan utama
+        // Inisialisasi daftar layanan utama dengan qty per orang
         if (appt.layanan_awal && appt.layanan_awal.length > 0) {
-          currentPrimaryServices = JSON.parse(JSON.stringify(appt.layanan_awal));
+          currentPrimaryServices = JSON.parse(JSON.stringify(appt.layanan_awal)).map(function(s) {
+            s.qty = Math.max(1, parseInt(s.qty, 10) || currentGuests);
+            return s;
+          });
         } else {
           currentPrimaryServices = [];
         }
 
         // Inisialisasi daftar tambahan hari-h (manik-manik, dll)
         if (appt.addons && appt.addons.length > 0) {
-          currentAddons = JSON.parse(JSON.stringify(appt.addons));
+          currentAddons = JSON.parse(JSON.stringify(appt.addons)).map(function(a) {
+            a.qty = Math.max(1, parseInt(a.qty, 10) || 1);
+            return a;
+          });
         } else {
           currentAddons = [];
         }
@@ -817,25 +925,9 @@
         document.getElementById('kasirClientName').textContent = appt.klien;
         document.getElementById('kasirClientPhone').textContent = 'WhatsApp: ' + appt.kontak;
         document.getElementById('kasirScheduleTime').textContent = appt.jam + ' • ' + (appt.kursi || 'Station 01');
-        document.getElementById('kasirArtistName').textContent = 'Terapis Bertugas: Mia Alvarez (Station 01)';
+        document.getElementById('kasirArtistName').textContent = 'Terapis Bertugas: ' + (appt.artist_name || 'Mia Alvarez') + ' (' + (appt.kursi || 'Station 01') + ')';
 
-        // Render banner status referensi website
-        var refBanner = document.getElementById('kasirReferenceBanner');
-        if (appt.has_website_reference === false || currentPrimaryServices.length === 0) {
-          refBanner.innerHTML = '<div class="p-2 px-3 rounded" style="background: #fff8e8; border: 1px solid #f6e2b5; color: #8a6414; font-size: 0.8rem;">' +
-                                '  <strong>Konsumen Tanpa Referensi Website (Walk-in / Request Langsung):</strong>' +
-                                '  <div style="font-size: 0.76rem; color: #73530e; margin-top: 2px;">Layanan pokok belum tercatat di website. Silakan pilih atau tambahkan layanan utama di bawah ini untuk memulai perhitungan.</div>' +
-                                '</div>';
-          var subTitle = document.getElementById('kasirPrimarySubtitle');
-          if (subTitle) subTitle.textContent = 'Pilih atau input paket perawatan pokok yang dikerjakan';
-        } else {
-          refBanner.innerHTML = '<div class="d-flex align-items-center gap-2" style="font-size: 0.8rem; color: #1e7e34;">' +
-                                '  <span class="badge" style="background: #eef6ee; color: #27ae60; font-size: 0.72rem;">Referensi Booking Website</span>' +
-                                '  <span>Konsumen memilih paket perawatan melalui reservasi website Amanails.</span>' +
-                                '</div>';
-          var subTitle = document.getElementById('kasirPrimarySubtitle');
-          if (subTitle) subTitle.textContent = 'Rincian paket perawatan yang dipesan via website';
-        }
+        syncGuestUI();
 
         // Foto desain referensi (jika ada upload foto klien)
         var photoBox = document.getElementById('kasirDesignPhotoBox');
@@ -854,6 +946,13 @@
         modalEl.show();
       }
 
+      function ubahQtyLayananUtama(idx, delta) {
+        if (!currentPrimaryServices[idx]) return;
+        var curQty = parseInt(currentPrimaryServices[idx].qty, 10) || 1;
+        currentPrimaryServices[idx].qty = Math.max(1, curQty + delta);
+        renderKasirPrimaryServices();
+      }
+
       function renderKasirPrimaryServices() {
         var tbody = document.getElementById('kasirInitialServicesTable');
         var badge = document.getElementById('kasirPrimaryCountBadge');
@@ -867,17 +966,27 @@
           if (badge) badge.textContent = '0 Layanan';
         } else {
           currentPrimaryServices.forEach(function(s, idx) {
+            var qty = Math.max(1, parseInt(s.qty, 10) || 1);
+            var unitPrice = parseInt(s.harga, 10) || 0;
+            var lineTotal = unitPrice * qty;
+
             var tr = document.createElement('tr');
             tr.innerHTML = '<td style="padding: 0.55rem 0.85rem; vertical-align: middle;">' +
                            '  <strong>' + s.nama + '</strong>' +
+                           '  <div style="font-size: 0.74rem; color: var(--lq-mauve);">' + formatRupiahKasir(unitPrice) + ' / orang</div>' +
                            '</td>' +
                            '<td class="text-end" style="padding: 0.55rem 0.85rem; font-weight: 600; color: var(--lq-ink); vertical-align: middle; white-space: nowrap;">' +
-                           '  ' + formatRupiahKasir(s.harga) +
+                           '  <div class="d-inline-flex align-items-center me-2" style="border: 1px solid var(--lq-line-soft); border-radius: 5px; background: var(--lq-cream);">' +
+                           '    <button type="button" class="btn btn-sm py-0 px-2" onclick="ubahQtyLayananUtama(' + idx + ', -1)" style="border: none; font-size: 0.8rem; color: var(--lq-plum);">-</button>' +
+                           '    <span style="font-size: 0.76rem; padding: 0 4px; color: var(--lq-ink);">' + qty + ' org</span>' +
+                           '    <button type="button" class="btn btn-sm py-0 px-2" onclick="ubahQtyLayananUtama(' + idx + ', 1)" style="border: none; font-size: 0.8rem; color: var(--lq-plum);">+</button>' +
+                           '  </div>' +
+                           '  <span>' + formatRupiahKasir(lineTotal) + '</span>' +
                            '  <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2" onclick="hapusLayananUtama(' + idx + ')" style="text-decoration:none; font-size:0.95rem;" title="Hapus layanan ini">&times;</button>' +
                            '</td>';
             tbody.appendChild(tr);
           });
-          if (badge) badge.textContent = currentPrimaryServices.length + ' Layanan';
+          if (badge) badge.textContent = currentPrimaryServices.length + ' Layanan (' + currentGuests + ' Org)';
         }
 
         recalculateKasirTotals();
@@ -886,6 +995,13 @@
       function hapusLayananUtama(idx) {
         currentPrimaryServices.splice(idx, 1);
         renderKasirPrimaryServices();
+      }
+
+      function ubahQtyAddon(idx, delta) {
+        if (!currentAddons[idx]) return;
+        var curQty = parseInt(currentAddons[idx].qty, 10) || 1;
+        currentAddons[idx].qty = Math.max(1, curQty + delta);
+        renderKasirAddons();
       }
 
       function renderKasirAddons() {
@@ -901,13 +1017,25 @@
         } else {
           if (noText) noText.style.display = 'none';
           currentAddons.forEach(function(item, idx) {
+            var qty = Math.max(1, parseInt(item.qty, 10) || 1);
+            var unitPrice = parseInt(item.price, 10) || 0;
+            var lineTotal = unitPrice * qty;
+            var guestTag = item.guestLabel ? ' <span class="badge" style="background: var(--lq-cream-2); color: var(--lq-plum); font-size: 0.68rem; font-weight: 500;">' + item.guestLabel + '</span>' : '';
+
             var li = document.createElement('li');
-            li.className = 'd-flex justify-content-between align-items-center py-1';
+            li.className = 'd-flex justify-content-between align-items-center py-1 flex-wrap gap-1';
             li.style.borderBottom = '1px dashed var(--lq-line-soft)';
             li.style.fontSize = '0.82rem';
-            li.innerHTML = '<span>+ ' + item.name + '</span>' +
-                           '<div><strong style="color:var(--lq-rose-deep); margin-right:8px;">' + formatRupiahKasir(item.price) + '</strong>' +
-                           '<button type="button" class="btn btn-sm btn-link text-danger p-0" style="text-decoration:none; font-size:0.95rem;" onclick="hapusKasirAddon(' + idx + ')" title="Hapus tambahan ini">&times;</button></div>';
+            li.innerHTML = '<span>+ ' + item.name + guestTag + '</span>' +
+                           '<div class="d-flex align-items-center">' +
+                           '  <div class="d-inline-flex align-items-center me-2" style="border: 1px solid var(--lq-line-soft); border-radius: 5px; background: var(--lq-cream);">' +
+                           '    <button type="button" class="btn btn-sm py-0 px-1" onclick="ubahQtyAddon(' + idx + ', -1)" style="border: none; font-size: 0.78rem; color: var(--lq-plum);">-</button>' +
+                           '    <span style="font-size: 0.74rem; padding: 0 4px; color: var(--lq-ink);">' + qty + 'x</span>' +
+                           '    <button type="button" class="btn btn-sm py-0 px-1" onclick="ubahQtyAddon(' + idx + ', 1)" style="border: none; font-size: 0.78rem; color: var(--lq-plum);">+</button>' +
+                           '  </div>' +
+                           '  <strong style="color:var(--lq-rose-deep); margin-right:8px;">' + formatRupiahKasir(lineTotal) + '</strong>' +
+                           '  <button type="button" class="btn btn-sm btn-link text-danger p-0" style="text-decoration:none; font-size:0.95rem;" onclick="hapusKasirAddon(' + idx + ')" title="Hapus tambahan ini">&times;</button>' +
+                           '</div>';
             ul.appendChild(li);
           });
           if (badge) badge.textContent = currentAddons.length + ' Tambahan';
@@ -942,17 +1070,28 @@
         recalculateKasirTotals();
       }
 
+      function getCalculatedDpAmount() {
+        if (!currentDpDeducted) return 0;
+        var origGuests = currentActiveAppt ? (parseInt(currentActiveAppt.guests, 10) || 1) : 1;
+        if (currentGuests === origGuests && currentActiveAppt && currentActiveAppt.dp_terbayar) {
+          return parseInt(currentActiveAppt.dp_terbayar, 10) || (50000 * currentGuests);
+        }
+        return 50000 * currentGuests;
+      }
+
       function recalculateKasirTotals() {
         var totalPrimary = currentPrimaryServices.reduce(function(acc, cur) {
-          return acc + (parseInt(cur.harga, 10) || 0);
+          var qty = Math.max(1, parseInt(cur.qty, 10) || 1);
+          return acc + ((parseInt(cur.harga, 10) || 0) * qty);
         }, 0);
 
         var totalAddons = currentAddons.reduce(function(acc, cur) {
-          return acc + (parseInt(cur.price, 10) || 0);
+          var qty = Math.max(1, parseInt(cur.qty, 10) || 1);
+          return acc + ((parseInt(cur.price, 10) || 0) * qty);
         }, 0);
 
         var totalGrand = totalPrimary + totalAddons;
-        var dp = currentDpDeducted ? (currentActiveAppt && currentActiveAppt.dp_terbayar ? currentActiveAppt.dp_terbayar : 50000) : 0;
+        var dp = getCalculatedDpAmount();
         var finalRemaining = Math.max(0, totalGrand - dp);
 
         // Update Elemen DOM
@@ -960,11 +1099,17 @@
         var elAddons = document.getElementById('kasirValAddonsTotal');
         var elGrand = document.getElementById('kasirValGrandTotal');
         var elDp = document.getElementById('kasirValDpPaid');
+        var elDpLabel = document.getElementById('kasirDpLabel');
         var elFinal = document.getElementById('kasirValFinalRemaining');
 
         if (elInit) elInit.textContent = formatRupiahKasir(totalPrimary);
         if (elAddons) elAddons.textContent = '+ ' + formatRupiahKasir(totalAddons);
         if (elGrand) elGrand.textContent = formatRupiahKasir(totalGrand);
+        if (elDpLabel) {
+          elDpLabel.textContent = currentGuests > 1
+            ? 'Potong Uang Muka (DP Booking - ' + currentGuests + ' Orang × Rp 50.000)'
+            : 'Potong Uang Muka (DP Booking)';
+        }
         if (elDp) elDp.textContent = currentDpDeducted ? ('- ' + formatRupiahKasir(dp)) : 'Rp 0 (Tanpa DP)';
         if (elFinal) elFinal.textContent = formatRupiahKasir(finalRemaining);
 
@@ -974,7 +1119,10 @@
           var lines = [];
           if (currentPrimaryServices.length > 0) {
             currentPrimaryServices.forEach(function(p) {
-              lines.push('<div>• ' + p.nama + ' <span class="float-end">' + formatRupiahKasir(p.harga) + '</span></div>');
+              var qty = Math.max(1, parseInt(p.qty, 10) || 1);
+              var unitPrice = parseInt(p.harga, 10) || 0;
+              var qtyNote = qty > 1 ? ' (' + qty + ' org × ' + formatRupiahKasir(unitPrice) + ')' : '';
+              lines.push('<div>• ' + p.nama + qtyNote + ' <span class="float-end">' + formatRupiahKasir(unitPrice * qty) + '</span></div>');
             });
           } else {
             lines.push('<div>• <em>Belum ada layanan utama dipilih</em></div>');
@@ -982,14 +1130,20 @@
 
           if (currentAddons.length > 0) {
             currentAddons.forEach(function(a) {
-              lines.push('<div style="color: var(--lq-rose-deep);">• [Tambahan] ' + a.name + ' <span class="float-end">' + formatRupiahKasir(a.price) + '</span></div>');
+              var qty = Math.max(1, parseInt(a.qty, 10) || 1);
+              var unitPrice = parseInt(a.price, 10) || 0;
+              var extraInfo = [];
+              if (a.guestLabel) extraInfo.push(a.guestLabel);
+              if (qty > 1) extraInfo.push(qty + 'x');
+              var infoStr = extraInfo.length > 0 ? ' (' + extraInfo.join(', ') + ')' : '';
+              lines.push('<div style="color: var(--lq-rose-deep);">• [Tambahan] ' + a.name + infoStr + ' <span class="float-end">' + formatRupiahKasir(unitPrice * qty) + '</span></div>');
             });
           }
 
           lines.push('<div class="d-flex justify-content-between pt-1 mt-1" style="border-top: 1px dashed var(--lq-line-soft); font-weight: 600;">' +
-                     '<span>Subtotal Layanan:</span><span>' + formatRupiahKasir(totalGrand) + '</span></div>');
+                     '<span>Subtotal Layanan (' + currentGuests + ' Orang):</span><span>' + formatRupiahKasir(totalGrand) + '</span></div>');
           lines.push('<div class="d-flex justify-content-between" style="color: #27ae60; font-weight: 500;">' +
-                     '<span>Uang Muka (DP Terbayar):</span><span>- ' + formatRupiahKasir(dp) + '</span></div>');
+                     '<span>Uang Muka (DP Terbayar' + (currentGuests > 1 ? ' - ' + currentGuests + ' Orang' : '') + '):</span><span>- ' + formatRupiahKasir(dp) + '</span></div>');
           lines.push('<div class="d-flex justify-content-between pt-1 mt-1" style="border-top: 1px solid var(--lq-line-soft); font-weight: 700; color: var(--lq-plum); font-size: 0.92rem;">' +
                      '<span>Total Pelunasan Kasir:</span><span>' + formatRupiahKasir(finalRemaining) + '</span></div>');
 
@@ -1034,7 +1188,8 @@
             price = parseInt(opt.getAttribute('data-price'), 10) || 0;
           }
 
-          currentPrimaryServices.push({ nama: name, harga: price });
+          var defaultQty = currentPrimaryServices.length === 0 ? currentGuests : 1;
+          currentPrimaryServices.push({ nama: name, harga: price, qty: defaultQty });
           select.selectedIndex = 0;
           document.getElementById('kasirCustomPrimaryPriceCol').style.display = 'none';
           renderKasirPrimaryServices();
@@ -1067,18 +1222,38 @@
           var payload = {};
           var name = '';
           var price = 0;
+          var addonQty = 1;
+          var guestLabel = '';
+
+          if (currentGuests > 1) {
+            var guestSel = document.getElementById('kasirAddonGuestSelect');
+            var guestVal = guestSel ? guestSel.value : '1';
+            if (guestVal === 'all') {
+              addonQty = currentGuests;
+              guestLabel = 'Semua (' + currentGuests + ' Orang)';
+            } else if (guestVal && guestVal !== '1') {
+              addonQty = 1;
+              guestLabel = guestVal;
+            }
+          }
 
           if (val === 'custom') {
             var customInput = prompt('Masukkan nama item tambahan / manik-manik:', 'Aksesoris Manik-manik Charm');
             if (!customInput) return;
             name = customInput;
             price = parseInt(document.getElementById('kasirCustomPrice').value, 10) || 25000;
-            payload = { item_name: name, price: price };
+            var dbItemName = (addonQty > 1 || guestLabel) ? (name + ' (' + addonQty + 'x' + (guestLabel ? ' - ' + guestLabel : '') + ')') : name;
+            payload = { item_name: dbItemName, price: price * addonQty };
           } else {
             var opt = select.options[select.selectedIndex];
             name = opt.getAttribute('data-name') || opt.textContent;
             price = parseInt(opt.getAttribute('data-price'), 10) || 0;
-            payload = { service_id: parseInt(val, 10) };
+            if (addonQty > 1 || guestLabel) {
+              var dbLabel = name + ' (' + addonQty + 'x' + (guestLabel ? ' - ' + guestLabel : '') + ')';
+              payload = { item_name: dbLabel, price: price * addonQty };
+            } else {
+              payload = { service_id: parseInt(val, 10) };
+            }
           }
 
           if (currentActiveAppt && currentActiveAppt.db_id) {
@@ -1095,15 +1270,15 @@
               });
               if (res.ok) {
                 var data = await res.json();
-                currentAddons.push({ id: data.item.id, name: data.item.nama, price: data.item.harga });
+                currentAddons.push({ id: data.item.id, name: name, price: price, qty: addonQty, guestLabel: guestLabel });
               } else {
-                currentAddons.push({ name: name, price: price });
+                currentAddons.push({ name: name, price: price, qty: addonQty, guestLabel: guestLabel });
               }
             } catch (e) {
-              currentAddons.push({ name: name, price: price });
+              currentAddons.push({ name: name, price: price, qty: addonQty, guestLabel: guestLabel });
             }
           } else {
-            currentAddons.push({ name: name, price: price });
+            currentAddons.push({ name: name, price: price, qty: addonQty, guestLabel: guestLabel });
           }
 
           select.selectedIndex = 0;
@@ -1146,12 +1321,15 @@
           }
 
           // Update data di jadwalList
+          var dpAmountFinal = getCalculatedDpAmount();
           currentActiveAppt.status = 'Selesai';
+          currentActiveAppt.guests = currentGuests;
+          currentActiveAppt.dp_terbayar = currentGuests * 50000;
           currentActiveAppt.layanan_awal = JSON.parse(JSON.stringify(currentPrimaryServices));
           currentActiveAppt.addons = JSON.parse(JSON.stringify(currentAddons));
           currentActiveAppt.pelunasan_final = {
             total_layanan: grand,
-            dp_terpotong: currentDpDeducted ? 'Rp 50.000' : 'Rp 0',
+            dp_terpotong: currentDpDeducted ? formatRupiahKasir(dpAmountFinal) : 'Rp 0',
             sisa_dibayar: remaining
           };
 
@@ -1178,9 +1356,9 @@
           // Tampilkan popup modal notifikasi sukses
           var suksesBody = document.getElementById('modalPelunasanSuksesBody');
           if (suksesBody) {
-            suksesBody.innerHTML = '<div><strong>Pelanggan:</strong> ' + currentActiveAppt.klien + '</div>' +
+            suksesBody.innerHTML = '<div><strong>Pelanggan:</strong> ' + currentActiveAppt.klien + ' (' + currentGuests + ' Orang)</div>' +
                                    '<div><strong>Total Layanan:</strong> ' + grand + '</div>' +
-                                   '<div><strong>Potongan DP Booking:</strong> ' + (currentDpDeducted ? '- Rp 50.000' : 'Rp 0') + '</div>' +
+                                   '<div><strong>Potongan DP Booking' + (currentGuests > 1 ? ' (' + currentGuests + ' Orang)' : '') + ':</strong> ' + (currentDpDeducted ? ('- ' + formatRupiahKasir(dpAmountFinal)) : 'Rp 0') + '</div>' +
                                    '<div class="pt-2 mt-2" style="border-top:1px dashed var(--lq-line-soft); font-weight:700; color:var(--lq-plum); font-size:0.95rem;">' +
                                    '<strong>Sisa Tagihan Diterima:</strong> ' + remaining + '</div>';
           }

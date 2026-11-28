@@ -53,6 +53,8 @@ class TerapisController extends Controller
                 $layananNames = 'Konsultasi Perawatan Studio';
             }
 
+            $guests = max(1, (int) ($appt->guests ?? 1));
+
             return [
                 'db_id' => $appt->id,
                 'id' => $appt->booking_code,
@@ -60,6 +62,7 @@ class TerapisController extends Controller
                 'tanggal' => $appt->appointment_date->toDateString(),
                 'klien' => $appt->client_name,
                 'kontak' => $appt->client_phone,
+                'guests' => $guests,
                 'layanan' => $layananNames,
                 'durasi' => $appt->total_duration.' Menit',
                 'status' => $appt->status,
@@ -72,13 +75,15 @@ class TerapisController extends Controller
                     'id' => $i->id,
                     'nama' => $i->item_name,
                     'harga' => $i->price,
+                    'qty' => $guests,
                 ])->all(),
                 'addons' => $addonItems->map(fn ($i) => [
                     'id' => $i->id,
                     'name' => $i->item_name,
                     'price' => $i->price,
+                    'qty' => 1,
                 ])->all(),
-                'dp_terbayar' => $appt->dp_amount,
+                'dp_terbayar' => $appt->dp_amount ?: (50000 * $guests),
                 'final_total' => $appt->final_total,
                 'final_payment_status' => $appt->final_payment_status,
                 'foto_desain' => $appt->custom_design_url,
